@@ -1,1 +1,13 @@
+# Local development settings (connection strings)
 **/appsettings.Development.json
+
+# Visual Studio
+.vs/
+*.user
+
+# Build results
+bin/
+obj/
+
+# User-specific
+*.suo
