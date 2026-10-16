@@ -1,2 +1,7 @@
-//TODO: Create an interface class to call & organize all the business logic methods
-//TODO: Afzal
+public interface IWorkoutService
+{
+    Task<bool> createPlan(WorkoutPlan plan);
+    Task<IEnumerable<WorkoutPlan>> getClientPlans(int clientId);
+    Task<WorkoutPlan> getPlan(int id);
+    Task<bool> deletePlan(int id);
+}
