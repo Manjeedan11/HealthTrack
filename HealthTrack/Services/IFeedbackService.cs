@@ -1,2 +1,5 @@
-//TODO: Create an interface class to call & organize all the business logic methods
-//TODO: Afzal
+public interface IFeedbackService
+{
+    Task<bool> giveFeedback(Feedback feedback);
+    Task<IEnumerable<Feedback>> getClientFeedback(int clientId);
+}
