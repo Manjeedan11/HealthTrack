@@ -263,14 +263,12 @@ namespace HealthTrack.Migrations
                         name: "FK_appointments_Clients_clientId",
                         column: x => x.clientId,
                         principalTable: "Clients",
-                        principalColumn: "clientId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "clientId");
                     table.ForeignKey(
                         name: "FK_appointments_Trainers_trainerId",
                         column: x => x.trainerId,
                         principalTable: "Trainers",
-                        principalColumn: "trainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "trainerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -292,14 +290,12 @@ namespace HealthTrack.Migrations
                         name: "FK_dietPlans_Clients_clientId",
                         column: x => x.clientId,
                         principalTable: "Clients",
-                        principalColumn: "clientId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "clientId");
                     table.ForeignKey(
                         name: "FK_dietPlans_Trainers_trainerId",
                         column: x => x.trainerId,
                         principalTable: "Trainers",
-                        principalColumn: "trainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "trainerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -320,14 +316,12 @@ namespace HealthTrack.Migrations
                         name: "FK_feedbacks_Clients_clientId",
                         column: x => x.clientId,
                         principalTable: "Clients",
-                        principalColumn: "clientId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "clientId");
                     table.ForeignKey(
                         name: "FK_feedbacks_Trainers_trainerId",
                         column: x => x.trainerId,
                         principalTable: "Trainers",
-                        principalColumn: "trainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "trainerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -349,14 +343,12 @@ namespace HealthTrack.Migrations
                         name: "FK_workoutPlans_Clients_clientId",
                         column: x => x.clientId,
                         principalTable: "Clients",
-                        principalColumn: "clientId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "clientId");
                     table.ForeignKey(
                         name: "FK_workoutPlans_Trainers_trainerId",
                         column: x => x.trainerId,
                         principalTable: "Trainers",
-                        principalColumn: "trainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "trainerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -366,7 +358,6 @@ namespace HealthTrack.Migrations
                     mealId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     dietId = table.Column<int>(type: "int", nullable: false),
-                    dietPlandietId = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     calories = table.Column<int>(type: "int", nullable: false),
                     mealTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -375,8 +366,8 @@ namespace HealthTrack.Migrations
                 {
                     table.PrimaryKey("PK_meals", x => x.mealId);
                     table.ForeignKey(
-                        name: "FK_meals_dietPlans_dietPlandietId",
-                        column: x => x.dietPlandietId,
+                        name: "FK_meals_dietPlans_dietId",
+                        column: x => x.dietId,
                         principalTable: "dietPlans",
                         principalColumn: "dietId",
                         onDelete: ReferentialAction.Cascade);
@@ -389,7 +380,6 @@ namespace HealthTrack.Migrations
                     exerciseId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     planId = table.Column<int>(type: "int", nullable: false),
-                    workoutPlanplanId = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     sets = table.Column<int>(type: "int", nullable: false),
                     reps = table.Column<int>(type: "int", nullable: false),
@@ -399,8 +389,8 @@ namespace HealthTrack.Migrations
                 {
                     table.PrimaryKey("PK_exercises", x => x.exerciseId);
                     table.ForeignKey(
-                        name: "FK_exercises_workoutPlans_workoutPlanplanId",
-                        column: x => x.workoutPlanplanId,
+                        name: "FK_exercises_workoutPlans_planId",
+                        column: x => x.planId,
                         principalTable: "workoutPlans",
                         principalColumn: "planId",
                         onDelete: ReferentialAction.Cascade);
@@ -428,8 +418,7 @@ namespace HealthTrack.Migrations
                         name: "FK_healthMetrics_Clients_clientId",
                         column: x => x.clientId,
                         principalTable: "Clients",
-                        principalColumn: "clientId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "clientId");
                     table.ForeignKey(
                         name: "FK_healthMetrics_exercises_exerciseId",
                         column: x => x.exerciseId,
@@ -500,9 +489,9 @@ namespace HealthTrack.Migrations
                 column: "trainerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_exercises_workoutPlanplanId",
+                name: "IX_exercises_planId",
                 table: "exercises",
-                column: "workoutPlanplanId");
+                column: "planId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_feedbacks_clientId",
@@ -530,9 +519,9 @@ namespace HealthTrack.Migrations
                 column: "mealId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_meals_dietPlandietId",
+                name: "IX_meals_dietId",
                 table: "meals",
-                column: "dietPlandietId");
+                column: "dietId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_notifications_userId",

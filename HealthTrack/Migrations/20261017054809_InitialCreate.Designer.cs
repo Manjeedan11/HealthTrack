@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthTrack.Migrations
 {
     [DbContext(typeof(HealthTrackDbContext))]
-    [Migration("20261017053253_InitialCreate")]
+    [Migration("20261017054809_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -172,12 +172,9 @@ namespace HealthTrack.Migrations
                     b.Property<int>("sets")
                         .HasColumnType("int");
 
-                    b.Property<int>("workoutPlanplanId")
-                        .HasColumnType("int");
-
                     b.HasKey("exerciseId");
 
-                    b.HasIndex("workoutPlanplanId");
+                    b.HasIndex("planId");
 
                     b.ToTable("exercises");
                 });
@@ -269,9 +266,6 @@ namespace HealthTrack.Migrations
                     b.Property<int>("dietId")
                         .HasColumnType("int");
 
-                    b.Property<int>("dietPlandietId")
-                        .HasColumnType("int");
-
                     b.Property<string>("mealTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -282,7 +276,7 @@ namespace HealthTrack.Migrations
 
                     b.HasKey("mealId");
 
-                    b.HasIndex("dietPlandietId");
+                    b.HasIndex("dietId");
 
                     b.ToTable("meals");
                 });
@@ -599,13 +593,13 @@ namespace HealthTrack.Migrations
                     b.HasOne("Client", "client")
                         .WithMany("appointments")
                         .HasForeignKey("clientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Trainer", "trainer")
                         .WithMany("appointments")
                         .HasForeignKey("trainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("client");
@@ -629,13 +623,13 @@ namespace HealthTrack.Migrations
                     b.HasOne("Client", "client")
                         .WithMany("dietPlans")
                         .HasForeignKey("clientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Trainer", "trainer")
                         .WithMany("dietPlans")
                         .HasForeignKey("trainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("client");
@@ -647,7 +641,7 @@ namespace HealthTrack.Migrations
                 {
                     b.HasOne("WorkoutPlan", "workoutPlan")
                         .WithMany("exercises")
-                        .HasForeignKey("workoutPlanplanId")
+                        .HasForeignKey("planId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -659,13 +653,13 @@ namespace HealthTrack.Migrations
                     b.HasOne("Client", "client")
                         .WithMany("feedbacks")
                         .HasForeignKey("clientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Trainer", "trainer")
                         .WithMany("feedbacks")
                         .HasForeignKey("trainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("client");
@@ -678,16 +672,18 @@ namespace HealthTrack.Migrations
                     b.HasOne("Client", "client")
                         .WithMany("healthMetrics")
                         .HasForeignKey("clientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Exercise", "exercise")
                         .WithMany()
-                        .HasForeignKey("exerciseId");
+                        .HasForeignKey("exerciseId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Meal", "meal")
                         .WithMany()
-                        .HasForeignKey("mealId");
+                        .HasForeignKey("mealId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("client");
 
@@ -700,7 +696,7 @@ namespace HealthTrack.Migrations
                 {
                     b.HasOne("DietPlan", "dietPlan")
                         .WithMany("meals")
-                        .HasForeignKey("dietPlandietId")
+                        .HasForeignKey("dietId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -785,13 +781,13 @@ namespace HealthTrack.Migrations
                     b.HasOne("Client", "client")
                         .WithMany("workoutPlans")
                         .HasForeignKey("clientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Trainer", "trainer")
                         .WithMany("workoutPlans")
                         .HasForeignKey("trainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("client");
