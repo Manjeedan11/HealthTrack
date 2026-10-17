@@ -15,7 +15,7 @@ public class HealthMetricRepository : IHealthMetricRepository
             .OrderByDescending(m => m.date)
             .ToListAsync();
 
-    public async Task<HealthMetric> getById(int id)
+    public async Task<HealthMetric?> getById(int id)
         => await context.healthMetrics.FindAsync(id);
 
     public async Task add(HealthMetric metric)

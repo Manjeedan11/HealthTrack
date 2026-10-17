@@ -12,7 +12,7 @@ public class AppointmentRepository : IAppointmentRepository
     public async Task<IEnumerable<Appointment>> getAll()
         => await context.appointments.ToListAsync();
 
-    public async Task<Appointment> getById(int id)
+    public async Task<Appointment?> getById(int id)
         => await context.appointments.FindAsync(id);
 
     public async Task add(Appointment appointment)

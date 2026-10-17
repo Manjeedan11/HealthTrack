@@ -1,5 +1,8 @@
-public class DietPlan {
+using System.ComponentModel.DataAnnotations;
 
+public class DietPlan
+{
+    [Key]
     public int dietId { get; set; }
     public int trainerId { get; set; }
     public Trainer trainer { get; set; }

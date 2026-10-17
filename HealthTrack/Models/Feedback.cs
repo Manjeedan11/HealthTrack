@@ -5,7 +5,7 @@ public class Feedback {
     public Trainer trainer { get; set; }
     public int clientId { get; set; }
     public Client client { get; set; }
-    public string message { get; set; }
+    public string comment { get; set; }
     public DateTime date { get; set; }
     
 }

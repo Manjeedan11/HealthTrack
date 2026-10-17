@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+
 public class WorkoutPlan{
 
+    [Key]
     public int planId { get; set; }
     public int trainerId { get; set; }
     public Trainer trainer { get; set; }

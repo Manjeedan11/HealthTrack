@@ -35,7 +35,7 @@ public class WorkoutService : IWorkoutService
     public async Task<IEnumerable<WorkoutPlan>> getClientPlans(int clientId)
         => await workoutRepo.getByClient(clientId);
 
-    public async Task<WorkoutPlan> getPlan(int id)
+    public async Task<WorkoutPlan?> getPlan(int id)
         => await workoutRepo.getById(id);
 
     public async Task<bool> deletePlan(int id)

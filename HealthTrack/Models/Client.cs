@@ -8,7 +8,7 @@ public class Client {
     public string gender { get; set; }
     public float height { get; set; }
 
-    public ICollection<HealthMetrics> healthMetrics { get; set; }
+    public ICollection<HealthMetric> healthMetrics { get; set; }
     public ICollection<Appointment> appointments { get; set; }
     public ICollection<WorkoutPlan> workoutPlans { get; set; }
     public ICollection<DietPlan> dietPlans { get; set; }

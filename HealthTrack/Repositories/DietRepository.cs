@@ -12,7 +12,7 @@ public class DietRepository : IDietRepository
     public async Task<IEnumerable<DietPlan>> getAll()
         => await context.dietPlans.Include(p => p.meals).ToListAsync();
 
-    public async Task<DietPlan> getById(int id)
+    public async Task<DietPlan?> getById(int id)
         => await context.dietPlans
             .Include(p => p.meals)
             .FirstOrDefaultAsync(p => p.dietId == id);

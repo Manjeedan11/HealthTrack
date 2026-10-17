@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+
 public class HealthMetric
 {
+    [Key]
     public int metricId { get; set; }
     public int clientId { get; set; }
     public Client client { get; set; }

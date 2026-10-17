@@ -12,7 +12,7 @@ public class WorkoutRepository : IWorkoutRepository
     public async Task<IEnumerable<WorkoutPlan>> getAll()
         => await context.workoutPlans.Include(p => p.exercises).ToListAsync();
 
-    public async Task<WorkoutPlan> getById(int id)
+    public async Task<WorkoutPlan?> getById(int id)
         => await context.workoutPlans
             .Include(p => p.exercises)
             .FirstOrDefaultAsync(p => p.planId == id);

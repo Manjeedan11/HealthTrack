@@ -1,5 +1,5 @@
 # Local development settings (connection strings)
-**/appsettings.Development.json
+**/appsettings.json
 
 # Visual Studio
 .vs/

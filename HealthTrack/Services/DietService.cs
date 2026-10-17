@@ -35,7 +35,7 @@ public class DietService : IDietService
     public async Task<IEnumerable<DietPlan>> getClientPlans(int clientId)
         => await dietRepo.getByClient(clientId);
 
-    public async Task<DietPlan> getPlan(int id)
+    public async Task<DietPlan?> getPlan(int id)
         => await dietRepo.getById(id);
 
     public async Task<bool> deletePlan(int id)
