@@ -1,0 +1,120 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="ht-auth-canvas">
+    <div class="ht-auth-card">
+        <!-- Card Header -->
+        <div class="ht-card-header">
+            <h1 class="ht-card-title">Sign In</h1>
+            <p class="ht-card-subtitle">Enter your credentials to access your HealthTrack portal</p>
+        </div>
+
+        <!-- Server-side Model Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="ht-validation-summary" role="alert"></div>
+
+        <!-- Login Form -->
+        <form asp-controller="Account" asp-action="login" method="post" class="ht-form" id="loginForm" novalidate>
+            @Html.AntiForgeryToken()
+
+            <!-- Email Address Field -->
+            <div class="ht-form-group">
+                <label asp-for="email" class="ht-label">Email Address</label>
+                <div class="ht-input-box">
+                    <span class="ht-field-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
+                    </span>
+                    <input asp-for="email"
+                           type="email"
+                           class="ht-input"
+                           placeholder="name@example.com"
+                           autocomplete="email"
+                           aria-required="true"
+                           id="login-email" />
+                </div>
+                <span asp-validation-for="email" class="ht-field-validation"></span>
+            </div>
+
+            <!-- Password Field -->
+            <div class="ht-form-group">
+                <label asp-for="password" class="ht-label">Password</label>
+                <div class="ht-input-box">
+                    <span class="ht-field-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </span>
+                    <input asp-for="password"
+                           type="password"
+                           class="ht-input ht-input-pwd"
+                           placeholder="••••••••••••"
+                           autocomplete="current-password"
+                           aria-required="true"
+                           id="login-password" />
+                    <button type="button"
+                            class="ht-pwd-toggle"
+                            aria-label="Toggle password visibility"
+                            tabindex="-1">
+                        <svg class="icon-eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="icon-eye-closed d-none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                            <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                            <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                            <line x1="2" x2="22" y1="2" y2="22"></line>
+                        </svg>
+                    </button>
+                </div>
+                <span asp-validation-for="password" class="ht-field-validation"></span>
+            </div>
+
+            <!-- Meta Options: Remember Me & Forgot Password -->
+            <div class="ht-meta-row">
+                <div class="ht-checkbox-box">
+                    <input asp-for="rememberMe" class="ht-checkbox" type="checkbox" id="rememberMeCheck" />
+                    <label asp-for="rememberMe" class="ht-checkbox-label" for="rememberMeCheck">
+                        Remember me
+                    </label>
+                </div>
+                <a href="#" class="ht-link-teal" onclick="event.preventDefault();" aria-label="Forgot password?">Forgot password?</a>
+            </div>
+
+            <!-- Primary Sign In Button -->
+            <button type="submit" class="ht-btn-submit" id="loginSubmitBtn">
+                <span>Sign In</span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+        </form>
+
+        <!-- Card Footer Navigation -->
+        <div class="ht-card-switch">
+            <span>Don't have an account?</span>
+            <a asp-controller="Account" asp-action="register" class="ht-link-teal ht-fw-bold" id="linkToRegister">Create an account</a>
+        </div>
+
+        <!-- Security Notice Inside Card -->
+        <div class="ht-security-notice">
+            <span class="ht-sec-icon" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </span>
+            <span>Protected by end-to-end data encryption &amp; strict access governance.</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

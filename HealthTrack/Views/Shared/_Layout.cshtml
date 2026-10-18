@@ -1,47 +1,134 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - HealthTrack</title>
-    <script type="importmap"></script>
+
+    <!-- Typography: Inter font matching reference specification -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Existing Core Stylesheets -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HealthTrack.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HealthTrack</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+<body class="ht-app-body">
+    <!-- Accessible Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Reference Exact Header / Navbar -->
+    <header class="ht-header">
+        <nav class="ht-navbar" aria-label="Main Navigation">
+            <div class="ht-nav-container">
+                <!-- HealthTrack Brand -->
+                <a class="ht-brand" asp-controller="Home" asp-action="Index">
+                    <span class="ht-brand-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <span class="ht-brand-name">HealthTrack</span>
+                </a>
+
+                <!-- Navigation Controls -->
+                <div class="ht-nav-actions">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="ht-auth-user">
+                            <span class="ht-user-pill">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span class="ht-user-name">@User.Identity.Name</span>
+                            </span>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Admin" asp-action="index" class="ht-nav-link-btn">Admin Portal</a>
+                            }
+                            else if (User.IsInRole("Trainer"))
+                            {
+                                <a asp-controller="Trainer" asp-action="index" class="ht-nav-link-btn">Trainer Portal</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Client" asp-action="index" class="ht-nav-link-btn">Dashboard</a>
+                            }
+
+                            <form asp-controller="Account" asp-action="logout" method="post" class="d-inline m-0">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="ht-btn-signout" title="Sign out">
+                                    Sign Out
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        @if (ViewData["Title"]?.ToString() == "Sign In")
+                        {
+                            <div class="ht-auth-prompt">
+                                <span class="ht-prompt-text">Need an account?</span>
+                                <a asp-controller="Account" asp-action="register" class="ht-prompt-link">Register</a>
+                                <a asp-controller="Account" asp-action="register" class="ht-avatar-btn" aria-label="Register account">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="ht-auth-prompt">
+                                <span class="ht-prompt-text">Already have an account?</span>
+                                <a asp-controller="Account" asp-action="login" class="ht-prompt-link">Sign In</a>
+                                <a asp-controller="Account" asp-action="login" class="ht-avatar-btn" aria-label="Sign in">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - HealthTrack - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- Main Content Area -->
+    <main id="main-content" role="main" class="ht-main-content">
+        @RenderBody()
+    </main>
+
+    <!-- Reference Exact Global Footer -->
+    <footer class="ht-footer">
+        <div class="ht-footer-container">
+            <div class="ht-footer-left">
+                <span class="ht-footer-shield" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                </span>
+                <span>Your health journey, all in one place</span>
+            </div>
+
+            <div class="ht-footer-right">
+                <a asp-controller="Home" asp-action="Privacy" class="ht-footer-link">Privacy Policy</a>
+                <span class="ht-footer-dot" aria-hidden="true">&bull;</span>
+                <span class="ht-footer-link">Security Standards</span>
+                <span class="ht-footer-dot" aria-hidden="true">&bull;</span>
+                <span class="ht-footer-copy">&copy; 2026 HealthTrack Systems</span>
+            </div>
         </div>
     </footer>
+
+    <!-- Existing Core Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
