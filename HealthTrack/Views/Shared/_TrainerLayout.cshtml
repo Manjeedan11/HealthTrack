@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HealthTrack Trainer Portal</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HealthTrack.styles.css" asp-append-version="true" />
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation (255px wide desktop) -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Trainer Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" asp-controller="Trainer" asp-action="index">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub ht-brand-sub-trainer">TRAINER PORTAL</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching screenshot -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard (Active) -->
+                <a asp-controller="Trainer" asp-action="index" class="ht-nav-item active" aria-current="page">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Clients -->
+                <a href="#clients-roster" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span>Clients</span>
+                </a>
+
+                <!-- 3. Workout Plans -->
+                <a asp-controller="Workout" asp-action="create" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6.5 6.5 11 11"></path>
+                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                            <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a asp-controller="Diet" asp-action="create" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Manage Routines -->
+                <a asp-controller="Workout" asp-action="index" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </span>
+                    <span>Manage Routines</span>
+                </a>
+
+                <!-- 6. Appointments -->
+                <a asp-controller="Appointment" asp-action="index" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 7. Progress -->
+                <a asp-controller="HealthMetric" asp-action="index" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                    </span>
+                    <span>Progress</span>
+                </a>
+
+                <!-- 8. Reports -->
+                <a asp-controller="Admin" asp-action="index" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </span>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Profile & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="#" class="ht-nav-item" onclick="event.preventDefault();" aria-label="Trainer profile">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span>Profile</span>
+                </a>
+
+                <form asp-controller="Account" asp-action="logout" method="post" class="m-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="ht-nav-item ht-nav-signout w-100">
+                        <span class="ht-nav-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </span>
+                        <span>Sign Out</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar (White bar with notifications & user profile on right) -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell with red badge indicator -->
+                    <a asp-controller="Notification" asp-action="index" class="ht-topbar-btn position-relative" aria-label="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- User Profile Area (MV avatar only) -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar">
+                            @(ViewData["TrainerInitials"] ?? "MV")
+                        </div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name">@(ViewData["TrainerName"] ?? "Marcus Vance")</span>
+                            <span class="ht-profile-role">Trainer</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
