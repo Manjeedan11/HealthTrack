@@ -1,0 +1,175 @@
+@model HealthMetric
+@{
+    Layout = "_ClientLayout";
+    ViewData["Title"] = "Log Health Measurement";
+
+    // Validate returnView parameter: strictly accept 'measurements' or 'progress'; default to 'measurements'
+    string rawReturn = (Context.Request.Query["returnView"].ToString() ?? "").Trim().ToLowerInvariant();
+    string returnView = (rawReturn == "progress") ? "progress" : "measurements";
+    string returnLabel = (returnView == "progress") ? "Back to Progress & Analytics" : "Back to Health Measurements";
+}
+
+<div class="ht-dashboard-container">
+    <!-- Breadcrumb & Back Links -->
+    <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+        <a asp-controller="Client" asp-action="index" class="ht-card-link-action p-0" id="linkLogBackToDashboard">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
+        <span class="text-muted" aria-hidden="true">&bull;</span>
+        <a asp-controller="HealthMetric" asp-action="index" asp-route-view="@returnView" class="ht-card-link-action p-0" id="linkLogBackToSource">
+            <span>@returnLabel</span>
+        </a>
+    </div>
+
+    <!-- Page Header -->
+    <div class="ht-welcome-section mb-4">
+        <h1 class="ht-welcome-title">Log Health Measurement</h1>
+        <p class="ht-welcome-subtitle">Record your current body weight, calories burned and calories consumed to keep your progress updated.</p>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="row g-4">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+            <div class="ht-card">
+                <div class="ht-card-header-flex mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                                <circle cx="12" cy="12" r="2"></circle>
+                                <path d="M6 12h.01M18 12h.01"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0">Measurement Entry</h2>
+                            <p class="ht-card-subtitle mb-0">Enter your health metrics for today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validation Summary -->
+                <div asp-validation-summary="ModelOnly" class="ht-validation-summary" role="alert"></div>
+
+                <!-- MVC Log Form -->
+                <form asp-controller="HealthMetric" asp-action="log" asp-route-returnView="@returnView" method="post" id="healthMetricLogForm" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3 mb-4">
+                        <!-- Body Weight Input -->
+                        <div class="col-12">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="weight" class="ht-label">Body Weight (kg) <span class="text-danger">*</span></label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 22h14"></path>
+                                            <path d="M5 2h14"></path>
+                                            <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
+                                            <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
+                                        </svg>
+                                    </span>
+                                    <input asp-for="weight"
+                                           type="number"
+                                           step="0.1"
+                                           min="20"
+                                           max="350"
+                                           class="ht-input"
+                                           placeholder="e.g., 72.4"
+                                           required
+                                           aria-required="true"
+                                           id="metric-weight-input" />
+                                </div>
+                                <span asp-validation-for="weight" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Calories Burned Input -->
+                        <div class="col-12 col-sm-6">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="caloriesBurned" class="ht-label">Calories Burned (kcal)</label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                                        </svg>
+                                    </span>
+                                    <input asp-for="caloriesBurned"
+                                           type="number"
+                                           step="1"
+                                           min="0"
+                                           max="10000"
+                                           class="ht-input"
+                                           placeholder="e.g., 1840"
+                                           id="metric-calories-burned-input" />
+                                </div>
+                                <span asp-validation-for="caloriesBurned" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Calories Consumed Input -->
+                        <div class="col-12 col-sm-6">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="caloriesConsumed" class="ht-label">Calories Consumed (kcal)</label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 2v20"></path>
+                                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                            <path d="M8 10v12"></path>
+                                        </svg>
+                                    </span>
+                                    <input asp-for="caloriesConsumed"
+                                           type="number"
+                                           step="1"
+                                           min="0"
+                                           max="10000"
+                                           class="ht-input"
+                                           placeholder="e.g., 2050"
+                                           id="metric-calories-consumed-input" />
+                                </div>
+                                <span asp-validation-for="caloriesConsumed" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- System Calculation Information Notice -->
+                        <div class="col-12">
+                            <div class="ht-workout-notice d-flex align-items-start gap-2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary mt-1">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <div class="small text-muted">
+                                    <strong>Automated System Stamping:</strong>
+                                    The timestamp (<code>DateTime.Now</code>) and BMI calculation (<code>weight / (height/100)²</code>) are evaluated server-side upon submission based on your registered client profile.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-3 border-top">
+                        <a asp-controller="HealthMetric" asp-action="index" asp-route-view="@returnView" class="btn btn-outline-secondary px-4 py-2" id="btnCancelLog">
+                            Cancel
+                        </a>
+                        <button type="submit" class="ht-btn-submit px-4" id="btnSubmitHealthMetric">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Save Measurement</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

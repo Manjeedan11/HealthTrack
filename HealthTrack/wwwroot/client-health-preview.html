@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Health Measurements & Progress Preview - HealthTrack Client Portal</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation (255px wide desktop) -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Client Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="/Client/Preview" id="sidebarBrandLink">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
+                            </path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub">Client Portal</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn"
+                    aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching Client Dashboard screenshot -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard -->
+                <a href="/Client/Preview" class="ht-nav-item" id="navItemDashboard" title="Dashboard">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Workout Plans -->
+                <a href="client-plans-preview.html#workout-plans" class="ht-nav-item" title="Workout Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h6v6"></path>
+                            <path d="M9 21H3v-6"></path>
+                            <path d="M21 3l-7 7"></path>
+                            <path d="M3 21l7-7"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 3. My Workouts -->
+                <a href="#my-workouts" class="ht-nav-item" onclick="event.preventDefault();" title="My Workouts">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                    </span>
+                    <span>My Workouts</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a href="client-plans-preview.html#diet-plans" class="ht-nav-item" title="Diet Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Health Measurements (Active in Mode A) -->
+                <a href="#measurements" class="ht-nav-item active" id="navItemMeasurements" aria-current="page">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <path d="M6 12h.01M18 12h.01"></path>
+                        </svg>
+                    </span>
+                    <span>Health Measurements</span>
+                </a>
+
+                <!-- 6. Progress & Analytics (Active in Mode B) -->
+                <a href="#progress" class="ht-nav-item" id="navItemProgress">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"></path>
+                            <path d="m19 9-5 5-4-4-3 3"></path>
+                        </svg>
+                    </span>
+                    <span>Progress &amp; Analytics</span>
+                </a>
+
+                <!-- 7. Appointments -->
+                <a href="#appointments" class="ht-nav-item" onclick="event.preventDefault();" title="Appointments">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" y1="16" x2="16" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 8. Trainer Feedback -->
+                <a href="#feedback" class="ht-nav-item" onclick="event.preventDefault();" title="Trainer Feedback">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    <span>Trainer Feedback</span>
+                </a>
+
+                <!-- 9. Notifications -->
+                <a href="#notifications" class="ht-nav-item" onclick="event.preventDefault();" title="Notifications">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </span>
+                    <span>Notifications</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Settings & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="#settings" class="ht-nav-item" onclick="event.preventDefault();" aria-label="Portal settings">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
+                            </path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                    <span>Settings</span>
+                </a>
+
+                <a href="#signout" class="ht-nav-item ht-nav-signout w-100" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar (White bar matching Client Portal screenshot) -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left d-flex align-items-center gap-3">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn"
+                        aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <!-- Left Brand Indicator matching screenshot -->
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6e5a" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" class="d-none d-sm-inline">
+                            <path
+                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
+                            </path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                        <span class="fw-semibold" style="color: #1e293b; font-size: 0.95rem;">Client Portal</span>
+                    </div>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell with red indicator dot -->
+                    <a href="#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications"
+                        onclick="event.preventDefault();">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- User Profile Area matching reference screenshot -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar">DP</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name">Dhammika Perera</span>
+                            <span class="ht-profile-role">Client</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- Mandatory Preview Notice Banner -->
+                    <div class="ht-demo-notice alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4"
+                        role="alert">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div class="small">
+                                <strong>PREVIEW MODE — SAMPLE DATA ONLY. NOTHING IS SAVED TO THE DATABASE.</strong>
+                                <span class="d-none d-md-inline ms-1 text-muted">Demonstration preview of Client Health
+                                    Measurements &amp; Progress Analytics screens.</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <!-- Quick View Switcher Pills -->
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Screen Switcher">
+                                <button type="button" class="btn btn-primary" id="btnTabMeasurements">Health
+                                    Measurements</button>
+                                <button type="button" class="btn btn-outline-primary" id="btnTabProgress">Progress &amp;
+                                    Analytics</button>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnToggleEmptyState"
+                                title="Toggle empty state view for testing">
+                                View Empty State
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Feedback Message Banner (Shown upon mock submission) -->
+                    <div id="mockSuccessAlert"
+                        class="alert alert-success d-none align-items-center justify-content-between mb-4 shadow-sm"
+                        role="alert">
+                        <div class="d-flex align-items-center gap-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                class="text-success flex-shrink-0">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <div>
+                                <strong id="mockAlertTitle">Measurement Recorded!</strong>
+                                <div class="small text-muted" id="mockAlertSubtitle">Measurement simulated in browser
+                                    preview. Live database persistence will be connected by backend developer.</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" id="btnCloseSuccessAlert" aria-label="Close"></button>
+                    </div>
+
+                    <!-- ======================================================== -->
+                    <!-- VIEW 1: HEALTH MEASUREMENTS MODE                         -->
+                    <!-- ======================================================== -->
+                    <section id="sectionMeasurements">
+                        <!-- Breadcrumb / Back Link -->
+                        <div class="mb-3">
+                            <a href="/Client/Preview" class="ht-card-link-action p-0" id="linkBackToDashboard1">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Dashboard</span>
+                            </a>
+                        </div>
+
+                        <!-- Page Header & Action Row -->
+                        <div class="ht-trainer-header-row mb-4">
+                            <div>
+                                <h1 class="ht-welcome-title">Health Measurements</h1>
+                                <p class="ht-welcome-subtitle">Record, track and review your personal body weight, BMI
+                                    and metabolic measurements over time.</p>
+                            </div>
+                            <div class="ht-trainer-actions-group">
+                                <button type="button"
+                                    class="ht-btn-submit d-inline-flex px-4 py-2 w-auto align-items-center gap-2"
+                                    id="btnOpenLogModal">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    <span>+ Log Measurement</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Populated Content Area -->
+                        <div id="measurementsPopulatedArea">
+                            <!-- KPI Summary Cards Row -->
+                            <div class="row g-3 mb-4" id="kpiCardsRow">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- History Table Card -->
+                            <div class="ht-card">
+                                <div class="ht-card-header-flex mb-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h2 class="ht-card-title mb-0">Measurement History</h2>
+                                        <span class="ht-status-badge ht-status-confirmed" id="recordsCountBadge">4 Total
+                                            Records</span>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table ht-trainer-table align-middle mb-0"
+                                        aria-label="Recorded Health Measurements">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="ht-th-col" style="width: 28%;">RECORDED DATE</th>
+                                                <th scope="col" class="ht-th-col" style="width: 18%;">WEIGHT</th>
+                                                <th scope="col" class="ht-th-col" style="width: 18%;">BMI</th>
+                                                <th scope="col" class="ht-th-col" style="width: 18%;">CALORIES BURNED
+                                                </th>
+                                                <th scope="col" class="ht-th-col text-end" style="width: 18%;">CALORIES
+                                                    CONSUMED</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="measurementHistoryTbody">
+                                            <!-- Injected dynamically via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty State Container (Hidden by default, toggleable) -->
+                        <div id="measurementsEmptyState" class="ht-card text-center py-5 ht-health-empty-card d-none"
+                            aria-label="No measurements recorded">
+                            <div class="ht-health-empty-icon mb-3" aria-hidden="true">
+                                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                    <path d="M6 12h.01M18 12h.01"></path>
+                                </svg>
+                            </div>
+                            <h2 class="ht-card-title mb-2">No Measurements Recorded</h2>
+                            <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
+                                You haven't recorded any health measurements yet. Track your body weight, BMI and
+                                metabolic metrics regularly to build insights and progress tracking.
+                            </p>
+                            <button type="button" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto"
+                                id="btnEmptyStateLog">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Log First Measurement
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- ======================================================== -->
+                    <!-- VIEW 2: PROGRESS & ANALYTICS MODE                        -->
+                    <!-- ======================================================== -->
+                    <section id="sectionProgress" class="d-none">
+                        <!-- Breadcrumb / Back Link -->
+                        <div class="mb-3">
+                            <a href="/Client/Preview" class="ht-card-link-action p-0" id="linkBackToDashboard2">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Dashboard</span>
+                            </a>
+                        </div>
+
+                        <!-- Header & Action Row -->
+                        <div class="ht-trainer-header-row mb-4">
+                            <div>
+                                <h1 class="ht-welcome-title">Progress &amp; Analytics</h1>
+                                <p class="ht-welcome-subtitle">Monitor trends, weight progression and metabolic
+                                    analytics across your recorded health milestones.</p>
+                            </div>
+                            <div class="ht-trainer-actions-group">
+                                <button type="button"
+                                    class="ht-btn-submit d-inline-flex px-4 py-2 w-auto align-items-center gap-2"
+                                    id="btnOpenLogModalProgress">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    <span>+ Log Measurement</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Populated Analytics Area -->
+                        <div id="progressPopulatedArea">
+                            <!-- Analytics Highlights Row -->
+                            <div class="row g-3 mb-4" id="progressHighlightsRow">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- Native SVG Trend Charts Row -->
+                            <div class="row g-4 mb-4">
+                                <!-- Weight Trend Chart -->
+                                <div class="col-12 col-lg-7">
+                                    <div class="ht-card h-100">
+                                        <div class="ht-card-header-flex mb-3">
+                                            <div>
+                                                <h2 class="ht-card-title mb-1">Body Weight Progression</h2>
+                                                <p class="ht-card-subtitle mb-0">Historical body mass tracking across
+                                                    recorded entries</p>
+                                            </div>
+                                            <span class="ht-status-badge ht-status-confirmed"
+                                                id="weightChartEntriesBadge">4 entries</span>
+                                        </div>
+                                        <div class="ht-health-chart-wrapper" id="weightChartContainer">
+                                            <!-- SVG Chart generated via JS -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- BMI Trajectory Chart -->
+                                <div class="col-12 col-lg-5">
+                                    <div class="ht-card h-100">
+                                        <div class="ht-card-header-flex mb-3">
+                                            <div>
+                                                <h2 class="ht-card-title mb-1">BMI Trajectory</h2>
+                                                <p class="ht-card-subtitle mb-0">Comparison against healthy thresholds
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="ht-health-chart-wrapper" id="bmiChartContainer">
+                                            <!-- SVG Chart generated via JS -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Milestone Details Table -->
+                            <div class="ht-card">
+                                <div class="ht-card-header-flex mb-3">
+                                    <h2 class="ht-card-title mb-0">Analytics Milestone Details</h2>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table ht-trainer-table align-middle mb-0"
+                                        aria-label="Analytics Milestone Data">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="ht-th-col" style="width: 25%;">MILESTONE DATE
+                                                </th>
+                                                <th scope="col" class="ht-th-col" style="width: 20%;">RECORDED WEIGHT
+                                                </th>
+                                                <th scope="col" class="ht-th-col" style="width: 20%;">BMI</th>
+                                                <th scope="col" class="ht-th-col" style="width: 20%;">CALORIES BURNED
+                                                </th>
+                                                <th scope="col" class="ht-th-col text-end" style="width: 15%;">CALORIES
+                                                    CONSUMED</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="progressMilestonesTbody">
+                                            <!-- Injected dynamically via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty State Container for Progress -->
+                        <div id="progressEmptyState" class="ht-card text-center py-5 ht-health-empty-card d-none"
+                            aria-label="No data for analytics">
+                            <div class="ht-health-empty-icon mb-3" aria-hidden="true">
+                                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 3v18h18"></path>
+                                    <path d="m19 9-5 5-4-4-3 3"></path>
+                                </svg>
+                            </div>
+                            <h2 class="ht-card-title mb-2">No Analytics Available Yet</h2>
+                            <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
+                                Start recording your body weight and metabolic metrics to generate automated progress
+                                charts and health analytics.
+                            </p>
+                            <button type="button" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto"
+                                id="btnEmptyStateLog2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Log First Measurement
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- ======================================================== -->
+                    <!-- SIMULATED LOG MEASUREMENT FORM (CARD VIEW)               -->
+                    <!-- ======================================================== -->
+                    <section id="sectionLogForm" class="d-none">
+                        <!-- Breadcrumb -->
+                        <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                            <a href="/Client/Preview" class="ht-card-link-action p-0" id="linkBackToDashboardFromLog">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Dashboard</span>
+                            </a>
+                            <span class="text-muted" aria-hidden="true">&bull;</span>
+                            <button type="button" class="btn btn-link ht-card-link-action p-0 text-decoration-none"
+                                id="btnBackFromLog">
+                                <span id="btnBackFromLogText">Back to Health Measurements</span>
+                            </button>
+                        </div>
+
+                        <!-- Header -->
+                        <div class="ht-welcome-section mb-4">
+                            <h1 class="ht-welcome-title">Log Health Measurement</h1>
+                            <p class="ht-welcome-subtitle">Record your current body weight, calories burned and calories
+                                consumed to keep your progress updated.</p>
+                        </div>
+
+                        <!-- Form Card -->
+                        <div class="row g-4">
+                            <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+                                <div class="ht-card">
+                                    <div class="ht-card-header-flex mb-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                                                    <circle cx="12" cy="12" r="2"></circle>
+                                                    <path d="M6 12h.01M18 12h.01"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0">Measurement Entry</h2>
+                                                <p class="ht-card-subtitle mb-0">Enter your health metrics for today</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mock Form -->
+                                    <form id="mockLogForm" novalidate>
+                                        <div class="row g-3 mb-4">
+                                            <!-- Weight -->
+                                            <div class="col-12">
+                                                <div class="ht-form-group mb-0">
+                                                    <label for="previewWeight" class="ht-label">Body Weight (kg) <span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="ht-input-box">
+                                                        <span class="ht-field-icon" aria-hidden="true">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M5 22h14"></path>
+                                                                <path d="M5 2h14"></path>
+                                                                <path
+                                                                    d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22">
+                                                                </path>
+                                                                <path
+                                                                    d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <input type="number" id="previewWeight" class="ht-input"
+                                                            step="0.1" min="20" max="350" placeholder="e.g., 72.1"
+                                                            required aria-required="true" />
+                                                    </div>
+                                                    <div class="invalid-feedback d-none text-danger small mt-1"
+                                                        id="previewWeightError">Please enter a valid body weight greater
+                                                        than 0.</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Calories Burned -->
+                                            <div class="col-12 col-sm-6">
+                                                <div class="ht-form-group mb-0">
+                                                    <label for="previewCaloriesBurned" class="ht-label">Calories Burned
+                                                        (kcal)</label>
+                                                    <div class="ht-input-box">
+                                                        <span class="ht-field-icon" aria-hidden="true">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path
+                                                                    d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <input type="number" id="previewCaloriesBurned" class="ht-input"
+                                                            step="1" min="0" max="10000" placeholder="e.g., 1850" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Calories Consumed -->
+                                            <div class="col-12 col-sm-6">
+                                                <div class="ht-form-group mb-0">
+                                                    <label for="previewCaloriesConsumed" class="ht-label">Calories
+                                                        Consumed (kcal)</label>
+                                                    <div class="ht-input-box">
+                                                        <span class="ht-field-icon" aria-hidden="true">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M18 2v20"></path>
+                                                                <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                                                <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                                                <path d="M8 10v12"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <input type="number" id="previewCaloriesConsumed"
+                                                            class="ht-input" step="1" min="0" max="10000"
+                                                            placeholder="e.g., 2000" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- System Notice -->
+                                            <div class="col-12">
+                                                <div class="ht-workout-notice d-flex align-items-start gap-2">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" class="flex-shrink-0 text-primary mt-1">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                                    </svg>
+                                                    <div class="small text-muted">
+                                                        <strong>Automated System Stamping:</strong>
+                                                        Timestamp (<code>DateTime.Now</code>) and BMI (registered height
+                                                        178 cm: <code>weight / 1.78²</code>) are calculated
+                                                        automatically.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Buttons -->
+                                        <div
+                                            class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-3 border-top">
+                                            <button type="button" class="btn btn-outline-secondary px-4 py-2"
+                                                id="btnCancelLogPreview">
+                                                Cancel
+                                            </button>
+                                            <button type="submit" class="ht-btn-submit px-4" id="btnSubmitLogPreview">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                </svg>
+                                                <span>Save Measurement</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Client-side Interactive Logic (Self-contained, database-free) -->
+    <script>
+        (function () {
+            'use strict';
+
+            // Registered client height for client Dhammika Perera: 178 cm
+            const clientHeightMeters = 1.78;
+
+            // Sample demonstration health measurements (matching the Client Dashboard screenshot data)
+            // 74.2 kg -> 73.6 kg -> 73.0 kg -> 72.4 kg (-1.8 kg this month)
+            const initialMetrics = [
+                {
+                    metricId: 104,
+                    date: "Oct 20, 2026",
+                    dateShort: "Today",
+                    weight: 72.4,
+                    bmi: 22.8,
+                    caloriesBurned: 1840,
+                    caloriesConsumed: 2050
+                },
+                {
+                    metricId: 103,
+                    date: "Oct 13, 2026",
+                    dateShort: "W3",
+                    weight: 73.0,
+                    bmi: 23.0,
+                    caloriesBurned: 1750,
+                    caloriesConsumed: 2100
+                },
+                {
+                    metricId: 102,
+                    date: "Oct 6, 2026",
+                    dateShort: "W2",
+                    weight: 73.6,
+                    bmi: 23.2,
+                    caloriesBurned: 1680,
+                    caloriesConsumed: 2150
+                },
+                {
+                    metricId: 101,
+                    date: "Sep 29, 2026",
+                    dateShort: "W1",
+                    weight: 74.2,
+                    bmi: 23.4,
+                    caloriesBurned: 1600,
+                    caloriesConsumed: 2200
+                }
+            ];
+
+            let metrics = [...initialMetrics];
+            let activeScreen = 'measurements'; // 'measurements', 'progress', or 'log'
+            let emptyState = false;
+
+            // DOM Elements
+            const sectionMeasurements = document.getElementById('sectionMeasurements');
+            const sectionProgress = document.getElementById('sectionProgress');
+            const sectionLogForm = document.getElementById('sectionLogForm');
+
+            const measurementsPopulatedArea = document.getElementById('measurementsPopulatedArea');
+            const measurementsEmptyState = document.getElementById('measurementsEmptyState');
+            const progressPopulatedArea = document.getElementById('progressPopulatedArea');
+            const progressEmptyState = document.getElementById('progressEmptyState');
+
+            const navItemMeasurements = document.getElementById('navItemMeasurements');
+            const navItemProgress = document.getElementById('navItemProgress');
+            const btnTabMeasurements = document.getElementById('btnTabMeasurements');
+            const btnTabProgress = document.getElementById('btnTabProgress');
+            const btnToggleEmptyState = document.getElementById('btnToggleEmptyState');
+
+            const kpiCardsRow = document.getElementById('kpiCardsRow');
+            const measurementHistoryTbody = document.getElementById('measurementHistoryTbody');
+            const recordsCountBadge = document.getElementById('recordsCountBadge');
+
+            const progressHighlightsRow = document.getElementById('progressHighlightsRow');
+            const progressMilestonesTbody = document.getElementById('progressMilestonesTbody');
+            const weightChartContainer = document.getElementById('weightChartContainer');
+            const bmiChartContainer = document.getElementById('bmiChartContainer');
+            const weightChartEntriesBadge = document.getElementById('weightChartEntriesBadge');
+
+            const mockSuccessAlert = document.getElementById('mockSuccessAlert');
+            const mockAlertTitle = document.getElementById('mockAlertTitle');
+            const mockAlertSubtitle = document.getElementById('mockAlertSubtitle');
+            const btnCloseSuccessAlert = document.getElementById('btnCloseSuccessAlert');
+
+            const btnOpenLogModal = document.getElementById('btnOpenLogModal');
+            const btnOpenLogModalProgress = document.getElementById('btnOpenLogModalProgress');
+            const btnEmptyStateLog = document.getElementById('btnEmptyStateLog');
+            const btnEmptyStateLog2 = document.getElementById('btnEmptyStateLog2');
+            const btnBackFromLog = document.getElementById('btnBackFromLog');
+            const btnCancelLogPreview = document.getElementById('btnCancelLogPreview');
+            const mockLogForm = document.getElementById('mockLogForm');
+
+            // Mobile sidebar drawer
+            const openSidebarBtn = document.getElementById('openSidebarBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const portalSidebar = document.getElementById('portalSidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+            if (openSidebarBtn && portalSidebar && sidebarBackdrop) {
+                openSidebarBtn.addEventListener('click', () => {
+                    portalSidebar.classList.add('show');
+                    sidebarBackdrop.classList.add('show');
+                });
+            }
+            function closeDrawer() {
+                if (portalSidebar) portalSidebar.classList.remove('show');
+                if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+            }
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeDrawer);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+            function getBmiCategory(bmi) {
+                if (bmi < 18.5) return "Underweight";
+                if (bmi < 25.0) return "Normal Range";
+                if (bmi < 30.0) return "Overweight";
+                return "Obese";
+            }
+
+            function getBmiBadgeClass(bmi) {
+                if (bmi < 18.5) return "bg-warning text-dark";
+                if (bmi < 25.0) return "ht-status-badge ht-status-confirmed";
+                if (bmi < 30.0) return "bg-warning text-dark";
+                return "bg-danger text-white";
+            }
+
+            // Render Health Measurements Screen
+            function renderMeasurements() {
+                if (emptyState || metrics.length === 0) {
+                    measurementsPopulatedArea.classList.add('d-none');
+                    measurementsEmptyState.classList.remove('d-none');
+                    return;
+                }
+
+                measurementsEmptyState.classList.add('d-none');
+                measurementsPopulatedArea.classList.remove('d-none');
+
+                const latest = metrics[0];
+                const prev = metrics.length > 1 ? metrics[1] : null;
+                const diff = (latest && prev) ? (latest.weight - prev.weight) : null;
+
+                // 1. KPI Cards
+                kpiCardsRow.innerHTML = `
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">BODY WEIGHT</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 22h14"></path>
+                                        <path d="M5 2h14"></path>
+                                        <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
+                                        <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${latest.weight.toFixed(1)}</span>
+                                <span class="ht-kpi-unit">kg</span>
+                            </div>
+                            <div class="mt-2">
+                                                                ${diff !== null ? (
+                        diff < 0
+                            ? `<span class="ht-health-kpi-badge-down">${diff.toFixed(1)} kg</span>`
+                            : diff > 0
+                                ? `<span class="ht-health-kpi-badge-up">+${diff.toFixed(1)} kg</span>`
+                                : `<span class="ht-health-kpi-badge-neutral">No change</span>`
+                    ) + '<span class="text-muted small ms-1">vs previous</span>' : '<span class="text-muted small">Baseline recorded</span>'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">BMI</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="5" r="3"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="15"></line>
+                                        <line x1="9" y1="11" x2="15" y2="11"></line>
+                                        <line x1="10" y1="15" x2="8" y2="21"></line>
+                                        <line x1="14" y1="15" x2="16" y2="21"></line>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${latest.bmi.toFixed(1)}</span>
+                                <span class="ht-kpi-unit">kg/m²</span>
+                            </div>
+                            <div class="mt-2">
+                                <span class="${getBmiBadgeClass(latest.bmi)} py-1 px-2" style="font-size: 0.72rem; border-radius: 6px;">
+                                    ${getBmiCategory(latest.bmi)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">CALORIES BURNED</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${latest.caloriesBurned.toLocaleString()}</span>
+                                <span class="ht-kpi-unit">kcal</span>
+                            </div>
+                            <div class="mt-2 text-muted small">Latest recorded activity</div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">CALORIES CONSUMED</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 2v20"></path>
+                                        <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                        <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                        <path d="M8 10v12"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${latest.caloriesConsumed.toLocaleString()}</span>
+                                <span class="ht-kpi-unit">kcal</span>
+                            </div>
+                            <div class="mt-2 text-muted small">Latest recorded intake</div>
+                        </div>
+                    </div>
+                `;
+
+                // 2. History Table
+                recordsCountBadge.textContent = `${metrics.length} Total Records`;
+                measurementHistoryTbody.innerHTML = metrics.map(m => `
+                    <tr class="ht-client-row">
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                                <span class="fw-semibold text-dark">${m.date}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="fw-bold text-dark">${m.weight.toFixed(1)} kg</span>
+                        </td>
+                        <td>
+                            <div class="d-inline-flex align-items-center gap-1">
+                                <span class="fw-bold">${m.bmi.toFixed(1)}</span>
+                                <span class="badge bg-light text-secondary border px-1" style="font-size: 0.68rem;">${getBmiCategory(m.bmi)}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="ht-workout-duration-text">${m.caloriesBurned.toLocaleString()} kcal</span>
+                        </td>
+                        <td class="text-end">
+                            <span class="fw-semibold text-muted">${m.caloriesConsumed.toLocaleString()} kcal</span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Render Progress & Analytics Screen
+            function renderProgress() {
+                if (emptyState || metrics.length === 0) {
+                    progressPopulatedArea.classList.add('d-none');
+                    progressEmptyState.classList.remove('d-none');
+                    return;
+                }
+
+                progressEmptyState.classList.add('d-none');
+                progressPopulatedArea.classList.remove('d-none');
+
+                // Chronological order (oldest to newest)
+                const chron = [...metrics].reverse();
+                const oldest = chron[0];
+                const newest = chron[chron.length - 1];
+                const totalDiff = newest.weight - oldest.weight;
+                const avgBurned = Math.round(chron.reduce((sum, m) => sum + m.caloriesBurned, 0) / chron.length);
+                const avgConsumed = Math.round(chron.reduce((sum, m) => sum + m.caloriesConsumed, 0) / chron.length);
+
+                // Highlights Row
+                progressHighlightsRow.innerHTML = `
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">TOTAL WEIGHT CHANGE</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 3v18h18"></path>
+                                        <path d="m19 9-5 5-4-4-3 3"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${totalDiff < 0 ? totalDiff.toFixed(1) : '+' + totalDiff.toFixed(1)}</span>
+                                <span class="ht-kpi-unit">kg</span>
+                            </div>
+                            <div class="mt-2 text-muted small">
+                                From ${oldest.weight.toFixed(1)} kg to ${newest.weight.toFixed(1)} kg
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">CURRENT BMI</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="5" r="3"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="15"></line>
+                                        <line x1="9" y1="11" x2="15" y2="11"></line>
+                                        <line x1="10" y1="15" x2="8" y2="21"></line>
+                                        <line x1="14" y1="15" x2="16" y2="21"></line>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${newest.bmi.toFixed(1)}</span>
+                                <span class="ht-kpi-unit">kg/m²</span>
+                            </div>
+                            <div class="mt-2">
+                                <span class="${getBmiBadgeClass(newest.bmi)} py-1 px-2" style="font-size: 0.72rem; border-radius: 6px;">
+                                    ${getBmiCategory(newest.bmi)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">AVG CALORIES BURNED</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${avgBurned.toLocaleString()}</span>
+                                <span class="ht-kpi-unit">kcal</span>
+                            </div>
+                            <div class="mt-2 text-muted small">Across ${chron.length} milestones</div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="ht-card ht-kpi-card h-100">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">AVG CALORIES INTAKE</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 2v20"></path>
+                                        <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                        <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                        <path d="M8 10v12"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">${avgConsumed.toLocaleString()}</span>
+                                <span class="ht-kpi-unit">kcal</span>
+                            </div>
+                            <div class="mt-2 text-muted small">Daily average logged</div>
+                        </div>
+                    </div>
+                `;
+
+                // Render Native SVG Charts
+                weightChartEntriesBadge.textContent = `${chron.length} entries`;
+                renderSvgWeightChart(chron);
+                renderSvgBmiChart(chron);
+
+                // Milestone Details Table
+                progressMilestonesTbody.innerHTML = metrics.map(m => `
+                    <tr class="ht-client-row">
+                        <td>
+                            <span class="fw-semibold text-dark">${m.date}</span>
+                        </td>
+                        <td>
+                            <span class="fw-bold text-dark">${m.weight.toFixed(1)} kg</span>
+                        </td>
+                        <td>
+                            <span class="${getBmiBadgeClass(m.bmi)} py-1 px-2" style="font-size: 0.72rem; border-radius: 6px;">
+                                ${m.bmi.toFixed(1)} · ${getBmiCategory(m.bmi)}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="ht-workout-duration-text">${m.caloriesBurned.toLocaleString()} kcal</span>
+                        </td>
+                        <td class="text-end">
+                            <span class="fw-semibold text-muted">${m.caloriesConsumed.toLocaleString()} kcal</span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Native SVG Weight Progression Chart
+            function renderSvgWeightChart(chron) {
+                if (chron.length < 2) {
+                    weightChartContainer.innerHTML = '<div class="p-4 text-center text-muted">At least 2 points needed for progression line</div>';
+                    return;
+                }
+
+                const minW = Math.min(...chron.map(c => c.weight));
+                const maxW = Math.max(...chron.map(c => c.weight));
+                const yMin = Math.floor(minW - 0.5);
+                const yMax = Math.ceil(maxW + 0.5);
+                const yRange = Math.max(1.0, yMax - yMin);
+
+                const width = 600;
+                const height = 220;
+                const pLeft = 45;
+                const pRight = 30;
+                const pTop = 20;
+                const pBottom = 35;
+                const plotW = width - pLeft - pRight;
+                const plotH = height - pTop - pBottom;
+
+                const points = chron.map((c, i) => {
+                    const x = pLeft + (i * plotW / (chron.length - 1));
+                    const y = pTop + plotH - ((c.weight - yMin) / yRange * plotH);
+                    return { x, y, weight: c.weight, label: c.dateShort || c.date.split(',')[0] };
+                });
+
+                const polylineStr = points.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+
+                weightChartContainer.innerHTML = `
+                    <svg viewBox="0 0 ${width} ${height}" class="ht-health-chart-svg" preserveAspectRatio="none" aria-label="Body weight trend chart">
+                        <defs>
+                            <linearGradient id="previewWeightGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#0d6e5a" stop-opacity="0.3"></stop>
+                                <stop offset="100%" stop-color="#0d6e5a" stop-opacity="0.0"></stop>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Guidelines -->
+                        <line x1="${pLeft}" y1="${pTop}" x2="${width - pRight}" y2="${pTop}" class="ht-health-chart-guideline"></line>
+                        <line x1="${pLeft}" y1="${pTop + plotH / 2}" x2="${width - pRight}" y2="${pTop + plotH / 2}" class="ht-health-chart-guideline"></line>
+                        <line x1="${pLeft}" y1="${pTop + plotH}" x2="${width - pRight}" y2="${pTop + plotH}" class="ht-health-chart-guideline"></line>
+
+                        <!-- Y-Labels -->
+                        <text x="${pLeft - 8}" y="${pTop + 4}" text-anchor="end" class="ht-health-chart-label">${yMax.toFixed(1)}</text>
+                        <text x="${pLeft - 8}" y="${pTop + plotH / 2 + 4}" text-anchor="end" class="ht-health-chart-label">${((yMin + yRange / 2)).toFixed(1)}</text>
+                        <text x="${pLeft - 8}" y="${pTop + plotH + 4}" text-anchor="end" class="ht-health-chart-label">${yMin.toFixed(1)}</text>
+
+                        <!-- Area Fill -->
+                        <polygon points="${pLeft},${pTop + plotH} ${polylineStr} ${width - pRight},${pTop + plotH}" fill="url(#previewWeightGradient)"></polygon>
+
+                        <!-- Trend Line -->
+                        <polyline points="${polylineStr}" class="ht-health-chart-line"></polyline>
+
+                        <!-- Points and X Labels -->
+                        ${points.map(p => `
+                            <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" class="ht-health-chart-point">
+                                <title>${p.label}: ${p.weight.toFixed(1)} kg</title>
+                            </circle>
+                            <text x="${p.x.toFixed(1)}" y="${pTop + plotH + 20}" text-anchor="middle" class="ht-health-chart-label">
+                                ${p.label}
+                            </text>
+                        `).join('')}
+                    </svg>
+                `;
+            }
+
+            // Native SVG BMI Trajectory Chart
+            function renderSvgBmiChart(chron) {
+                if (chron.length < 2) {
+                    bmiChartContainer.innerHTML = '<div class="p-4 text-center text-muted">At least 2 points needed for progression line</div>';
+                    return;
+                }
+
+                const minBmi = Math.min(...chron.map(c => c.bmi));
+                const maxBmi = Math.max(...chron.map(c => c.bmi));
+                const yMin = Math.floor(Math.min(18.0, minBmi - 1.0));
+                const yMax = Math.ceil(Math.max(26.0, maxBmi + 1.0));
+                const yRange = Math.max(1.0, yMax - yMin);
+
+                const width = 600;
+                const height = 220;
+                const pLeft = 45;
+                const pRight = 30;
+                const pTop = 20;
+                const pBottom = 35;
+                const plotW = width - pLeft - pRight;
+                const plotH = height - pTop - pBottom;
+
+                const points = chron.map((c, i) => {
+                    const x = pLeft + (i * plotW / (chron.length - 1));
+                    const y = pTop + plotH - ((c.bmi - yMin) / yRange * plotH);
+                    return { x, y, bmi: c.bmi, label: c.dateShort || c.date.split(',')[0] };
+                });
+
+                const polylineStr = points.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+                const normalLineY = pTop + plotH - ((25.0 - yMin) / yRange * plotH);
+
+                bmiChartContainer.innerHTML = `
+                    <svg viewBox="0 0 ${width} ${height}" class="ht-health-chart-svg" preserveAspectRatio="none" aria-label="BMI trajectory chart">
+                        <!-- Normal Upper Limit Guideline (25.0) -->
+                        <line x1="${pLeft}" y1="${normalLineY.toFixed(1)}" x2="${width - pRight}" y2="${normalLineY.toFixed(1)}" stroke="#22c55e" stroke-dasharray="4 4" stroke-width="1.5"></line>
+                        <text x="${width - pRight}" y="${normalLineY - 4}" text-anchor="end" fill="#16a34a" style="font-size: 10px; font-weight: 600;">Normal Upper Limit (25.0)</text>
+
+                        <!-- Y-Labels -->
+                        <text x="${pLeft - 8}" y="${pTop + 4}" text-anchor="end" class="ht-health-chart-label">${yMax.toFixed(1)}</text>
+                        <text x="${pLeft - 8}" y="${pTop + plotH + 4}" text-anchor="end" class="ht-health-chart-label">${yMin.toFixed(1)}</text>
+
+                        <!-- Line -->
+                        <polyline points="${polylineStr}" stroke="#0284c7" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline>
+
+                        <!-- Points -->
+                        ${points.map(p => `
+                            <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="2">
+                                <title>${p.label}: BMI ${p.bmi.toFixed(1)}</title>
+                            </circle>
+                            <text x="${p.x.toFixed(1)}" y="${pTop + plotH + 20}" text-anchor="middle" class="ht-health-chart-label">
+                                ${p.label}
+                            </text>
+                        `).join('')}
+                    </svg>
+                `;
+            }
+
+            // Screen Navigation
+            function setScreen(screen) {
+                activeScreen = screen;
+                closeDrawer();
+
+                sectionMeasurements.classList.add('d-none');
+                sectionProgress.classList.add('d-none');
+                sectionLogForm.classList.add('d-none');
+
+                navItemMeasurements.classList.remove('active');
+                navItemMeasurements.removeAttribute('aria-current');
+                navItemProgress.classList.remove('active');
+                navItemProgress.removeAttribute('aria-current');
+
+                if (screen === 'measurements') {
+                    sectionMeasurements.classList.remove('d-none');
+                    navItemMeasurements.classList.add('active');
+                    navItemMeasurements.setAttribute('aria-current', 'page');
+                    btnTabMeasurements.className = 'btn btn-primary';
+                    btnTabProgress.className = 'btn btn-outline-primary';
+                    renderMeasurements();
+                } else if (screen === 'progress') {
+                    sectionProgress.classList.remove('d-none');
+                    navItemProgress.classList.add('active');
+                    navItemProgress.setAttribute('aria-current', 'page');
+                    btnTabMeasurements.className = 'btn btn-outline-primary';
+                    btnTabProgress.className = 'btn btn-primary';
+                    renderProgress();
+                } else if (screen === 'log') {
+                    sectionLogForm.classList.remove('d-none');
+                    if (logSourceScreen === 'progress') {
+                        navItemProgress.classList.add('active');
+                        navItemProgress.setAttribute('aria-current', 'page');
+                    } else {
+                        navItemMeasurements.classList.add('active');
+                        navItemMeasurements.setAttribute('aria-current', 'page');
+                    }
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Event Listeners for Tab Switching
+            btnTabMeasurements.addEventListener('click', () => setScreen('measurements'));
+            btnTabProgress.addEventListener('click', () => setScreen('progress'));
+            navItemMeasurements.addEventListener('click', (e) => {
+                e.preventDefault();
+                setScreen('measurements');
+            });
+            navItemProgress.addEventListener('click', (e) => {
+                e.preventDefault();
+                setScreen('progress');
+            });
+
+            // Log Form Open/Close with Source Screen Tracking
+            let logSourceScreen = 'measurements';
+
+            function openLog(source) {
+                logSourceScreen = (source === 'progress') ? 'progress' : 'measurements';
+                const backBtnText = document.getElementById('btnBackFromLogText');
+                if (backBtnText) {
+                    backBtnText.textContent = (logSourceScreen === 'progress')
+                        ? 'Back to Progress & Analytics'
+                        : 'Back to Health Measurements';
+                }
+
+                setScreen('log');
+                setTimeout(() => {
+                    const weightInp = document.getElementById('previewWeight');
+                    if (weightInp) weightInp.focus();
+                }, 50);
+            }
+
+            if (btnOpenLogModal) btnOpenLogModal.addEventListener('click', () => openLog('measurements'));
+            if (btnOpenLogModalProgress) btnOpenLogModalProgress.addEventListener('click', () => openLog('progress'));
+            if (btnEmptyStateLog) btnEmptyStateLog.addEventListener('click', () => {
+                emptyState = false;
+                openLog('measurements');
+            });
+            if (btnEmptyStateLog2) btnEmptyStateLog2.addEventListener('click', () => {
+                emptyState = false;
+                openLog('progress');
+            });
+
+            function returnFromLog() {
+                setScreen(logSourceScreen);
+            }
+
+            if (btnBackFromLog) btnBackFromLog.addEventListener('click', returnFromLog);
+            if (btnCancelLogPreview) btnCancelLogPreview.addEventListener('click', returnFromLog);
+
+            // Empty State Toggle
+            btnToggleEmptyState.addEventListener('click', () => {
+                emptyState = !emptyState;
+                btnToggleEmptyState.textContent = emptyState ? 'View Sample Data' : 'View Empty State';
+                if (activeScreen === 'progress') {
+                    renderProgress();
+                } else {
+                    renderMeasurements();
+                }
+            });
+
+            // Close Success Alert
+            if (btnCloseSuccessAlert && mockSuccessAlert) {
+                btnCloseSuccessAlert.addEventListener('click', () => {
+                    mockSuccessAlert.classList.add('d-none');
+                    mockSuccessAlert.classList.remove('d-flex');
+                });
+            }
+
+            // Form Submit Simulation
+            if (mockLogForm) {
+                mockLogForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const weightInput = document.getElementById('previewWeight');
+                    const burnedInput = document.getElementById('previewCaloriesBurned');
+                    const consumedInput = document.getElementById('previewCaloriesConsumed');
+                    const weightError = document.getElementById('previewWeightError');
+
+                    const weightVal = parseFloat(weightInput.value);
+                    if (isNaN(weightVal) || weightVal <= 0) {
+                        weightInput.classList.add('is-invalid');
+                        if (weightError) weightError.classList.remove('d-none');
+                        return;
+                    }
+
+                    weightInput.classList.remove('is-invalid');
+                    if (weightError) weightError.classList.add('d-none');
+
+                    const burnedVal = parseInt(burnedInput.value, 10) || 0;
+                    const consumedVal = parseInt(consumedInput.value, 10) || 0;
+
+                    // Calculate BMI automatically (registered height = 1.78m)
+                    const calculatedBmi = parseFloat((weightVal / (clientHeightMeters * clientHeightMeters)).toFixed(1));
+
+                    const newMetric = {
+                        metricId: Date.now(),
+                        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                        dateShort: "Now",
+                        weight: weightVal,
+                        bmi: calculatedBmi,
+                        caloriesBurned: burnedVal,
+                        caloriesConsumed: consumedVal
+                    };
+
+                    // Prepend to metrics array
+                    metrics.unshift(newMetric);
+                    emptyState = false;
+
+                    // Reset form
+                    mockLogForm.reset();
+
+                    // Show success banner
+                    if (mockSuccessAlert) {
+                        mockSuccessAlert.classList.remove('d-none');
+                        mockSuccessAlert.classList.add('d-flex');
+                        mockAlertTitle.textContent = `Measurement (${weightVal.toFixed(1)} kg) Recorded!`;
+                        mockAlertSubtitle.textContent = `Calculated BMI: ${calculatedBmi.toFixed(1)} (${getBmiCategory(calculatedBmi)}). In-memory preview simulated.`;
+                    }
+
+                    // Return to originating view
+                    setScreen(logSourceScreen);
+                });
+            }
+
+            // Initial view
+            setScreen('measurements');
+        })();
+    </script>
+</body>
+
+</html>
