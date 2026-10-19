@@ -185,9 +185,9 @@ namespace HealthTrack.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     userId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    dateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    height = table.Column<float>(type: "real", nullable: false)
+                    dateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    height = table.Column<float>(type: "real", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -230,8 +230,8 @@ namespace HealthTrack.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     userId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    specialization = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    bio = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    specialization = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    bio = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

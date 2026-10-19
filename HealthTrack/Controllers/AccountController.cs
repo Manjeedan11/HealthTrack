@@ -60,6 +60,9 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult login() => View();
 
+    [HttpGet]
+    public IActionResult AccessDenied() => View();
+
     [HttpPost]
     public async Task<IActionResult> login(LoginViewModel model)
     {
