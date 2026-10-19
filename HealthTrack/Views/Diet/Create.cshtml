@@ -1,0 +1,358 @@
+@model DietPlan
+@{
+    Layout = "_TrainerLayout";
+    ViewData["Title"] = "Create / Assign Diet Plan";
+}
+
+<div class="ht-dashboard-container">
+    <!-- Breadcrumb & Back Link -->
+    <div class="mb-3">
+        <a asp-controller="Trainer" asp-action="index" class="ht-card-link-action p-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Trainer Dashboard</span>
+        </a>
+    </div>
+
+    <!-- Page Header -->
+    <div class="ht-welcome-section mb-4">
+        <h1 class="ht-welcome-title">Create / Assign Diet Plan</h1>
+        <p class="ht-welcome-subtitle">Define diet plan specifications, select the target client, and schedule daily meals.</p>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="row g-4">
+        <div class="col-12 col-xl-10">
+            <div class="ht-card">
+                <!-- Card Header -->
+                <div class="ht-card-header-flex mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge ht-diet-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2v20"></path>
+                                <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                <path d="M8 10v12"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0">Diet Plan Configuration</h2>
+                            <p class="ht-card-subtitle mb-0">Complete all required nutrition details and meal schedules</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validation Summary -->
+                <div asp-validation-summary="ModelOnly" class="ht-validation-summary" role="alert"></div>
+
+                <!-- MVC Create Form -->
+                <form asp-controller="Diet" asp-action="create" method="post" id="dietCreateForm" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3 mb-4">
+                        <!-- Diet Plan Name -->
+                        <div class="col-12 col-md-7">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="name" class="ht-label">Diet Plan Name <span class="text-danger">*</span></label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 2v20"></path>
+                                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                            <path d="M8 10v12"></path>
+                                        </svg>
+                                    </span>
+                                    <input asp-for="name"
+                                           class="ht-input"
+                                           placeholder="e.g., High-Protein Caloric Deficit Plan"
+                                           required
+                                           aria-required="true"
+                                           id="plan-name-input" />
+                                </div>
+                                <span asp-validation-for="name" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Client Assignment Selector -->
+                        <div class="col-12 col-md-5">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="clientId" class="ht-label">Assign To Client <span class="text-danger">*</span></label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                    </span>
+                                    <select asp-for="clientId" class="ht-input ht-select" id="plan-client-select" aria-describedby="client-selector-note">
+                                        <option value="" disabled selected>-- Select an assigned client --</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="clientId" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Backend Integration Guidance Note -->
+                        <div class="col-12">
+                            <div class="ht-workout-notice d-flex align-items-center gap-2" id="client-selector-note">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span class="small text-muted">
+                                    <strong>Client Roster Integration:</strong> Client dropdown options and <code>trainerId</code> session identity are injected by backend services during production database integration.
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Plan Description -->
+                        <div class="col-12">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="description" class="ht-label">Dietary Guidelines & Instructions</label>
+                                <textarea asp-for="description"
+                                          class="form-control ht-workout-textarea"
+                                          rows="3"
+                                          placeholder="Provide dietary guidelines, macronutrient targets, hydration recommendations and special dietary notes..."
+                                          id="plan-description-input"></textarea>
+                                <span asp-validation-for="description" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Trainer Identity Summary -->
+                        <div class="col-12">
+                            <div class="ht-workout-trainer-badge-card">
+                                <div class="ht-profile-avatar">
+                                    @(ViewData["TrainerInitials"] ?? "MV")
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="ht-client-name">@(ViewData["TrainerName"] ?? "Marcus Vance")</span>
+                                        <span class="ht-status-badge ht-status-confirmed py-0 px-2" style="font-size: 0.68rem;">Verified Trainer</span>
+                                    </div>
+                                    <span class="ht-workout-trainer-caption">Assigned Trainer Account · ID linked to authenticated identity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meals Builder Section -->
+                    <div class="ht-workout-builder-section mt-4 pt-3 border-top">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                            <div>
+                                <h3 class="ht-card-heading mb-1">Daily Meal Regimen</h3>
+                                <p class="text-muted small mb-0">Define scheduled daily meals with target calories and meal timings.</p>
+                            </div>
+                            <button type="button" class="ht-action-btn" id="btnAddMealRow" aria-label="Add another meal row">
+                                <span class="ht-action-icon" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </span>
+                                <span>+ Add Meal</span>
+                            </button>
+                        </div>
+
+                        <!-- Meal Rows Container -->
+                        <div class="table-responsive">
+                            <table class="table ht-trainer-table align-middle mb-0" id="mealsTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="ht-th-col" style="width: 42%;">MEAL NAME <span class="text-danger">*</span></th>
+                                        <th scope="col" class="ht-th-col" style="width: 24%;">CALORIES (KCAL) <span class="text-danger">*</span></th>
+                                        <th scope="col" class="ht-th-col" style="width: 28%;">MEAL TIME / TIMING <span class="text-danger">*</span></th>
+                                        <th scope="col" class="ht-th-col text-end" style="width: 6%;">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mealRowsContainer">
+                                    <!-- Row 0: Default Initial Row -->
+                                    <tr class="ht-diet-builder-row" data-row-index="0">
+                                        <td>
+                                            <input type="text"
+                                                   name="meals[0].name"
+                                                   class="form-control ht-workout-table-input"
+                                                   placeholder="e.g., Oatmeal with Whey & Berries"
+                                                   required
+                                                   aria-label="Meal name for item 1" />
+                                        </td>
+                                        <td>
+                                            <input type="number"
+                                                   name="meals[0].calories"
+                                                   class="form-control ht-workout-table-input"
+                                                   placeholder="450"
+                                                   min="0"
+                                                   value="450"
+                                                   required
+                                                   aria-label="Calories for item 1" />
+                                        </td>
+                                        <td>
+                                            <input type="text"
+                                                   name="meals[0].mealTime"
+                                                   class="form-control ht-workout-table-input"
+                                                   placeholder="e.g., 08:00 AM or Breakfast"
+                                                   value="Breakfast"
+                                                   required
+                                                   aria-label="Meal time for item 1" />
+                                        </td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                    class="btn btn-sm ht-workout-btn-remove btnRemoveRow"
+                                                    disabled
+                                                    title="At least one meal row is required"
+                                                    aria-label="Remove meal row 1">
+                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top">
+                        <a asp-controller="Trainer" asp-action="index" class="btn btn-outline-secondary px-4 py-2" id="btnCancelCreate">
+                            Cancel
+                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="submit" class="ht-btn-submit px-4" id="btnSubmitDietPlan">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>Create Diet Plan</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            'use strict';
+
+            const container = document.getElementById('mealRowsContainer');
+            const addBtn = document.getElementById('btnAddMealRow');
+
+            function updateRowIndices() {
+                const rows = container.querySelectorAll('.ht-diet-builder-row');
+                rows.forEach((row, index) => {
+                    row.setAttribute('data-row-index', index);
+                    
+                    const nameInput = row.querySelector('input[name$=".name"]');
+                    const calInput = row.querySelector('input[name$=".calories"]');
+                    const timeInput = row.querySelector('input[name$=".mealTime"]');
+                    const removeBtn = row.querySelector('.btnRemoveRow');
+
+                    if (nameInput) {
+                        nameInput.name = `meals[${index}].name`;
+                        nameInput.setAttribute('aria-label', `Meal name for item ${index + 1}`);
+                    }
+                    if (calInput) {
+                        calInput.name = `meals[${index}].calories`;
+                        calInput.setAttribute('aria-label', `Calories for item ${index + 1}`);
+                    }
+                    if (timeInput) {
+                        timeInput.name = `meals[${index}].mealTime`;
+                        timeInput.setAttribute('aria-label', `Meal time for item ${index + 1}`);
+                    }
+                    if (removeBtn) {
+                        removeBtn.setAttribute('aria-label', `Remove meal row ${index + 1}`);
+                        if (rows.length === 1) {
+                            removeBtn.disabled = true;
+                            removeBtn.title = "At least one meal row is required";
+                        } else {
+                            removeBtn.disabled = false;
+                            removeBtn.title = "Remove this meal";
+                        }
+                    }
+                });
+            }
+
+            if (addBtn && container) {
+                addBtn.addEventListener('click', function () {
+                    const rows = container.querySelectorAll('.ht-diet-builder-row');
+                    const newIndex = rows.length;
+                    const tr = document.createElement('tr');
+                    tr.className = 'ht-diet-builder-row';
+                    tr.setAttribute('data-row-index', newIndex);
+
+                    tr.innerHTML = `
+                        <td>
+                            <input type="text"
+                                   name="meals[${newIndex}].name"
+                                   class="form-control ht-workout-table-input"
+                                   placeholder="e.g., Grilled Chicken Salad"
+                                   required
+                                   aria-label="Meal name for item ${newIndex + 1}" />
+                        </td>
+                        <td>
+                            <input type="number"
+                                   name="meals[${newIndex}].calories"
+                                   class="form-control ht-workout-table-input"
+                                   placeholder="550"
+                                   min="0"
+                                   value="500"
+                                   required
+                                   aria-label="Calories for item ${newIndex + 1}" />
+                        </td>
+                        <td>
+                            <input type="text"
+                                   name="meals[${newIndex}].mealTime"
+                                   class="form-control ht-workout-table-input"
+                                   placeholder="e.g., 01:00 PM or Lunch"
+                                   value="Lunch"
+                                   required
+                                   aria-label="Meal time for item ${newIndex + 1}" />
+                        </td>
+                        <td class="text-end">
+                            <button type="button"
+                                    class="btn btn-sm ht-workout-btn-remove btnRemoveRow"
+                                    aria-label="Remove meal row ${newIndex + 1}">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </td>
+                    `;
+
+                    container.appendChild(tr);
+                    updateRowIndices();
+                    const firstInput = tr.querySelector('input');
+                    if (firstInput) firstInput.focus();
+                });
+
+                container.addEventListener('click', function (e) {
+                    const removeBtn = e.target.closest('.btnRemoveRow');
+                    if (!removeBtn) return;
+
+                    const rows = container.querySelectorAll('.ht-diet-builder-row');
+                    if (rows.length <= 1) return;
+
+                    const row = removeBtn.closest('.ht-diet-builder-row');
+                    if (row) {
+                        row.remove();
+                        updateRowIndices();
+                    }
+                });
+            }
+
+            // Initial state check
+            updateRowIndices();
+        })();
+    </script>
+}

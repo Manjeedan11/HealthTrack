@@ -1858,3 +1858,85 @@ body.ht-portal-body {
   appearance: auto;
   cursor: pointer;
 }
+
+/* --------------------------------------------------------------------------
+   14. Diet Plans (Trainer & Client Management)
+   -------------------------------------------------------------------------- */
+.ht-diet-card {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.ht-diet-card:hover {
+  border-color: rgba(13, 110, 90, 0.35);
+  box-shadow: 0 2px 4px 0 rgba(15, 23, 42, 0.04),
+    0 8px 20px -2px rgba(13, 110, 90, 0.08);
+}
+
+.ht-diet-icon-badge {
+  background: #e6f4f1 !important;
+  color: #0d6e5a !important;
+}
+
+.ht-diet-badge-date {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ht-diet-calorie-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0d6e5a;
+  background-color: #e6f4f1;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid #cce9e2;
+}
+
+.ht-diet-meal-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0d6e5a;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.ht-diet-time-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+  background-color: #f8fafc;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.ht-diet-empty-card {
+  border: 2px dashed #cbd5e1;
+  background-color: #ffffff;
+}
+
+.ht-diet-empty-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ht-diet-empty-meals {
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #e2e8f0;
+  font-size: 0.88rem;
+}
