@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workout Plans Preview - HealthTrack Trainer Portal</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation (255px wide desktop) -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Trainer Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="#view-list" id="sidebarBrandLink">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub ht-brand-sub-trainer">TRAINER PORTAL</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching screenshot -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard -->
+                <a href="Trainer/Preview" class="ht-nav-item" title="Trainer Dashboard Preview">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Clients -->
+                <a href="#clients" class="ht-nav-item" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span>Clients</span>
+                </a>
+
+                <!-- 3. Workout Plans (ACTIVE) -->
+                <a href="#workout-plans" class="ht-nav-item active" id="navItemWorkoutPlans" aria-current="page">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6.5 6.5 11 11"></path>
+                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                            <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a href="#diet-plans" class="ht-nav-item" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Manage Routines -->
+                <a href="#manage-routines" class="ht-nav-item" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </span>
+                    <span>Manage Routines</span>
+                </a>
+
+                <!-- 6. Appointments -->
+                <a href="#appointments" class="ht-nav-item" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 7. Progress -->
+                <a href="#progress" class="ht-nav-item" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                    </span>
+                    <span>Progress</span>
+                </a>
+
+                <!-- 8. Reports -->
+                <a href="#reports" class="ht-nav-item" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </span>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Profile & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="#profile" class="ht-nav-item" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span>Profile</span>
+                </a>
+
+                <a href="#signout" class="ht-nav-item ht-nav-signout w-100" onclick="event.preventDefault();">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar (White bar with notifications & user profile on right) -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left d-flex align-items-center gap-3">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <span class="ht-topbar-trainer-title d-none d-sm-inline">TRAINER PORTAL</span>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell with red badge indicator -->
+                    <a href="#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications" onclick="event.preventDefault();">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- User Profile Area -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar">MV</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name">Marcus Vance</span>
+                            <span class="ht-profile-role">Trainer</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- Mandatory Preview Notice Banner -->
+                    <div class="ht-demo-notice alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4" role="alert">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div class="small">
+                                <strong>PREVIEW MODE — SAMPLE DATA ONLY. NOTHING IS SAVED TO THE DATABASE.</strong>
+                                <span class="d-none d-md-inline ms-1 text-muted">All interactive operations operate strictly inside this client-side preview session.</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnToggleEmptyState" title="Toggle empty state view for testing">
+                                View Empty State
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Feedback Message Banner (Shown upon mock submission) -->
+                    <div id="mockSuccessAlert" class="alert alert-success d-none align-items-center justify-content-between mb-4 shadow-sm" role="alert">
+                        <div class="d-flex align-items-center gap-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-success flex-shrink-0">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <div>
+                                <strong id="mockAlertTitle">Workout Plan Configured!</strong>
+                                <div class="small text-muted" id="mockAlertSubtitle">Plan simulated in browser preview. Live database persistence will be connected by backend developer.</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" id="btnCloseSuccessAlert" aria-label="Close"></button>
+                    </div>
+
+                    <!-- ======================================================== -->
+                    <!-- VIEW 1: WORKOUT PLANS LIST VIEW                          -->
+                    <!-- ======================================================== -->
+                    <div id="plansListView">
+                        <!-- Top Header & Actions Row -->
+                        <div class="ht-trainer-header-row mb-4">
+                            <div>
+                                <h1 class="ht-welcome-title">Workout Plans</h1>
+                                <p class="ht-welcome-subtitle">Manage, review and assign customized workout routines for your clients.</p>
+                            </div>
+
+                            <div class="ht-trainer-actions-group">
+                                <button type="button" class="ht-action-card-btn" id="btnShowCreateForm">
+                                    <span class="ht-action-card-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                    </span>
+                                    <span class="ht-action-card-text">Create / Assign<br />Workout</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Workout Plans Cards Container -->
+                        <div id="plansCardsContainer" class="d-flex flex-column gap-4">
+                            <!-- Populated dynamically by JS with sample data -->
+                        </div>
+
+                        <!-- Empty State Container (Hidden by default, toggleable) -->
+                        <section id="plansEmptyState" class="ht-card text-center py-5 ht-workout-empty-card d-none" aria-label="No workout plans available">
+                            <div class="ht-workout-empty-icon mb-3" aria-hidden="true">
+                                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m6.5 6.5 11 11"></path>
+                                    <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                    <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                                </svg>
+                            </div>
+                            <h2 class="ht-card-title mb-2">No Workout Plans Found</h2>
+                            <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
+                                You haven't assigned any workout plans to this client yet. Create and configure a routine with targeted exercises, sets, reps and durations.
+                            </p>
+                            <button type="button" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto" id="btnEmptyStateCreate">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Create First Workout Plan
+                            </button>
+                        </section>
+                    </div>
+
+                    <!-- ======================================================== -->
+                    <!-- VIEW 2: CREATE / ASSIGN WORKOUT FORM VIEW                -->
+                    <!-- ======================================================== -->
+                    <div id="plansCreateView" class="d-none">
+                        <!-- Breadcrumb & Back Link -->
+                        <div class="mb-3">
+                            <button type="button" class="ht-card-link-action p-0 border-0 bg-transparent" id="btnBackToList">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Workout Plans List</span>
+                            </button>
+                        </div>
+
+                        <!-- Header -->
+                        <div class="ht-welcome-section mb-4">
+                            <h1 class="ht-welcome-title">Create / Assign Workout</h1>
+                            <p class="ht-welcome-subtitle">Define workout plan specifications, select the target client, and schedule exercise routines.</p>
+                        </div>
+
+                        <!-- Form Card -->
+                        <div class="row g-4">
+                            <div class="col-12 col-xl-10">
+                                <div class="ht-card">
+                                    <div class="ht-card-header-flex mb-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge ht-workout-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0">Plan Configuration</h2>
+                                                <p class="ht-card-subtitle mb-0">Complete all required routine details and exercise targets</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mock Form -->
+                                    <form id="previewCreateWorkoutForm" novalidate>
+                                        <div class="row g-3 mb-4">
+                                            <!-- Workout Name -->
+                                            <div class="col-12 col-md-7">
+                                                <div class="ht-form-group mb-0">
+                                                    <label for="mockPlanName" class="ht-label">Workout Plan Name <span class="text-danger">*</span></label>
+                                                    <div class="ht-input-box">
+                                                        <span class="ht-field-icon" aria-hidden="true">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="m6.5 6.5 11 11"></path>
+                                                                <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                                                <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <input type="text"
+                                                               class="ht-input"
+                                                               id="mockPlanName"
+                                                               placeholder="e.g., Upper Body Strength & Hypertrophy"
+                                                               required />
+                                                    </div>
+                                                    <div class="invalid-feedback d-none text-danger small mt-1" id="mockPlanNameFeedback">Please provide a workout plan name.</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Client Assignment Selector -->
+                                            <div class="col-12 col-md-5">
+                                                <div class="ht-form-group mb-0">
+                                                    <label for="mockClientSelect" class="ht-label">Assign To Client <span class="text-danger">*</span></label>
+                                                    <div class="ht-input-box">
+                                                        <span class="ht-field-icon" aria-hidden="true">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                                <circle cx="9" cy="7" r="4"></circle>
+                                                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <select class="ht-input ht-select" id="mockClientSelect" required>
+                                                            <option value="" disabled selected>-- Select an assigned client --</option>
+                                                            <option value="1">Dhammika Perera (#CL-1042)</option>
+                                                            <option value="2">Kasun Fernando (#CL-1088)</option>
+                                                            <option value="3">Nimal Wijesinghe (#CL-1120)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="invalid-feedback d-none text-danger small mt-1" id="mockClientFeedback">Please select a target client.</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Backend Note -->
+                                            <div class="col-12">
+                                                <div class="ht-workout-notice d-flex align-items-center gap-2">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                                    </svg>
+                                                    <span class="small text-muted">
+                                                        <strong>Client Roster Integration:</strong> Client dropdown options and <code>trainerId</code> session identity are injected by backend services during production database integration.
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Description -->
+                                            <div class="col-12">
+                                                <div class="ht-form-group mb-0">
+                                                    <label for="mockPlanDesc" class="ht-label">Routine Description & Instructions</label>
+                                                    <textarea class="form-control ht-workout-textarea"
+                                                              id="mockPlanDesc"
+                                                              rows="3"
+                                                              placeholder="Provide warm-up recommendations, rest periods, coaching cues and progression instructions..."></textarea>
+                                                </div>
+                                            </div>
+
+                                            <!-- Trainer Read-Only Identity -->
+                                            <div class="col-12">
+                                                <div class="ht-workout-trainer-badge-card">
+                                                    <div class="ht-profile-avatar">MV</div>
+                                                    <div class="d-flex flex-column">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <span class="ht-client-name">Marcus Vance</span>
+                                                            <span class="ht-status-badge ht-status-confirmed py-0 px-2" style="font-size: 0.68rem;">Verified Trainer</span>
+                                                        </div>
+                                                        <span class="ht-workout-trainer-caption">Lead Fitness Trainer · Session-authenticated identity</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Exercises Builder -->
+                                        <div class="ht-workout-builder-section mt-4 pt-3 border-top">
+                                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                                <div>
+                                                    <h3 class="ht-card-heading mb-1">Exercise Regimen</h3>
+                                                    <p class="text-muted small mb-0">Define exercises with designated sets, repetitions, and rest intervals.</p>
+                                                </div>
+                                                <button type="button" class="ht-action-btn" id="btnPreviewAddRow">
+                                                    <span class="ht-action-icon" aria-hidden="true">
+                                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                        </svg>
+                                                    </span>
+                                                    <span>+ Add Exercise</span>
+                                                </button>
+                                            </div>
+
+                                            <!-- Exercise Builder Table -->
+                                            <div class="table-responsive">
+                                                <table class="table ht-trainer-table align-middle mb-0" id="previewExercisesTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" class="ht-th-col" style="width: 42%;">EXERCISE NAME <span class="text-danger">*</span></th>
+                                                            <th scope="col" class="ht-th-col" style="width: 18%;">SETS <span class="text-danger">*</span></th>
+                                                            <th scope="col" class="ht-th-col" style="width: 18%;">REPS <span class="text-danger">*</span></th>
+                                                            <th scope="col" class="ht-th-col" style="width: 16%;">DURATION (MIN)</th>
+                                                            <th scope="col" class="ht-th-col text-end" style="width: 6%;">ACTION</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="previewExerciseRowsContainer">
+                                                        <!-- Initial Row 0 -->
+                                                        <tr class="ht-workout-builder-row" data-row-index="0">
+                                                            <td>
+                                                                <input type="text"
+                                                                       class="form-control ht-workout-table-input ex-name"
+                                                                       name="exercises[0].name"
+                                                                       placeholder="e.g., Incline Dumbbell Press"
+                                                                       value="Incline Dumbbell Press"
+                                                                       required />
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                       class="form-control ht-workout-table-input ex-sets"
+                                                                       name="exercises[0].sets"
+                                                                       min="1"
+                                                                       value="3"
+                                                                       required />
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                       class="form-control ht-workout-table-input ex-reps"
+                                                                       name="exercises[0].reps"
+                                                                       min="1"
+                                                                       value="10"
+                                                                       required />
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                       class="form-control ht-workout-table-input ex-dur"
+                                                                       name="exercises[0].duration"
+                                                                       min="0"
+                                                                       value="2" />
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <button type="button"
+                                                                        class="btn btn-sm ht-workout-btn-remove btnPreviewRemoveRow"
+                                                                        disabled
+                                                                        title="At least one exercise row is required">
+                                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                                    </svg>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Form Buttons -->
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top">
+                                            <button type="button" class="btn btn-outline-secondary px-4 py-2" id="btnPreviewCancel">
+                                                Cancel
+                                            </button>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <button type="submit" class="ht-btn-submit px-4" id="btnPreviewSubmit">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                    <span>Create Workout Plan (Preview)</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Client-side Interactive Logic (Self-contained, database-free) -->
+    <script>
+        (function () {
+            'use strict';
+
+            // Sample demonstration data for visual testing
+            const initialPlans = [
+                {
+                    planId: 1,
+                    name: "Strength & Hypertrophy Foundation",
+                    description: "Progressive overload routine focusing on multi-joint compound barbell and dumbbell movements. Rest 2-3 minutes between compound sets.",
+                    clientName: "Dhammika Perera",
+                    clientDisplayId: "#CL-1042",
+                    dateCreated: "Oct 18, 2026",
+                    exercises: [
+                        { name: "Barbell Bench Press", sets: 4, reps: 8, duration: 3 },
+                        { name: "Romanian Deadlift", sets: 3, reps: 10, duration: 2 },
+                        { name: "Dumbbell Overhead Shoulder Press", sets: 3, reps: 12, duration: 2 },
+                        { name: "Cable Lateral Raise", sets: 3, reps: 15, duration: 1 }
+                    ]
+                },
+                {
+                    planId: 2,
+                    name: "HIIT Cardio & Core Conditioning",
+                    description: "High-intensity metabolic conditioning interval circuit designed for cardiovascular endurance and core stabilization.",
+                    clientName: "Kasun Fernando",
+                    clientDisplayId: "#CL-1088",
+                    dateCreated: "Oct 17, 2026",
+                    exercises: [
+                        { name: "Kettlebell Swings", sets: 4, reps: 20, duration: 1 },
+                        { name: "Plank Hold", sets: 3, reps: 1, duration: 1 },
+                        { name: "Mountain Climbers", sets: 4, reps: 30, duration: 1 },
+                        { name: "Battle Ropes", sets: 4, reps: 1, duration: 1 }
+                    ]
+                },
+                {
+                    planId: 3,
+                    name: "Mobility & Active Recovery",
+                    description: "Joint decompression, thoracic mobility, and soft-tissue recovery sequence intended for non-lifting active recovery days.",
+                    clientName: "Nimal Wijesinghe",
+                    clientDisplayId: "#CL-1120",
+                    dateCreated: "Oct 15, 2026",
+                    exercises: [
+                        { name: "Cat-Cow Stretch", sets: 3, reps: 10, duration: 1 },
+                        { name: "World's Greatest Stretch", sets: 3, reps: 6, duration: 1 },
+                        { name: "Foam Rolling Quadriceps", sets: 2, reps: 1, duration: 2 }
+                    ]
+                }
+            ];
+
+            let plans = [...initialPlans];
+            let isShowingEmptyState = false;
+
+            // DOM Elements
+            const plansListView = document.getElementById('plansListView');
+            const plansCreateView = document.getElementById('plansCreateView');
+            const plansCardsContainer = document.getElementById('plansCardsContainer');
+            const plansEmptyState = document.getElementById('plansEmptyState');
+            const btnShowCreateForm = document.getElementById('btnShowCreateForm');
+            const btnEmptyStateCreate = document.getElementById('btnEmptyStateCreate');
+            const btnBackToList = document.getElementById('btnBackToList');
+            const btnPreviewCancel = document.getElementById('btnPreviewCancel');
+            const btnToggleEmptyState = document.getElementById('btnToggleEmptyState');
+            const mockSuccessAlert = document.getElementById('mockSuccessAlert');
+            const btnCloseSuccessAlert = document.getElementById('btnCloseSuccessAlert');
+            const previewCreateWorkoutForm = document.getElementById('previewCreateWorkoutForm');
+            const previewExerciseRowsContainer = document.getElementById('previewExerciseRowsContainer');
+            const btnPreviewAddRow = document.getElementById('btnPreviewAddRow');
+
+            // Mobile sidebar drawer elements
+            const openSidebarBtn = document.getElementById('openSidebarBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const portalSidebar = document.getElementById('portalSidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+            // Render plans list
+            function renderPlans() {
+                if (isShowingEmptyState || plans.length === 0) {
+                    plansCardsContainer.innerHTML = '';
+                    plansCardsContainer.classList.add('d-none');
+                    plansEmptyState.classList.remove('d-none');
+                    btnToggleEmptyState.textContent = 'View Populated State';
+                    return;
+                }
+
+                plansEmptyState.classList.add('d-none');
+                plansCardsContainer.classList.remove('d-none');
+                btnToggleEmptyState.textContent = 'View Empty State';
+
+                let html = '';
+                plans.forEach(plan => {
+                    const exerciseCount = plan.exercises ? plan.exercises.length : 0;
+                    let exercisesHtml = '';
+
+                    if (exerciseCount > 0) {
+                        exercisesHtml = `
+                            <div class="table-responsive mt-3">
+                                <table class="table ht-trainer-table align-middle mb-0" aria-label="Exercises for ${escapeHtml(plan.name)}">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="ht-th-col" style="width: 45%;">EXERCISE</th>
+                                            <th scope="col" class="ht-th-col" style="width: 18%;">SETS</th>
+                                            <th scope="col" class="ht-th-col" style="width: 18%;">REPS</th>
+                                            <th scope="col" class="ht-th-col text-end" style="width: 19%;">DURATION / REST</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${plan.exercises.map(ex => `
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="ht-workout-exercise-bullet" aria-hidden="true"></span>
+                                                        <span class="ht-client-name">${escapeHtml(ex.name)}</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="ht-workout-stat-badge">${ex.sets} sets</span>
+                                                </td>
+                                                <td>
+                                                    <span class="ht-workout-stat-badge">${ex.reps} reps</span>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span class="ht-workout-duration-text">${ex.duration > 0 ? ex.duration + ' min' : '—'}</span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `;
+                    } else {
+                        exercisesHtml = `
+                            <div class="ht-workout-empty-exercises p-3 text-muted text-center">
+                                No exercises have been scheduled for this plan yet.
+                            </div>
+                        `;
+                    }
+
+                    html += `
+                        <article class="ht-card ht-workout-card" aria-labelledby="plan-preview-${plan.planId}">
+                            <div class="ht-card-header-flex mb-3">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="ht-header-icon-badge ht-workout-icon-badge" aria-hidden="true">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="m6.5 6.5 11 11"></path>
+                                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                            <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                            <h2 class="ht-card-title mb-0" id="plan-preview-${plan.planId}">${escapeHtml(plan.name)}</h2>
+                                            ${plan.clientName ? `<span class="ht-badge-total" style="font-size: 0.72rem;">Assigned: ${escapeHtml(plan.clientName)}</span>` : ''}
+                                        </div>
+                                        <p class="ht-card-subtitle mb-0">${escapeHtml(plan.description || 'No detailed instructions provided.')}</p>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span class="ht-badge-total ht-workout-badge-date">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                                        </svg>
+                                        ${plan.dateCreated}
+                                    </span>
+                                    <span class="ht-status-badge ht-status-confirmed">
+                                        ${exerciseCount} ${exerciseCount === 1 ? 'Exercise' : 'Exercises'}
+                                    </span>
+                                </div>
+                            </div>
+
+                            ${exercisesHtml}
+                        </article>
+                    `;
+                });
+
+                plansCardsContainer.innerHTML = html;
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            // View switching
+            function showList() {
+                plansListView.classList.remove('d-none');
+                plansCreateView.classList.add('d-none');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function showCreate() {
+                plansListView.classList.add('d-none');
+                plansCreateView.classList.remove('d-none');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                const nameInput = document.getElementById('mockPlanName');
+                if (nameInput) setTimeout(() => nameInput.focus(), 100);
+            }
+
+            // Exercise Row Management
+            function updatePreviewRowIndices() {
+                const rows = previewExerciseRowsContainer.querySelectorAll('.ht-workout-builder-row');
+                rows.forEach((row, index) => {
+                    row.setAttribute('data-row-index', index);
+                    
+                    const nameIn = row.querySelector('.ex-name');
+                    const setsIn = row.querySelector('.ex-sets');
+                    const repsIn = row.querySelector('.ex-reps');
+                    const durIn = row.querySelector('.ex-dur');
+                    const removeBtn = row.querySelector('.btnPreviewRemoveRow');
+
+                    if (nameIn) nameIn.name = `exercises[${index}].name`;
+                    if (setsIn) setsIn.name = `exercises[${index}].sets`;
+                    if (repsIn) repsIn.name = `exercises[${index}].reps`;
+                    if (durIn) durIn.name = `exercises[${index}].duration`;
+
+                    if (removeBtn) {
+                        if (rows.length === 1) {
+                            removeBtn.disabled = true;
+                            removeBtn.title = "At least one exercise row is required";
+                        } else {
+                            removeBtn.disabled = false;
+                            removeBtn.title = "Remove this exercise";
+                        }
+                    }
+                });
+            }
+
+            // Event Listeners
+            btnShowCreateForm.addEventListener('click', showCreate);
+            btnEmptyStateCreate.addEventListener('click', showCreate);
+            btnBackToList.addEventListener('click', showList);
+            btnPreviewCancel.addEventListener('click', showList);
+
+            // Empty state toggle
+            btnToggleEmptyState.addEventListener('click', function () {
+                isShowingEmptyState = !isShowingEmptyState;
+                renderPlans();
+            });
+
+            // Add row
+            btnPreviewAddRow.addEventListener('click', function () {
+                const rows = previewExerciseRowsContainer.querySelectorAll('.ht-workout-builder-row');
+                const newIndex = rows.length;
+                const tr = document.createElement('tr');
+                tr.className = 'ht-workout-builder-row';
+                tr.setAttribute('data-row-index', newIndex);
+
+                tr.innerHTML = `
+                    <td>
+                        <input type="text"
+                               class="form-control ht-workout-table-input ex-name"
+                               name="exercises[${newIndex}].name"
+                               placeholder="e.g., Dumbbell Lateral Raise"
+                               required />
+                    </td>
+                    <td>
+                        <input type="number"
+                               class="form-control ht-workout-table-input ex-sets"
+                               name="exercises[${newIndex}].sets"
+                               min="1"
+                               value="3"
+                               required />
+                    </td>
+                    <td>
+                        <input type="number"
+                               class="form-control ht-workout-table-input ex-reps"
+                               name="exercises[${newIndex}].reps"
+                               min="1"
+                               value="12"
+                               required />
+                    </td>
+                    <td>
+                        <input type="number"
+                               class="form-control ht-workout-table-input ex-dur"
+                               name="exercises[${newIndex}].duration"
+                               min="0"
+                               value="0" />
+                    </td>
+                    <td class="text-end">
+                        <button type="button"
+                                class="btn btn-sm ht-workout-btn-remove btnPreviewRemoveRow"
+                                aria-label="Remove exercise row ${newIndex + 1}">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </td>
+                `;
+
+                previewExerciseRowsContainer.appendChild(tr);
+                updatePreviewRowIndices();
+                const firstInput = tr.querySelector('.ex-name');
+                if (firstInput) firstInput.focus();
+            });
+
+            // Remove row
+            previewExerciseRowsContainer.addEventListener('click', function (e) {
+                const removeBtn = e.target.closest('.btnPreviewRemoveRow');
+                if (!removeBtn) return;
+
+                const rows = previewExerciseRowsContainer.querySelectorAll('.ht-workout-builder-row');
+                if (rows.length <= 1) return;
+
+                const row = removeBtn.closest('.ht-workout-builder-row');
+                if (row) {
+                    row.remove();
+                    updatePreviewRowIndices();
+                }
+            });
+
+            // Mock form submit
+            previewCreateWorkoutForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const planNameInput = document.getElementById('mockPlanName');
+                const clientSelect = document.getElementById('mockClientSelect');
+                const planDescInput = document.getElementById('mockPlanDesc');
+
+                let isValid = true;
+
+                if (!planNameInput.value.trim()) {
+                    planNameInput.classList.add('is-invalid');
+                    document.getElementById('mockPlanNameFeedback').classList.remove('d-none');
+                    isValid = false;
+                } else {
+                    planNameInput.classList.remove('is-invalid');
+                    document.getElementById('mockPlanNameFeedback').classList.add('d-none');
+                }
+
+                if (!clientSelect.value) {
+                    clientSelect.classList.add('is-invalid');
+                    document.getElementById('mockClientFeedback').classList.remove('d-none');
+                    isValid = false;
+                } else {
+                    clientSelect.classList.remove('is-invalid');
+                    document.getElementById('mockClientFeedback').classList.add('d-none');
+                }
+
+                const rows = previewExerciseRowsContainer.querySelectorAll('.ht-workout-builder-row');
+                const newExercises = [];
+
+                rows.forEach(r => {
+                    const name = r.querySelector('.ex-name').value.trim() || 'Exercise Item';
+                    const sets = parseInt(r.querySelector('.ex-sets').value, 10) || 3;
+                    const reps = parseInt(r.querySelector('.ex-reps').value, 10) || 10;
+                    const dur = parseInt(r.querySelector('.ex-dur').value, 10) || 0;
+                    newExercises.push({ name, sets, reps, duration: dur });
+                });
+
+                if (!isValid) return;
+
+                const selectedClientText = clientSelect.options[clientSelect.selectedIndex].text;
+                const newPlan = {
+                    planId: Date.now(),
+                    name: planNameInput.value.trim(),
+                    description: planDescInput.value.trim(),
+                    clientName: selectedClientText,
+                    dateCreated: "Today (Preview)",
+                    exercises: newExercises
+                };
+
+                // Add to demo list
+                plans.unshift(newPlan);
+                isShowingEmptyState = false;
+
+                // Reset form fields
+                planNameInput.value = '';
+                planDescInput.value = '';
+                clientSelect.selectedIndex = 0;
+
+                // Show success notification banner
+                document.getElementById('mockAlertTitle').textContent = `Workout Plan "${newPlan.name}" Configured!`;
+                document.getElementById('mockAlertSubtitle').textContent = `Assigned to ${selectedClientText} with ${newExercises.length} exercise(s). Simulated in preview session only (no database write).`;
+                mockSuccessAlert.classList.remove('d-none');
+                mockSuccessAlert.classList.add('d-flex');
+
+                renderPlans();
+                showList();
+            });
+
+            // Dismiss success alert
+            if (btnCloseSuccessAlert) {
+                btnCloseSuccessAlert.addEventListener('click', function () {
+                    mockSuccessAlert.classList.add('d-none');
+                    mockSuccessAlert.classList.remove('d-flex');
+                });
+            }
+
+            // Mobile sidebar toggles
+            if (openSidebarBtn && portalSidebar && sidebarBackdrop) {
+                openSidebarBtn.addEventListener('click', function () {
+                    portalSidebar.classList.add('show');
+                    sidebarBackdrop.classList.add('show');
+                });
+            }
+            if (closeSidebarBtn && portalSidebar && sidebarBackdrop) {
+                closeSidebarBtn.addEventListener('click', function () {
+                    portalSidebar.classList.remove('show');
+                    sidebarBackdrop.classList.remove('show');
+                });
+            }
+            if (sidebarBackdrop && portalSidebar) {
+                sidebarBackdrop.addEventListener('click', function () {
+                    portalSidebar.classList.remove('show');
+                    sidebarBackdrop.classList.remove('show');
+                });
+            }
+
+            // Initial render
+            updatePreviewRowIndices();
+            renderPlans();
+        })();
+    </script>
+</body>
+</html>

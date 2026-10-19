@@ -1692,3 +1692,169 @@ body.ht-portal-body {
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   15. Workout Plans & Exercise Builder (ht-workout-)
+   ========================================================================== */
+.ht-workout-card {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.ht-workout-card:hover {
+  border-color: rgba(13, 110, 90, 0.35);
+  box-shadow: 0 2px 4px 0 rgba(15, 23, 42, 0.04),
+    0 8px 20px -2px rgba(13, 110, 90, 0.08);
+}
+
+.ht-workout-icon-badge {
+  background: #ccfbf1 !important;
+  color: #0f766e !important;
+}
+
+.ht-workout-badge-date {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ht-workout-exercise-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0d6e5a;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.ht-workout-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+  background-color: #f1f5f9;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.ht-workout-duration-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0d6e5a;
+}
+
+.ht-workout-empty-card {
+  border: 2px dashed #cbd5e1;
+  background-color: #ffffff;
+}
+
+.ht-workout-empty-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ht-workout-empty-exercises {
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #e2e8f0;
+  font-size: 0.88rem;
+}
+
+.ht-workout-notice {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.ht-workout-field-hint {
+  font-size: 0.77rem;
+  color: #64748b;
+  display: flex;
+  align-items: flex-start;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.ht-workout-trainer-badge-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.ht-workout-trainer-caption {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.ht-workout-textarea {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #0f172a;
+  padding: 10px 14px;
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.ht-workout-textarea:focus {
+  background-color: #ffffff;
+  border-color: #0d6e5a;
+  box-shadow: 0 0 0 3px rgba(13, 110, 90, 0.12);
+  outline: none;
+}
+
+.ht-workout-table-input {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  padding: 6px 10px;
+  color: #0f172a;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ht-workout-table-input:focus {
+  border-color: #0d6e5a;
+  box-shadow: 0 0 0 3px rgba(13, 110, 90, 0.12);
+  outline: none;
+}
+
+.ht-workout-btn-remove {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  border-radius: 6px;
+  padding: 6px 8px;
+  transition: all 0.15s ease;
+}
+
+.ht-workout-btn-remove:hover:not(:disabled) {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.ht-workout-btn-remove:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.ht-select {
+  appearance: auto;
+  cursor: pointer;
+}
