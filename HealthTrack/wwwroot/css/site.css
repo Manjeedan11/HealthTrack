@@ -2043,3 +2043,76 @@ body.ht-portal-body {
   align-items: center;
   justify-content: center;
 }
+
+/* --------------------------------------------------------------------------
+   16. Client and Trainer Appointments
+   -------------------------------------------------------------------------- */
+.ht-status-cancelled {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.ht-appointment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.ht-appointment-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ht-appointment-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  transform: translateY(-1px);
+}
+
+.ht-appointment-date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ht-appointment-participant {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ht-appointment-notes {
+  font-size: 0.88rem;
+  color: #475569;
+  line-height: 1.45;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border-left: 3px solid #0d6e5a;
+}
+
+.ht-appointment-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.ht-appointment-btn-sm {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
