@@ -1,3 +1,5 @@
+namespace HealthTrack.ViewModels;
+
 public class LoginViewModel
 {
     public string email { get; set; }
