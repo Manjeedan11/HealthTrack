@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthTrack.Migrations
 {
     [DbContext(typeof(HealthTrackDbContext))]
-    [Migration("20261017054809_InitialCreate")]
+    [Migration("20261018150723_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -89,14 +89,13 @@ namespace HealthTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("clientId"));
 
-                    b.Property<DateTime>("dateOfBirth")
+                    b.Property<DateTime?>("dateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("height")
+                    b.Property<float?>("height")
                         .HasColumnType("real");
 
                     b.Property<string>("name")
@@ -452,7 +451,6 @@ namespace HealthTrack.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("trainerId"));
 
                     b.Property<string>("bio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
@@ -460,7 +458,6 @@ namespace HealthTrack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("specialization")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("userId")

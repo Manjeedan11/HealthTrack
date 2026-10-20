@@ -20,11 +20,14 @@ public class HealthMetricService : IHealthMetricService
     public async Task<IEnumerable<HealthMetric>> getClientMetrics(int clientId)
         => await metricRepo.getByClient(clientId);
 
-    public Task<float> calculateBMI(float weight, float height)
+    public Task<float> calculateBMI(float weight, float? height)
     {
-        if (height <= 0) return Task.FromResult(0f);
-        float heightInMeters = height / 100;
+        if (height == null || height <= 0)
+        return Task.FromResult(0f);
+
+        float heightInMeters = height.Value / 100;
         float bmi = weight / (heightInMeters * heightInMeters);
         return Task.FromResult((float)Math.Round(bmi, 2));
     }
+
 }
