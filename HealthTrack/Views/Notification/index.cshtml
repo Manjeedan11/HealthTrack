@@ -1,0 +1,279 @@
+@model IEnumerable<Notification>
+@{
+    bool isTrainer = User.IsInRole("Trainer") || string.Equals(Context.Request.Query["role"].ToString(), "trainer", StringComparison.OrdinalIgnoreCase);
+    bool isAdmin = User.IsInRole("Admin") || string.Equals(Context.Request.Query["role"].ToString(), "admin", StringComparison.OrdinalIgnoreCase);
+
+    Layout = isTrainer ? "_TrainerLayout" : (isAdmin ? "_Layout" : "_ClientLayout");
+    ViewData["Title"] = "Notifications";
+
+    var notificationList = Model?.OrderByDescending(n => n.date).ToList() ?? new List<Notification>();
+    int totalCount = notificationList.Count;
+    int unreadCount = notificationList.Count(n => !n.isRead);
+    int readCount = totalCount - unreadCount;
+}
+
+<div class="ht-dashboard-container">
+    <!-- Breadcrumb & Back Link -->
+    <div class="mb-3">
+        @if (isTrainer)
+        {
+            <a asp-controller="Trainer" asp-action="index" class="ht-card-link-action p-0" id="linkBackToDashboard">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Back to Trainer Dashboard</span>
+            </a>
+        }
+        else if (isAdmin)
+        {
+            <a asp-controller="Admin" asp-action="index" class="ht-card-link-action p-0" id="linkBackToDashboard">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Back to Admin Portal</span>
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Client" asp-action="index" class="ht-card-link-action p-0" id="linkBackToDashboard">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Back to Client Dashboard</span>
+            </a>
+        }
+    </div>
+
+    <!-- Page Header Row -->
+    <div class="ht-trainer-header-row mb-4">
+        <div>
+            <h1 class="ht-welcome-title">Notifications</h1>
+            <p class="ht-welcome-subtitle">
+                @if (isTrainer)
+                {
+                    <span>Alerts regarding client appointments, routine assignments, and system reminders.</span>
+                }
+                else if (isAdmin)
+                {
+                    <span>System-wide activity notifications, user alerts, and system reminders.</span>
+                }
+                else
+                {
+                    <span>Stay updated on workout schedules, meal timings, appointment updates, and trainer messages.</span>
+                }
+            </p>
+        </div>
+        <div class="ht-trainer-actions-group">
+            @if (unreadCount > 0)
+            {
+                <span class="ht-status-badge ht-notification-unread-pill px-3 py-2" id="unreadSummaryBadge">
+                    <span class="ht-notification-dot-inline" aria-hidden="true"></span>
+                    <span>@unreadCount Unread</span>
+                </span>
+            }
+            else
+            {
+                <span class="ht-status-badge ht-status-confirmed px-3 py-2" id="unreadSummaryBadge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>All Caught Up</span>
+                </span>
+            }
+        </div>
+    </div>
+
+    @if (totalCount == 0)
+    {
+        <!-- Empty State -->
+        <div class="ht-card text-center py-5 ht-notification-empty-card" id="emptyNotificationState">
+            <div class="ht-notification-empty-icon mb-3" aria-hidden="true">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                </svg>
+            </div>
+            <h2 class="h5 fw-bold text-dark mb-1">No Notifications</h2>
+            <p class="text-muted mx-auto mb-4" style="max-width: 440px;">
+                You do not have any notifications or reminders at this time. New workout, meal, and consultation notifications will appear here.
+            </p>
+            <div class="d-flex justify-content-center">
+                <a asp-controller="@(isTrainer ? "Trainer" : (isAdmin ? "Admin" : "Client"))" asp-action="index" class="ht-btn-submit px-4 text-decoration-none">
+                    <span>Return to Dashboard</span>
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Filter Bar -->
+        <div class="ht-notification-filter-bar mb-4" role="tablist" aria-label="Notification filters">
+            <button type="button" class="ht-notification-filter-btn active" data-filter="all" role="tab" aria-selected="true" id="tabFilterAll">
+                <span>All</span>
+                <span class="ht-notification-filter-count">@totalCount</span>
+            </button>
+            <button type="button" class="ht-notification-filter-btn" data-filter="unread" role="tab" aria-selected="false" id="tabFilterUnread">
+                <span>Unread</span>
+                <span class="ht-notification-filter-count">@unreadCount</span>
+            </button>
+            <button type="button" class="ht-notification-filter-btn" data-filter="read" role="tab" aria-selected="false" id="tabFilterRead">
+                <span>Read</span>
+                <span class="ht-notification-filter-count">@readCount</span>
+            </button>
+        </div>
+
+        <!-- Notification Cards List -->
+        <div class="ht-notification-list d-flex flex-column gap-3" id="notificationListContainer">
+            @foreach (var item in notificationList)
+            {
+                var msgLower = (item.message ?? "").ToLowerInvariant();
+                bool isWorkout = msgLower.Contains("workout") || msgLower.Contains("exercise") || msgLower.Contains("routine");
+                bool isMeal = msgLower.Contains("meal") || msgLower.Contains("diet") || msgLower.Contains("food") || msgLower.Contains("breakfast") || msgLower.Contains("lunch") || msgLower.Contains("dinner");
+                bool isAppointment = msgLower.Contains("appointment") || msgLower.Contains("consult") || msgLower.Contains("session");
+                bool isFeedbackMsg = msgLower.Contains("feedback") || msgLower.Contains("comment");
+
+                <article class="ht-card ht-notification-item @(item.isRead ? "ht-notification-read" : "ht-notification-unread")"
+                         data-read-status="@(item.isRead ? "read" : "unread")"
+                         id="notification_@item.notificationId">
+                    <div class="d-flex align-items-start gap-3 w-100">
+                        <!-- Icon Box based on reminder type -->
+                        <div class="ht-notification-icon-box flex-shrink-0" aria-hidden="true">
+                            @if (isWorkout)
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M15 3h6v6"></path>
+                                    <path d="M9 21H3v-6"></path>
+                                    <path d="M21 3l-7 7"></path>
+                                    <path d="M3 21l7-7"></path>
+                                </svg>
+                            }
+                            else if (isMeal)
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 2v20"></path>
+                                    <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                    <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                    <path d="M8 10v12"></path>
+                                </svg>
+                            }
+                            else if (isAppointment)
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                            }
+                            else if (isFeedbackMsg)
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            }
+                            else
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                                </svg>
+                            }
+                        </div>
+
+                        <!-- Notification Body & Content -->
+                        <div class="ht-notification-content flex-grow-1">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
+                                <span class="ht-notification-type-tag">
+                                    @if (isWorkout) { <span>Workout Reminder</span> }
+                                    else if (isMeal) { <span>Meal Reminder</span> }
+                                    else if (isAppointment) { <span>Appointment Alert</span> }
+                                    else if (isFeedbackMsg) { <span>Trainer Feedback</span> }
+                                    else { <span>Notification</span> }
+                                </span>
+                                <span class="ht-notification-time-tag text-muted">
+                                    <time datetime="@item.date.ToString("yyyy-MM-ddTHH:mm:ss")">@item.date.ToString("MMM dd, yyyy · h:mm tt")</time>
+                                </span>
+                            </div>
+
+                            <p class="ht-notification-message-text mb-2">@item.message</p>
+
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-2 pt-2 border-top">
+                                <div class="d-flex align-items-center gap-2">
+                                    @if (!item.isRead)
+                                    {
+                                        <span class="ht-status-badge ht-notification-badge-unread py-0 px-2">
+                                            <span class="ht-notification-dot-small" aria-hidden="true"></span>
+                                            <span>Unread</span>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ht-status-badge ht-notification-badge-read py-0 px-2">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                            <span>Read</span>
+                                        </span>
+                                    }
+                                    <span class="text-muted small">Ref #NT-@item.notificationId</span>
+                                </div>
+
+                                <div>
+                                    @if (!item.isRead)
+                                    {
+                                        <form asp-controller="Notification" asp-action="markAsRead" asp-route-id="@item.notificationId" method="post" class="d-inline m-0">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="ht-notification-btn-mark" id="btnMarkRead_@item.notificationId" title="Mark this notification as read">
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                </svg>
+                                                <span>Mark as Read</span>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            'use strict';
+            const filterBtns = document.querySelectorAll('.ht-notification-filter-btn');
+            const items = document.querySelectorAll('.ht-notification-item');
+
+            if (!filterBtns.length || !items.length) return;
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const filter = this.getAttribute('data-filter');
+
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+
+                    items.forEach(item => {
+                        const status = item.getAttribute('data-read-status');
+                        if (filter === 'all' || status === filter) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
+}

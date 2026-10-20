@@ -1,0 +1,163 @@
+@model Feedback
+@{
+    Layout = "_TrainerLayout";
+    ViewData["Title"] = "Trainer Feedback";
+    bool hasTargetClient = Model != null && Model.clientId > 0;
+}
+
+<div class="ht-dashboard-container">
+    <!-- Breadcrumb & Back to Trainer Dashboard Link -->
+    <div class="mb-3">
+        <a asp-controller="Trainer" asp-action="index" class="ht-card-link-action p-0" id="linkBackToDashboard">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Trainer Dashboard</span>
+        </a>
+    </div>
+
+    <!-- Page Header -->
+    <div class="ht-welcome-section mb-4">
+        <h1 class="ht-welcome-title">Trainer Feedback</h1>
+        <p class="ht-welcome-subtitle">Provide personalized feedback, review client progress, and suggest routine adjustments.</p>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="row g-4">
+        <div class="col-12 col-xl-9 col-lg-10">
+            <div class="ht-card">
+                <!-- Card Header -->
+                <div class="ht-card-header-flex mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0">Record Client Feedback</h2>
+                            <p class="ht-card-subtitle mb-0">Submit feedback directly to your assigned client's portal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validation Summary -->
+                <div asp-validation-summary="ModelOnly" class="ht-validation-summary" role="alert"></div>
+
+                <!-- Feedback Form -->
+                <form asp-controller="Feedback" asp-action="give" method="post" id="giveFeedbackForm" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3 mb-4">
+                        <!-- Client Selection -->
+                        <div class="col-12 col-md-6">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="clientId" class="ht-label">Target Client <span class="text-danger">*</span></label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                    </span>
+
+                                    @if (ViewBag.Clients is IEnumerable<SelectListItem> clientOptions)
+                                    {
+                                        <select asp-for="clientId" class="ht-input ht-select" asp-items="clientOptions" id="feedback-client-select" required aria-required="true">
+                                            <option value="" disabled selected>-- Select an assigned client --</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="clientId"
+                                               type="number"
+                                               class="ht-input"
+                                               placeholder="Enter Client ID (e.g., 1)"
+                                               min="1"
+                                               required
+                                               aria-required="true"
+                                               id="feedback-client-id" />
+                                    }
+                                </div>
+                                <span asp-validation-for="clientId" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Backend Integration Notice -->
+                        <div class="col-12">
+                            <div class="ht-workout-notice d-flex align-items-center gap-2" id="client-feedback-note">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span class="small text-muted">
+                                    @if (hasTargetClient)
+                                    {
+                                        <span>Assigning feedback to Client ID <strong>#@Model!.clientId</strong>. Trainer identity is automatically resolved from your active login session.</span>
+                                    }
+                                    else
+                                    {
+                                        <span><strong>Client Roster Integration:</strong> Enter the target Client ID (e.g. from your assigned clients table) or access this form directly with <code>?clientId={id}</code>.</span>
+                                    }
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Comment Textarea -->
+                        <div class="col-12">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="comment" class="ht-label">Feedback &amp; Guidance <span class="text-danger">*</span></label>
+                                <textarea asp-for="comment"
+                                          class="form-control ht-feedback-textarea"
+                                          rows="5"
+                                          placeholder="Enter constructive feedback, routine modifications, progress praise, or guidance for your client..."
+                                          required
+                                          aria-required="true"
+                                          id="feedback-comment-input"></textarea>
+                                <span asp-validation-for="comment" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Authenticated Trainer Identity Card -->
+                        <div class="col-12">
+                            <div class="ht-workout-trainer-badge-card">
+                                <div class="ht-profile-avatar" aria-hidden="true">
+                                    @(ViewData["TrainerInitials"] ?? "MV")
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="ht-client-name">@(ViewData["TrainerName"] ?? "Marcus Vance")</span>
+                                        <span class="ht-status-badge ht-status-confirmed py-0 px-2" style="font-size: 0.68rem;">Active Trainer</span>
+                                    </div>
+                                    <span class="ht-workout-trainer-caption">Trainer ID linked to authenticated identity upon submission</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top">
+                        <a asp-controller="Trainer" asp-action="index" class="btn btn-outline-secondary px-4 py-2" id="btnCancelFeedback">
+                            Cancel
+                        </a>
+                        <button type="submit" class="ht-btn-submit px-4" id="btnSubmitFeedback">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            <span>Send Feedback</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

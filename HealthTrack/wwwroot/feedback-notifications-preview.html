@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback &amp; Notifications Preview - HealthTrack</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+    <style>
+        .ht-preview-banner {
+            background: linear-gradient(90deg, #0d6e5a, #095c4d);
+            color: #ffffff;
+            padding: 10px 24px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+            box-shadow: 0 2px 8px rgba(13, 110, 90, 0.2);
+        }
+        .ht-preview-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.03em;
+        }
+        .ht-preview-switch-btn {
+            background-color: #ffffff;
+            color: #0d6e5a;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .ht-preview-switch-btn:hover {
+            background-color: #f1f5f9;
+        }
+        .ht-view-tab-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .ht-view-tab-btn.active {
+            background: #ffffff;
+            color: #0d6e5a;
+            border-color: #ffffff;
+        }
+    </style>
+</head>
+<body class="ht-portal-body">
+    <!-- Standalone Demonstration Header Banner -->
+    <aside class="ht-preview-banner" aria-label="Demo Bar">
+        <div class="d-flex align-items-center gap-3">
+            <span class="ht-preview-badge">DEMO PREVIEW</span>
+            <span><strong>HealthTrack UI Verification:</strong> Interactive preview for viva demonstration (Sample data · Not saved to database)</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button type="button" class="ht-view-tab-btn active" id="btnTabFeedback" onclick="switchView('feedback')">Feedback UI</button>
+            <button type="button" class="ht-view-tab-btn" id="btnTabNotifications" onclick="switchView('notifications')">Notifications UI</button>
+            <button type="button" class="ht-preview-switch-btn ms-2" id="btnToggleRole" onclick="toggleRole()">Switch to Trainer View</button>
+        </div>
+    </aside>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Portal Navigation">
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="javascript:void(0);">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub" id="sidebarRoleLabel">Client Portal</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Sidebar Items -->
+            <nav class="ht-sidebar-menu" id="sidebarMenuNav">
+                <!-- Injected by JS -->
+            </nav>
+
+            <div class="ht-sidebar-footer">
+                <a href="javascript:void(0);" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                    <span>Settings</span>
+                </a>
+                <a href="javascript:void(0);" class="ht-nav-item ht-nav-signout w-100">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <span class="fw-semibold text-dark" id="topbarPortalTitle">Client Portal</span>
+                </div>
+                <div class="ht-topbar-right">
+                    <a href="javascript:void(0);" onclick="switchView('notifications')" class="ht-topbar-btn position-relative" aria-label="Notifications" id="topbarBellBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" id="topbarDot" style="display: inline-block;"></span>
+                    </a>
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar" id="topbarAvatar">DP</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name" id="topbarUserName">Dhammika Perera</span>
+                            <span class="ht-profile-role" id="topbarUserRole">Client</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Container -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <!-- ========================================== -->
+                <!-- VIEW 1: CLIENT FEEDBACK                    -->
+                <!-- ========================================== -->
+                <div id="sectionClientFeedback">
+                    <div class="ht-dashboard-container">
+                        <div class="mb-3">
+                            <a href="javascript:void(0);" class="ht-card-link-action p-0">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Client Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="ht-trainer-header-row mb-4">
+                            <div>
+                                <h1 class="ht-welcome-title">Trainer Feedback</h1>
+                                <p class="ht-welcome-subtitle">Personalized advice, routine modifications, and encouragement from your trainer.</p>
+                            </div>
+                            <div class="ht-trainer-actions-group">
+                                <span class="ht-status-badge ht-status-confirmed px-3 py-2">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                    <span>2 Feedback Entries</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Cards List -->
+                        <div class="ht-feedback-list d-flex flex-column gap-3">
+                            <article class="ht-card ht-feedback-card">
+                                <div class="ht-feedback-card-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 pb-3 border-bottom">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="ht-profile-avatar ht-feedback-avatar">MV</div>
+                                        <div>
+                                            <h2 class="ht-feedback-trainer-name mb-0">Marcus Vance</h2>
+                                            <span class="ht-feedback-trainer-spec">Strength &amp; Conditioning Coach</span>
+                                        </div>
+                                    </div>
+                                    <span class="ht-feedback-date-badge text-muted">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                        Oct 18, 2026 · 10:15 AM
+                                    </span>
+                                </div>
+                                <div class="ht-feedback-comment-box">
+                                    <p class="ht-feedback-comment-text mb-0">Great posture and steady progress on your bench press sets this week! Make sure to keep your shoulder blades pinched together throughout the lift to protect your rotator cuffs. Increase weight by 2.5kg next session if reps feel comfortable.</p>
+                                </div>
+                                <div class="ht-feedback-card-footer d-flex align-items-center justify-content-between mt-3 pt-2 text-muted small">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-success">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                        </svg>
+                                        <span>Verified Trainer Feedback</span>
+                                    </div>
+                                    <span class="ht-feedback-id-tag">Reference #FB-104</span>
+                                </div>
+                            </article>
+
+                            <article class="ht-card ht-feedback-card">
+                                <div class="ht-feedback-card-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 pb-3 border-bottom">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="ht-profile-avatar ht-feedback-avatar">MV</div>
+                                        <div>
+                                            <h2 class="ht-feedback-trainer-name mb-0">Marcus Vance</h2>
+                                            <span class="ht-feedback-trainer-spec">Strength &amp; Conditioning Coach</span>
+                                        </div>
+                                    </div>
+                                    <span class="ht-feedback-date-badge text-muted">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                        Oct 12, 2026 · 4:45 PM
+                                    </span>
+                                </div>
+                                <div class="ht-feedback-comment-box">
+                                    <p class="ht-feedback-comment-text mb-0">Your hydration and protein intake have met your targets for five consecutive days. Excellent discipline on your nutrition plan. Let's aim to maintain this consistency as we introduce the compound leg routine next Monday.</p>
+                                </div>
+                                <div class="ht-feedback-card-footer d-flex align-items-center justify-content-between mt-3 pt-2 text-muted small">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-success">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                        </svg>
+                                        <span>Verified Trainer Feedback</span>
+                                    </div>
+                                    <span class="ht-feedback-id-tag">Reference #FB-098</span>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- VIEW 2: TRAINER FEEDBACK FORM              -->
+                <!-- ========================================== -->
+                <div id="sectionTrainerFeedback" style="display: none;">
+                    <div class="ht-dashboard-container">
+                        <div class="mb-3">
+                            <a href="javascript:void(0);" class="ht-card-link-action p-0">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Trainer Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="ht-welcome-section mb-4">
+                            <h1 class="ht-welcome-title">Trainer Feedback</h1>
+                            <p class="ht-welcome-subtitle">Provide personalized feedback, review client progress, and suggest routine adjustments.</p>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-12 col-xl-9 col-lg-10">
+                                <div class="ht-card">
+                                    <div class="ht-card-header-flex mb-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0">Record Client Feedback</h2>
+                                                <p class="ht-card-subtitle mb-0">Submit feedback directly to your assigned client's portal</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <form onsubmit="handleDemoFeedbackSubmit(event)">
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-12 col-md-6">
+                                                <div class="ht-form-group mb-0">
+                                                    <label class="ht-label">Target Client <span class="text-danger">*</span></label>
+                                                    <div class="ht-input-box">
+                                                        <span class="ht-field-icon" aria-hidden="true">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                                <circle cx="9" cy="7" r="4"></circle>
+                                                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <select class="ht-input ht-select" id="demoClientSelect" required>
+                                                            <option value="1">Dhammika Perera (#CL-1001)</option>
+                                                            <option value="2">Nimal Silva (#CL-1002)</option>
+                                                            <option value="3">Kasun Fernando (#CL-1003)</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="ht-workout-notice d-flex align-items-center gap-2">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                                    </svg>
+                                                    <span class="small text-muted">
+                                                        <span>Assigning feedback to selected client. Trainer identity is automatically resolved from your active login session.</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="ht-form-group mb-0">
+                                                    <label class="ht-label">Feedback &amp; Guidance <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control ht-feedback-textarea" id="demoFeedbackComment" rows="5" placeholder="Enter constructive feedback, routine modifications, progress praise, or guidance for your client..." required></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="ht-workout-trainer-badge-card">
+                                                    <div class="ht-profile-avatar">MV</div>
+                                                    <div class="d-flex flex-column">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <span class="ht-client-name">Marcus Vance</span>
+                                                            <span class="ht-status-badge ht-status-confirmed py-0 px-2" style="font-size: 0.68rem;">Active Trainer</span>
+                                                        </div>
+                                                        <span class="ht-workout-trainer-caption">Trainer ID linked to authenticated identity upon submission</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top">
+                                            <button type="button" class="btn btn-outline-secondary px-4 py-2" onclick="switchView('feedback')">Cancel</button>
+                                            <button type="submit" class="ht-btn-submit px-4" id="btnSubmitFeedbackDemo">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                                </svg>
+                                                <span>Send Feedback</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <div id="demoFeedbackSuccess" class="alert alert-success mt-3 d-none" role="alert">
+                                        Feedback successfully submitted! Switch to Client View to see it in the client's feed.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- VIEW 3: NOTIFICATIONS INBOX                -->
+                <!-- ========================================== -->
+                <div id="sectionNotifications" style="display: none;">
+                    <div class="ht-dashboard-container">
+                        <div class="mb-3">
+                            <a href="javascript:void(0);" class="ht-card-link-action p-0">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span id="notificationBackText">Back to Client Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="ht-trainer-header-row mb-4">
+                            <div>
+                                <h1 class="ht-welcome-title">Notifications</h1>
+                                <p class="ht-welcome-subtitle" id="notificationSubtitle">
+                                    Stay updated on workout schedules, meal timings, appointment updates, and trainer messages.
+                                </p>
+                            </div>
+                            <div class="ht-trainer-actions-group">
+                                <span class="ht-status-badge ht-notification-unread-pill px-3 py-2" id="demoUnreadSummaryPill">
+                                    <span class="ht-notification-dot-inline" aria-hidden="true"></span>
+                                    <span id="demoUnreadSummaryText">2 Unread</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Filter Bar -->
+                        <div class="ht-notification-filter-bar mb-4" role="tablist">
+                            <button type="button" class="ht-notification-filter-btn active" data-filter="all" onclick="filterDemoNotifications('all', this)">
+                                <span>All</span>
+                                <span class="ht-notification-filter-count" id="demoCountAll">4</span>
+                            </button>
+                            <button type="button" class="ht-notification-filter-btn" data-filter="unread" onclick="filterDemoNotifications('unread', this)">
+                                <span>Unread</span>
+                                <span class="ht-notification-filter-count" id="demoCountUnread">2</span>
+                            </button>
+                            <button type="button" class="ht-notification-filter-btn" data-filter="read" onclick="filterDemoNotifications('read', this)">
+                                <span>Read</span>
+                                <span class="ht-notification-filter-count" id="demoCountRead">2</span>
+                            </button>
+                        </div>
+
+                        <!-- Notification List -->
+                        <div class="ht-notification-list d-flex flex-column gap-3" id="demoNotificationContainer">
+                            <!-- Injected dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // State
+        let currentRole = 'client'; // 'client' or 'trainer'
+        let currentView = 'feedback'; // 'feedback' or 'notifications'
+
+        const clientNotifications = [
+            { id: 201, message: "Reminder: Scheduled Workout 'Upper Body Strength' today at 4:30 PM.", date: "Today · 2:00 PM", type: "workout", isRead: false },
+            { id: 202, message: "Reminder: High-Protein Lunch scheduled for 1:00 PM. Don't forget to hydrate!", date: "Today · 12:30 PM", type: "meal", isRead: false },
+            { id: 203, message: "Your consultation with Marcus Vance was confirmed for tomorrow at 10:00 AM.", date: "Yesterday · 5:20 PM", type: "appointment", isRead: true },
+            { id: 204, message: "Your trainer Marcus Vance left new feedback on your bench press progress.", date: "Oct 18, 2026 · 10:15 AM", type: "feedback", isRead: true }
+        ];
+
+        const trainerNotifications = [
+            { id: 301, message: "Client Dhammika Perera completed the 'Upper Body Strength' routine.", date: "Today · 11:30 AM", type: "workout", isRead: false },
+            { id: 302, message: "New consultation appointment requested by Nimal Silva for Thursday at 2:00 PM.", date: "Today · 9:15 AM", type: "appointment", isRead: false },
+            { id: 303, message: "Client Kasun Fernando logged a new body weight measurement of 74.2 kg.", date: "Yesterday · 4:00 PM", type: "workout", isRead: true }
+        ];
+
+        function renderSidebar() {
+            const menu = document.getElementById('sidebarMenuNav');
+            const roleLabel = document.getElementById('sidebarRoleLabel');
+            const topbarTitle = document.getElementById('topbarPortalTitle');
+            const topbarAvatar = document.getElementById('topbarAvatar');
+            const topbarName = document.getElementById('topbarUserName');
+            const topbarRole = document.getElementById('topbarUserRole');
+
+            if (currentRole === 'client') {
+                roleLabel.textContent = 'Client Portal';
+                topbarTitle.textContent = 'Client Portal';
+                topbarAvatar.textContent = 'DP';
+                topbarName.textContent = 'Dhammika Perera';
+                topbarRole.textContent = 'Client';
+
+                menu.innerHTML = `
+                    <a href="javascript:void(0);" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="client-plans-preview.html" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
+                        <span>Workout Plans</span>
+                    </a>
+                    <a href="client-plans-preview.html" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v20"/><path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"/><path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M8 10v12"/></svg></span>
+                        <span>Diet Plans</span>
+                    </a>
+                    <a href="client-health-preview.html" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/></svg></span>
+                        <span>Health Measurements</span>
+                    </a>
+                    <a href="appointments-preview.html" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="javascript:void(0);" onclick="switchView('feedback')" class="ht-nav-item ${currentView === 'feedback' ? 'active' : ''}">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                        <span>Trainer Feedback</span>
+                    </a>
+                    <a href="javascript:void(0);" onclick="switchView('notifications')" class="ht-nav-item ${currentView === 'notifications' ? 'active' : ''}">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+                        <span>Notifications</span>
+                    </a>
+                `;
+            } else {
+                roleLabel.textContent = 'Trainer Portal';
+                topbarTitle.textContent = 'Trainer Portal';
+                topbarAvatar.textContent = 'MV';
+                topbarName.textContent = 'Marcus Vance';
+                topbarRole.textContent = 'Trainer';
+
+                menu.innerHTML = `
+                    <a href="javascript:void(0);" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="workout-preview.html" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"/></svg></span>
+                        <span>Workout Plans</span>
+                    </a>
+                    <a href="diet-preview.html" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v20"/><path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"/><path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M8 10v12"/></svg></span>
+                        <span>Diet Plans</span>
+                    </a>
+                    <a href="appointments-preview.html" class="ht-nav-item">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="javascript:void(0);" onclick="switchView('feedback')" class="ht-nav-item ${currentView === 'feedback' ? 'active' : ''}">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                        <span>Provide Feedback</span>
+                    </a>
+                    <a href="javascript:void(0);" onclick="switchView('notifications')" class="ht-nav-item ${currentView === 'notifications' ? 'active' : ''}">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+                        <span>Notifications</span>
+                    </a>
+                `;
+            }
+        }
+
+        function switchView(view) {
+            currentView = view;
+            document.getElementById('btnTabFeedback').classList.toggle('active', view === 'feedback');
+            document.getElementById('btnTabNotifications').classList.toggle('active', view === 'notifications');
+
+            const clientFeedback = document.getElementById('sectionClientFeedback');
+            const trainerFeedback = document.getElementById('sectionTrainerFeedback');
+            const notifications = document.getElementById('sectionNotifications');
+
+            if (view === 'feedback') {
+                if (currentRole === 'client') {
+                    clientFeedback.style.display = 'block';
+                    trainerFeedback.style.display = 'none';
+                } else {
+                    clientFeedback.style.display = 'none';
+                    trainerFeedback.style.display = 'block';
+                }
+                notifications.style.display = 'none';
+            } else {
+                clientFeedback.style.display = 'none';
+                trainerFeedback.style.display = 'none';
+                notifications.style.display = 'block';
+                renderNotifications();
+            }
+            renderSidebar();
+        }
+
+        function toggleRole() {
+            currentRole = currentRole === 'client' ? 'trainer' : 'client';
+            document.getElementById('btnToggleRole').textContent = currentRole === 'client' ? 'Switch to Trainer View' : 'Switch to Client View';
+            switchView(currentView);
+        }
+
+        function renderNotifications() {
+            const list = currentRole === 'client' ? clientNotifications : trainerNotifications;
+            const container = document.getElementById('demoNotificationContainer');
+            const subtitle = document.getElementById('notificationSubtitle');
+            const backText = document.getElementById('notificationBackText');
+
+            backText.textContent = currentRole === 'client' ? 'Back to Client Dashboard' : 'Back to Trainer Dashboard';
+            subtitle.textContent = currentRole === 'client'
+                ? 'Stay updated on workout schedules, meal timings, appointment updates, and trainer messages.'
+                : 'Alerts regarding client appointments, routine assignments, and system reminders.';
+
+            const total = list.length;
+            const unread = list.filter(n => !n.isRead).length;
+            const read = total - unread;
+
+            document.getElementById('demoCountAll').textContent = total;
+            document.getElementById('demoCountUnread').textContent = unread;
+            document.getElementById('demoCountRead').textContent = read;
+
+            const summaryPill = document.getElementById('demoUnreadSummaryPill');
+            const summaryText = document.getElementById('demoUnreadSummaryText');
+            if (unread > 0) {
+                summaryPill.className = "ht-status-badge ht-notification-unread-pill px-3 py-2";
+                summaryPill.innerHTML = `<span class="ht-notification-dot-inline" aria-hidden="true"></span><span>${unread} Unread</span>`;
+            } else {
+                summaryPill.className = "ht-status-badge ht-status-confirmed px-3 py-2";
+                summaryPill.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="me-1"><polyline points="20 6 9 17 4 12"/></svg><span>All Caught Up</span>`;
+            }
+
+            // Topbar dot
+            document.getElementById('topbarDot').style.display = unread > 0 ? 'inline-block' : 'none';
+
+            let html = '';
+            list.forEach(item => {
+                const isWorkout = item.type === 'workout';
+                const isMeal = item.type === 'meal';
+                const isAppt = item.type === 'appointment';
+                const isFb = item.type === 'feedback';
+
+                let iconSvg = '';
+                let typeLabel = 'Notification';
+                if (isWorkout) {
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>`;
+                    typeLabel = 'Workout Reminder';
+                } else if (isMeal) {
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v20"/><path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"/><path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M8 10v12"/></svg>`;
+                    typeLabel = 'Meal Reminder';
+                } else if (isAppt) {
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
+                    typeLabel = 'Appointment Alert';
+                } else {
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+                    typeLabel = 'Trainer Feedback';
+                }
+
+                html += `
+                    <article class="ht-card ht-notification-item ${item.isRead ? 'ht-notification-read' : 'ht-notification-unread'}" data-read-status="${item.isRead ? 'read' : 'unread'}">
+                        <div class="d-flex align-items-start gap-3 w-100">
+                            <div class="ht-notification-icon-box flex-shrink-0">
+                                ${iconSvg}
+                            </div>
+                            <div class="ht-notification-content flex-grow-1">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
+                                    <span class="ht-notification-type-tag">${typeLabel}</span>
+                                    <span class="ht-notification-time-tag text-muted">${item.date}</span>
+                                </div>
+                                <p class="ht-notification-message-text mb-2">${item.message}</p>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-2 pt-2 border-top">
+                                    <div class="d-flex align-items-center gap-2">
+                                        ${!item.isRead ? `
+                                            <span class="ht-status-badge ht-notification-badge-unread py-0 px-2">
+                                                <span class="ht-notification-dot-small"></span>
+                                                <span>Unread</span>
+                                            </span>
+                                        ` : `
+                                            <span class="ht-status-badge ht-notification-badge-read py-0 px-2">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="me-1"><polyline points="20 6 9 17 4 12"/></svg>
+                                                <span>Read</span>
+                                            </span>
+                                        `}
+                                        <span class="text-muted small">Ref #NT-${item.id}</span>
+                                    </div>
+                                    <div>
+                                        ${!item.isRead ? `
+                                            <button type="button" class="ht-notification-btn-mark" onclick="markDemoAsRead(${item.id})">
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="me-1"><polyline points="20 6 9 17 4 12"/></svg>
+                                                <span>Mark as Read</span>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function markDemoAsRead(id) {
+            const list = currentRole === 'client' ? clientNotifications : trainerNotifications;
+            const notif = list.find(n => n.id === id);
+            if (notif) {
+                notif.isRead = true;
+                renderNotifications();
+            }
+        }
+
+        function filterDemoNotifications(filter, btn) {
+            document.querySelectorAll('.ht-notification-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const items = document.querySelectorAll('.ht-notification-item');
+            items.forEach(item => {
+                const status = item.getAttribute('data-read-status');
+                if (filter === 'all' || status === filter) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function handleDemoFeedbackSubmit(e) {
+            e.preventDefault();
+            const alertBox = document.getElementById('demoFeedbackSuccess');
+            alertBox.classList.remove('d-none');
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+                document.getElementById('demoFeedbackComment').value = '';
+            }, 3000);
+        }
+
+        // Initialize
+        renderSidebar();
+        renderNotifications();
+    </script>
+</body>
+</html>

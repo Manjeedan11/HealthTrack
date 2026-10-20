@@ -2116,3 +2116,301 @@ body.ht-portal-body {
   border-radius: 6px;
   transition: all 0.15s ease;
 }
+
+/* --------------------------------------------------------------------------
+   17. Feedback & Notifications Interfaces
+   -------------------------------------------------------------------------- */
+.ht-feedback-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #ffffff;
+  padding: 20px 24px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ht-feedback-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.ht-feedback-avatar {
+  background-color: #0d6e5a;
+  color: #ffffff;
+  font-weight: 700;
+  width: 42px;
+  height: 42px;
+  font-size: 0.95rem;
+}
+
+.ht-feedback-trainer-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ht-feedback-trainer-spec {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.ht-feedback-date-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.82rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.ht-feedback-comment-box {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 14px 18px;
+  border-left: 3.5px solid #0d6e5a;
+}
+
+.ht-feedback-comment-text {
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: #1e293b;
+  white-space: pre-line;
+}
+
+.ht-feedback-empty-card {
+  border: 2px dashed #cbd5e1;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.ht-feedback-empty-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #e6f4f1;
+  color: #0d6e5a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.ht-feedback-textarea {
+  min-height: 120px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: #0f172a;
+  resize: vertical;
+}
+
+.ht-feedback-textarea:focus {
+  border-color: #0d6e5a;
+  box-shadow: 0 0 0 3px rgba(13, 110, 90, 0.15);
+}
+
+.ht-feedback-id-tag {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+/* Notifications Components */
+.ht-notification-unread-pill {
+  background-color: #e6f4f1;
+  color: #0d6e5a;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.ht-notification-dot-inline {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0d6e5a;
+  display: inline-block;
+  animation: ht-pulse 2s infinite ease-in-out;
+}
+
+@keyframes ht-pulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+.ht-notification-empty-card {
+  border: 2px dashed #cbd5e1;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.ht-notification-empty-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.ht-notification-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ht-notification-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ht-notification-filter-btn:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.ht-notification-filter-btn.active {
+  background-color: #0d6e5a;
+  border-color: #0d6e5a;
+  color: #ffffff;
+}
+
+.ht-notification-filter-count {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background-color: rgba(15, 23, 42, 0.08);
+}
+
+.ht-notification-filter-btn.active .ht-notification-filter-count {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.ht-notification-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  background-color: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.ht-notification-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.ht-notification-item.ht-notification-unread {
+  border-left: 4px solid #0d6e5a;
+  background: #ffffff;
+}
+
+.ht-notification-item.ht-notification-read {
+  border-left: 4px solid #cbd5e1;
+  background-color: #fbfcfd;
+}
+
+.ht-notification-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ht-notification-unread .ht-notification-icon-box {
+  background-color: #e6f4f1;
+  color: #0d6e5a;
+}
+
+.ht-notification-read .ht-notification-icon-box {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.ht-notification-type-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ht-notification-time-tag {
+  font-size: 0.78rem;
+}
+
+.ht-notification-message-text {
+  font-size: 0.92rem;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+.ht-notification-unread .ht-notification-message-text {
+  font-weight: 500;
+}
+
+.ht-notification-badge-unread {
+  background-color: #e6f4f1;
+  color: #0d6e5a;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+}
+
+.ht-notification-dot-small {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #0d6e5a;
+  display: inline-block;
+}
+
+.ht-notification-badge-read {
+  background-color: #f1f5f9;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+}
+
+.ht-notification-btn-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #0d6e5a;
+  background-color: transparent;
+  color: #0d6e5a;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ht-notification-btn-mark:hover {
+  background-color: #0d6e5a;
+  color: #ffffff;
+}
