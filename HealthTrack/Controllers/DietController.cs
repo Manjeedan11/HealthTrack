@@ -1,37 +1,109 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using HealthTrack.ViewModels.Trainer;
+using System.Linq;
+using System.Threading.Tasks;
 
 [Authorize]
 public class DietController : Controller
 {
-    private readonly IDietService service;
+    private readonly HealthTrackDbContext context;
+    private readonly UserManager<User> userManager;
 
-    public DietController(IDietService service)
+    public DietController(HealthTrackDbContext context, UserManager<User> userManager)
     {
-        this.service = service;
+        this.context = context;
+        this.userManager = userManager;
     }
 
-    public async Task<IActionResult> index(int clientId)
+    
+    public async Task<IActionResult> index()
     {
-        var plans = await service.getClientPlans(clientId);
-        return View(plans);
+        var user = await userManager.GetUserAsync(User);
+        if (user == null) return Challenge();
+
+        List<DietPlan> plans;
+
+        if (User.IsInRole("Trainer"))
+        {
+            var trainer = context.trainers.FirstOrDefault(t => t.userId == user.Id);
+            if (trainer == null) return NotFound();
+
+            
+            plans = context.dietPlans
+                .Include(p => p.meals)
+                .Where(p => p.trainerId == trainer.trainerId)
+                .ToList();
+        }
+        else
+        {
+            var client = context.clients.FirstOrDefault(c => c.userId == user.Id);
+            if (client == null) return NotFound();
+
+            
+            plans = context.dietPlans
+                .Include(p => p.meals)
+                .Where(p => p.clientId == client.clientId)
+                .ToList();
+        }
+
+       
+        return View("~/Views/Client/Diet/Index.cshtml", plans);
     }
 
+ 
+   
     [Authorize(Roles = "Trainer")]
-    public IActionResult create() => View();
+    public IActionResult create()
+    {
+        var viewModel = new CreateDietPlanViewModel
+        {
+            AvailableClients = context.clients.ToList() 
+        };
+        
+        return View("~/Views/Client/Diet/Create.cshtml", viewModel);
+    }
 
+    
     [HttpPost]
     [Authorize(Roles = "Trainer")]
-    public async Task<IActionResult> create(DietPlan plan)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> create(CreateDietPlanViewModel viewModel)
     {
-        if (!ModelState.IsValid) return View(plan);
-
-        var success = await service.createPlan(plan);
-        if (!success)
+        if (!ModelState.IsValid)
         {
-            ModelState.AddModelError("", "Could not create plan.");
-            return View(plan);
+          
+            viewModel.AvailableClients = context.clients.ToList(); 
+            return View("~/Views/Client/Diet/Create.cshtml", viewModel);
         }
-        return RedirectToAction("index", new { clientId = plan.clientId });
+
+        var user = await userManager.GetUserAsync(User);
+        var trainer = context.trainers.FirstOrDefault(t => t.userId == user.Id);
+        if (trainer == null) return NotFound();
+
+        var dietPlan = viewModel.DietPlan;
+        dietPlan.trainerId = trainer.trainerId;
+        dietPlan.dateCreated = DateTime.Now;
+
+        context.dietPlans.Add(dietPlan);
+        await context.SaveChangesAsync();
+
+        // Notify client
+        var client = await context.clients.FindAsync(dietPlan.clientId);
+        if (client != null)
+        {
+            context.notifications.Add(new Notification
+            {
+                userId = client.userId,
+                message = $"New diet plan assigned: {dietPlan.name}",
+                date = DateTime.Now,
+                isRead = false
+            });
+            await context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("index");
     }
 }
