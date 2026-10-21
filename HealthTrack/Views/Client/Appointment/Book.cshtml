@@ -1,4 +1,4 @@
-@model global::Appointment
+@model HealthTrack.ViewModels.Client.BookAppointmentViewModel
 @{
     Layout = "_ClientLayout";
     ViewData["Title"] = "Book Appointment";
@@ -58,7 +58,7 @@
                         <!-- Date & Time Input -->
                         <div class="col-12 col-sm-6">
                             <div class="ht-form-group mb-0">
-                                <label asp-for="dateTime" class="ht-label">Consultation Date &amp; Time <span class="text-danger">*</span></label>
+                                <label asp-for="Appointment.dateTime" class="ht-label">Consultation Date &amp; Time <span class="text-danger">*</span></label>
                                 <div class="ht-input-box">
                                     <span class="ht-field-icon" aria-hidden="true">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -66,7 +66,7 @@
                                             <polyline points="12 6 12 12 16 14"></polyline>
                                         </svg>
                                     </span>
-                                    <input asp-for="dateTime"
+                                    <input asp-for="Appointment.dateTime"
                                            type="datetime-local"
                                            class="ht-input"
                                            min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
@@ -74,14 +74,14 @@
                                            aria-required="true"
                                            id="appointment-datetime-input" />
                                 </div>
-                                <span asp-validation-for="dateTime" class="ht-field-validation"></span>
+                                <span asp-validation-for="Appointment.dateTime" class="ht-field-validation"></span>
                             </div>
                         </div>
 
                         <!-- Trainer Selection -->
                         <div class="col-12 col-sm-6">
                             <div class="ht-form-group mb-0">
-                                <label asp-for="trainerId" class="ht-label">Select Trainer <span class="text-danger">*</span></label>
+                                <label asp-for="Appointment.trainerId" class="ht-label">Select Trainer <span class="text-danger">*</span></label>
                                 <div class="ht-input-box">
                                     <span class="ht-field-icon" aria-hidden="true">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -89,27 +89,29 @@
                                             <circle cx="12" cy="7" r="4"></circle>
                                         </svg>
                                     </span>
-                                    <select asp-for="trainerId" class="ht-input form-select border-0 ps-0" required aria-required="true" id="appointment-trainer-input">
-                                        <option value="1">Marcus Vance (Fitness &amp; Bodybuilding)</option>
-                                        <option value="2">Kasun Fernando (Strength &amp; Conditioning)</option>
-                                        <option value="3">Dhammika Perera (Nutrition &amp; Weight Loss)</option>
+                                    <select asp-for="Appointment.trainerId" class="ht-input form-select border-0 ps-0" required aria-required="true" id="appointment-trainer-input">
+                                        <option value="">-- Select a Trainer --</option>
+                                        @foreach (var trainer in Model.AvailableTrainers)
+                                        {
+                                            <option value="@trainer.trainerId">@trainer.name (@trainer.specialization)</option>
+                                        }
                                     </select>
                                 </div>
-                                <span asp-validation-for="trainerId" class="ht-field-validation"></span>
+                                <span asp-validation-for="Appointment.trainerId" class="ht-field-validation"></span>
                             </div>
                         </div>
 
                         <!-- Consultation Notes / Goals -->
                         <div class="col-12">
                             <div class="ht-form-group mb-0">
-                                <label asp-for="notes" class="ht-label">Consultation Notes / Focus Areas <span class="text-muted small fw-normal">(Optional)</span></label>
-                                <textarea asp-for="notes"
+                                <label asp-for="Appointment.notes" class="ht-label">Consultation Notes / Focus Areas <span class="text-muted small fw-normal">(Optional)</span></label>
+                                <textarea asp-for="Appointment.notes"
                                           class="ht-input py-2"
                                           rows="4"
                                           style="height: auto; min-height: 96px;"
                                           placeholder="e.g., Routine review, personalized nutrition plan discussion, target weight check-in..."
                                           id="appointment-notes-input"></textarea>
-                                <span asp-validation-for="notes" class="ht-field-validation"></span>
+                                <span asp-validation-for="Appointment.notes" class="ht-field-validation"></span>
                             </div>
                         </div>
 

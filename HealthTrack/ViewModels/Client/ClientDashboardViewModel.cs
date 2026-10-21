@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HealthTrack.ViewModels
+namespace HealthTrack.ViewModels.Client
 {
     public class ClientDashboardViewModel
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using HealthTrack.ViewModels;
+using HealthTrack.ViewModels.Account;
 
 public class AccountController : Controller
 {
