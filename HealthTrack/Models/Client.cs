@@ -4,9 +4,9 @@ public class Client {
     public string userId { get; set; }
     public User user { get; set; }
     public string name { get; set; }
-    public DateTime dateOfBirth { get; set; }
-    public string gender { get; set; }
-    public float height { get; set; }
+    public DateTime? dateOfBirth { get; set; }
+    public string? gender { get; set; }
+    public float? height { get; set; }
 
     public ICollection<HealthMetric> healthMetrics { get; set; }
     public ICollection<Appointment> appointments { get; set; }

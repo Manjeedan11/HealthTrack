@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using HealthTrack.ViewModels;
 
 public class AccountController : Controller
 {
@@ -59,6 +60,9 @@ public class AccountController : Controller
 
     [HttpGet]
     public IActionResult login() => View();
+
+    [HttpGet]
+    public IActionResult AccessDenied() => View();
 
     [HttpPost]
     public async Task<IActionResult> login(LoginViewModel model)
