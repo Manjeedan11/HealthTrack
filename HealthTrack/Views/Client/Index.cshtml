@@ -266,7 +266,7 @@
         <div class="ht-card">
             <div class="ht-card-header-row">
                 <h2 class="ht-card-heading">Progress Tracking</h2>
-                <a asp-controller="HealthMetric" asp-action="index" class="ht-card-link">View Progress &rarr;</a>
+                <a asp-controller="HealthMetric" asp-action="index" asp-route-view="progress" class="ht-card-link">View Progress &rarr;</a>
             </div>
 
             @if (Model.HasProgress && Model.ProgressPoints.Any())

@@ -23,7 +23,7 @@
         <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Client Portal Navigation">
             <!-- Sidebar Header / Brand -->
             <div class="ht-sidebar-header">
-                <a class="ht-sidebar-brand" href="#dashboard" id="sidebarBrandLink">
+                <a class="ht-sidebar-brand" href="/Client/Preview" id="sidebarBrandLink">
                     <span class="ht-sidebar-badge" aria-hidden="true">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
@@ -41,7 +41,7 @@
             <!-- Primary Navigation Links matching Client Dashboard screenshot -->
             <nav class="ht-sidebar-menu">
                 <!-- 1. Dashboard -->
-                <a href="#dashboard" class="ht-nav-item" id="navItemDashboard" title="Dashboard">
+                <a href="/Client/Preview" class="ht-nav-item" id="navItemDashboard" title="Dashboard">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="7" x="3" y="3" rx="1"></rect>
@@ -94,7 +94,7 @@
                 </a>
 
                 <!-- 5. Health Measurements (Visual placeholder) -->
-                <a href="#health-measurements" class="ht-nav-item" onclick="event.preventDefault();" title="Health Measurements (Separate workflow)">
+                <a href="client-health-preview.html#measurements" class="ht-nav-item" title="Health Measurements">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="20" height="12" x="2" y="6" rx="2"></rect>
@@ -106,7 +106,7 @@
                 </a>
 
                 <!-- 6. Progress & Analytics (Visual placeholder) -->
-                <a href="#progress" class="ht-nav-item" onclick="event.preventDefault();" title="Progress & Analytics (Separate workflow)">
+                <a href="client-health-preview.html#progress" class="ht-nav-item" title="Progress & Analytics">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 3v18h18"></path>
@@ -117,7 +117,7 @@
                 </a>
 
                 <!-- 7. Appointments (Visual placeholder) -->
-                <a href="#appointments" class="ht-nav-item" onclick="event.preventDefault();" title="Appointments (Separate workflow)">
+                <a href="appointments-preview.html?role=client" class="ht-nav-item" title="Appointments">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
@@ -130,7 +130,7 @@
                 </a>
 
                 <!-- 8. Trainer Feedback (Visual placeholder) -->
-                <a href="#feedback" class="ht-nav-item" onclick="event.preventDefault();" title="Trainer Feedback (Separate workflow)">
+                <a href="feedback-notifications-preview.html?role=client#feedback" class="ht-nav-item" title="Trainer Feedback">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -140,7 +140,7 @@
                 </a>
 
                 <!-- 9. Notifications (Visual placeholder) -->
-                <a href="#notifications" class="ht-nav-item" onclick="event.preventDefault();" title="Notifications (Separate workflow)">
+                <a href="feedback-notifications-preview.html?role=client#notifications" class="ht-nav-item" title="Notifications">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
@@ -202,8 +202,7 @@
                 </div>
 
                 <div class="ht-topbar-right">
-                    <!-- Notification Bell with red indicator dot -->
-                    <a href="#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications" onclick="event.preventDefault();">
+                    <a href="feedback-notifications-preview.html#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications">
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
                             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
@@ -256,7 +255,7 @@
                     <section id="sectionWorkoutPlans" aria-labelledby="client-workout-heading">
                         <!-- Breadcrumb / Back Link -->
                         <div class="mb-3">
-                            <a href="#dashboard" class="ht-card-link-action p-0" id="linkBackToDashboardWorkouts">
+                            <a href="/Client/Preview" class="ht-card-link-action p-0" id="linkBackToDashboardWorkouts">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -300,7 +299,7 @@
                     <section id="sectionDietPlans" class="d-none" aria-labelledby="client-diet-heading">
                         <!-- Breadcrumb / Back Link -->
                         <div class="mb-3">
-                            <a href="#dashboard" class="ht-card-link-action p-0" id="linkBackToDashboardDiets">
+                            <a href="/Client/Preview" class="ht-card-link-action p-0" id="linkBackToDashboardDiets">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -796,8 +795,22 @@
                 }
             });
 
-            // Initial render
-            setScreen('workouts');
+            // Initial render based on URL fragment
+            const initialHash = window.location.hash.toLowerCase();
+            if (initialHash === '#diet-plans') {
+                setScreen('diets');
+            } else {
+                setScreen('workouts');
+            }
+
+            window.addEventListener('hashchange', function () {
+                const h = window.location.hash.toLowerCase();
+                if (h === '#diet-plans') {
+                    setScreen('diets');
+                } else if (h === '#workout-plans') {
+                    setScreen('workouts');
+                }
+            });
         })();
     </script>
 </body>

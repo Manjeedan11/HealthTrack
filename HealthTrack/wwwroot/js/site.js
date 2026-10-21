@@ -1,9 +1,10 @@
 // HealthTrack — Client-Side Scripting
-// Supports accessible password visibility toggle & real-time password requirement guidance
+// Supports accessible password visibility toggle, real-time password requirements, and portal sidebar drawer
 
 document.addEventListener('DOMContentLoaded', function () {
     initPasswordToggles();
     initPasswordGuidance();
+    initPortalSidebar();
 });
 
 /**
@@ -80,4 +81,31 @@ function toggleRuleState(element, isValid) {
             icon.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
         }
     }
+}
+
+/**
+ * Responsive drawer toggle for the Client Portal sidebar on mobile/tablet viewports.
+ */
+function initPortalSidebar() {
+    const openBtn = document.getElementById('openSidebarBtn');
+    const closeBtn = document.getElementById('closeSidebarBtn');
+    const sidebar = document.getElementById('portalSidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+
+    if (!sidebar) return;
+
+    if (openBtn) {
+        openBtn.addEventListener('click', function () {
+            sidebar.classList.add('show');
+            if (backdrop) backdrop.classList.add('show');
+        });
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        if (backdrop) backdrop.classList.remove('show');
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if (backdrop) backdrop.addEventListener('click', closeSidebar);
 }

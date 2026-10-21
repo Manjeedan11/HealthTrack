@@ -49,6 +49,9 @@
                 bool isDashboard = string.Equals(routeCtrl, "Client", StringComparison.OrdinalIgnoreCase) &&
                                    (string.Equals(routeAct, "index", StringComparison.OrdinalIgnoreCase) || string.Equals(routeAct, "Preview", StringComparison.OrdinalIgnoreCase));
 
+                bool isWorkout = string.Equals(routeCtrl, "Workout", StringComparison.OrdinalIgnoreCase);
+                bool isDiet = string.Equals(routeCtrl, "Diet", StringComparison.OrdinalIgnoreCase);
+
                 bool isMeasurements = string.Equals(routeCtrl, "HealthMetric", StringComparison.OrdinalIgnoreCase) &&
                                       (string.Equals(queryView, "measurements", StringComparison.OrdinalIgnoreCase) ||
                                        (string.IsNullOrEmpty(queryView) && string.Equals(routeAct, "index", StringComparison.OrdinalIgnoreCase)) ||
@@ -75,7 +78,7 @@
                     <span>Dashboard</span>
                 </a>
 
-                <a asp-controller="Workout" asp-action="index" class="ht-nav-item">
+                <a asp-controller="Workout" asp-action="index" class="ht-nav-item @(isWorkout ? "active" : "")" aria-current="@(isWorkout ? "page" : null)">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M15 3h6v6"></path>
@@ -100,7 +103,7 @@
                     <span>My Workouts</span>
                 </a>
 
-                <a asp-controller="Diet" asp-action="index" class="ht-nav-item">
+                <a asp-controller="Diet" asp-action="index" class="ht-nav-item @(isDiet ? "active" : "")" aria-current="@(isDiet ? "page" : null)">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 2v20"></path>

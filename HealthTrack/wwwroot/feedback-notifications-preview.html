@@ -85,7 +85,7 @@
         <!-- Sidebar Navigation -->
         <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Portal Navigation">
             <div class="ht-sidebar-header">
-                <a class="ht-sidebar-brand" href="javascript:void(0);">
+                <a class="ht-sidebar-brand" href="/Client/Preview" id="sidebarBrandLink">
                     <span class="ht-sidebar-badge" aria-hidden="true">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
@@ -160,7 +160,7 @@
                 <div id="sectionClientFeedback">
                     <div class="ht-dashboard-container">
                         <div class="mb-3">
-                            <a href="javascript:void(0);" class="ht-card-link-action p-0">
+                            <a href="/Client/Preview" class="ht-card-link-action p-0">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -259,7 +259,7 @@
                 <div id="sectionTrainerFeedback" style="display: none;">
                     <div class="ht-dashboard-container">
                         <div class="mb-3">
-                            <a href="javascript:void(0);" class="ht-card-link-action p-0">
+                            <a href="/Trainer/Preview" class="ht-card-link-action p-0">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -373,7 +373,7 @@
                 <div id="sectionNotifications" style="display: none;">
                     <div class="ht-dashboard-container">
                         <div class="mb-3">
-                            <a href="javascript:void(0);" class="ht-card-link-action p-0">
+                            <a href="/Client/Preview" id="notificationBackLink" class="ht-card-link-action p-0">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -451,6 +451,7 @@
             const topbarAvatar = document.getElementById('topbarAvatar');
             const topbarName = document.getElementById('topbarUserName');
             const topbarRole = document.getElementById('topbarUserRole');
+            const brandLink = document.getElementById('sidebarBrandLink');
 
             if (currentRole === 'client') {
                 roleLabel.textContent = 'Client Portal';
@@ -458,34 +459,43 @@
                 topbarAvatar.textContent = 'DP';
                 topbarName.textContent = 'Dhammika Perera';
                 topbarRole.textContent = 'Client';
+                if (brandLink) brandLink.href = '/Client/Preview';
 
                 menu.innerHTML = `
-                    <a href="javascript:void(0);" class="ht-nav-item">
+                    <a href="/Client/Preview" class="ht-nav-item" title="Dashboard">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span>
                         <span>Dashboard</span>
                     </a>
-                    <a href="client-plans-preview.html" class="ht-nav-item">
+                    <a href="client-plans-preview.html#workout-plans" class="ht-nav-item" title="Workout Plans">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></span>
                         <span>Workout Plans</span>
                     </a>
-                    <a href="client-plans-preview.html" class="ht-nav-item">
+                    <a href="#my-workouts" class="ht-nav-item" onclick="event.preventDefault();" title="My Workouts">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="1" y2="4"/><line x1="10" x2="10" y1="1" y2="4"/><line x1="14" x2="14" y1="1" y2="4"/></svg></span>
+                        <span>My Workouts</span>
+                    </a>
+                    <a href="client-plans-preview.html#diet-plans" class="ht-nav-item" title="Diet Plans">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v20"/><path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"/><path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M8 10v12"/></svg></span>
                         <span>Diet Plans</span>
                     </a>
-                    <a href="client-health-preview.html" class="ht-nav-item">
-                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/></svg></span>
+                    <a href="client-health-preview.html#measurements" class="ht-nav-item" title="Health Measurements">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></span>
                         <span>Health Measurements</span>
                     </a>
-                    <a href="appointments-preview.html" class="ht-nav-item">
+                    <a href="client-health-preview.html#progress" class="ht-nav-item" title="Progress & Analytics">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span>
+                        <span>Progress &amp; Analytics</span>
+                    </a>
+                    <a href="appointments-preview.html?role=client" class="ht-nav-item" title="Appointments">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
                         <span>Appointments</span>
                     </a>
-                    <a href="javascript:void(0);" onclick="switchView('feedback')" class="ht-nav-item ${currentView === 'feedback' ? 'active' : ''}">
+                    <a href="javascript:void(0);" onclick="switchView('feedback')" class="ht-nav-item ${currentView === 'feedback' ? 'active' : ''}" title="Trainer Feedback">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
                         <span>Trainer Feedback</span>
                     </a>
-                    <a href="javascript:void(0);" onclick="switchView('notifications')" class="ht-nav-item ${currentView === 'notifications' ? 'active' : ''}">
-                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+                    <a href="javascript:void(0);" onclick="switchView('notifications')" class="ht-nav-item ${currentView === 'notifications' ? 'active' : ''}" title="Notifications">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
                         <span>Notifications</span>
                     </a>
                 `;
@@ -495,31 +505,48 @@
                 topbarAvatar.textContent = 'MV';
                 topbarName.textContent = 'Marcus Vance';
                 topbarRole.textContent = 'Trainer';
+                if (brandLink) brandLink.href = '/Trainer/Preview';
 
                 menu.innerHTML = `
-                    <a href="javascript:void(0);" class="ht-nav-item">
+                    <a href="/Trainer/Preview" class="ht-nav-item" title="Dashboard">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span>
                         <span>Dashboard</span>
                     </a>
-                    <a href="workout-preview.html" class="ht-nav-item">
+                    <a href="/Trainer/Preview#clients-roster" class="ht-nav-item" title="Clients">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span>Clients</span>
+                    </a>
+                    <a href="workout-preview.html" class="ht-nav-item" title="Workout Plans">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"/></svg></span>
                         <span>Workout Plans</span>
                     </a>
-                    <a href="diet-preview.html" class="ht-nav-item">
+                    <a href="diet-preview.html" class="ht-nav-item" title="Diet Plans">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v20"/><path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"/><path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M8 10v12"/></svg></span>
                         <span>Diet Plans</span>
                     </a>
-                    <a href="appointments-preview.html" class="ht-nav-item">
+                    <a href="#manage-routines" class="ht-nav-item" onclick="event.preventDefault();" title="Manage Routines">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                        <span>Manage Routines</span>
+                    </a>
+                    <a href="appointments-preview.html?role=trainer" class="ht-nav-item" title="Appointments">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
                         <span>Appointments</span>
                     </a>
-                    <a href="javascript:void(0);" onclick="switchView('feedback')" class="ht-nav-item ${currentView === 'feedback' ? 'active' : ''}">
+                    <a href="#progress" class="ht-nav-item" onclick="event.preventDefault();" title="Progress">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 7-8.5 8.5-5-5L2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+                        <span>Progress</span>
+                    </a>
+                    <a href="javascript:void(0);" onclick="switchView('feedback')" class="ht-nav-item ${currentView === 'feedback' ? 'active' : ''}" title="Provide Feedback">
                         <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
                         <span>Provide Feedback</span>
                     </a>
-                    <a href="javascript:void(0);" onclick="switchView('notifications')" class="ht-nav-item ${currentView === 'notifications' ? 'active' : ''}">
-                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+                    <a href="javascript:void(0);" onclick="switchView('notifications')" class="ht-nav-item ${currentView === 'notifications' ? 'active' : ''}" title="Notifications">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
                         <span>Notifications</span>
+                    </a>
+                    <a href="#reports" class="ht-nav-item" onclick="event.preventDefault();" title="Reports">
+                        <span class="ht-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+                        <span>Reports</span>
                     </a>
                 `;
             }
@@ -527,6 +554,14 @@
 
         function switchView(view) {
             currentView = view;
+
+            // Maintain hash in URL
+            if (window.location.hash.toLowerCase() !== '#' + view) {
+                const url = new URL(window.location.href);
+                url.hash = view;
+                history.replaceState(null, '', url.toString());
+            }
+
             document.getElementById('btnTabFeedback').classList.toggle('active', view === 'feedback');
             document.getElementById('btnTabNotifications').classList.toggle('active', view === 'notifications');
 
@@ -554,8 +589,24 @@
 
         function toggleRole() {
             currentRole = currentRole === 'client' ? 'trainer' : 'client';
-            document.getElementById('btnToggleRole').textContent = currentRole === 'client' ? 'Switch to Trainer View' : 'Switch to Client View';
+            const url = new URL(window.location.href);
+            url.searchParams.set('role', currentRole);
+            url.hash = currentView;
+            history.replaceState(null, '', url.toString());
+
+            updateRoleUi();
             switchView(currentView);
+        }
+
+        function updateRoleUi() {
+            const btn = document.getElementById('btnToggleRole');
+            if (btn) {
+                btn.textContent = currentRole === 'client' ? 'Switch to Trainer View' : 'Switch to Client View';
+            }
+            const brandLink = document.getElementById('sidebarBrandLink');
+            if (brandLink) {
+                brandLink.href = currentRole === 'client' ? '/Client/Preview' : '/Trainer/Preview';
+            }
         }
 
         function renderNotifications() {
@@ -563,8 +614,12 @@
             const container = document.getElementById('demoNotificationContainer');
             const subtitle = document.getElementById('notificationSubtitle');
             const backText = document.getElementById('notificationBackText');
+            const backLink = document.getElementById('notificationBackLink');
 
             backText.textContent = currentRole === 'client' ? 'Back to Client Dashboard' : 'Back to Trainer Dashboard';
+            if (backLink) {
+                backLink.href = currentRole === 'client' ? '/Client/Preview' : '/Trainer/Preview';
+            }
             subtitle.textContent = currentRole === 'client'
                 ? 'Stay updated on workout schedules, meal timings, appointment updates, and trainer messages.'
                 : 'Alerts regarding client appointments, routine assignments, and system reminders.';
@@ -595,41 +650,36 @@
                 const isWorkout = item.type === 'workout';
                 const isMeal = item.type === 'meal';
                 const isAppt = item.type === 'appointment';
-                const isFb = item.type === 'feedback';
+                const isFeedback = item.type === 'feedback';
 
-                let iconSvg = '';
-                let typeLabel = 'Notification';
-                if (isWorkout) {
-                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>`;
-                    typeLabel = 'Workout Reminder';
-                } else if (isMeal) {
-                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v20"/><path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"/><path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M8 10v12"/></svg>`;
-                    typeLabel = 'Meal Reminder';
-                } else if (isAppt) {
-                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
-                    typeLabel = 'Appointment Alert';
-                } else {
-                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
-                    typeLabel = 'Trainer Feedback';
-                }
+                const iconSvg = isWorkout
+                    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"/></svg>`
+                    : (isMeal
+                        ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v20"/><path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"/><path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M8 10v12"/></svg>`
+                        : (isAppt
+                            ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`
+                            : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`));
+
+                const iconClass = isWorkout ? 'workout' : (isMeal ? 'meal' : (isAppt ? 'appointment' : 'feedback'));
 
                 html += `
-                    <article class="ht-card ht-notification-item ${item.isRead ? 'ht-notification-read' : 'ht-notification-unread'}" data-read-status="${item.isRead ? 'read' : 'unread'}">
-                        <div class="d-flex align-items-start gap-3 w-100">
-                            <div class="ht-notification-icon-box flex-shrink-0">
+                    <article class="ht-notification-item ${!item.isRead ? 'unread' : ''}" data-read-status="${item.isRead ? 'read' : 'unread'}">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="ht-notification-icon ${iconClass}">
                                 ${iconSvg}
                             </div>
-                            <div class="ht-notification-content flex-grow-1">
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
-                                    <span class="ht-notification-type-tag">${typeLabel}</span>
-                                    <span class="ht-notification-time-tag text-muted">${item.date}</span>
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-start justify-content-between gap-2 mb-1">
+                                    <p class="ht-notification-text mb-0 ${!item.isRead ? 'fw-bold text-dark' : 'text-secondary'}">
+                                        ${item.message}
+                                    </p>
+                                    <span class="ht-notification-time flex-shrink-0">${item.date}</span>
                                 </div>
-                                <p class="ht-notification-message-text mb-2">${item.message}</p>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-2 pt-2 border-top">
+                                <div class="d-flex align-items-center justify-content-between mt-2 pt-1 border-top" style="border-color: #f1f5f9 !important;">
                                     <div class="d-flex align-items-center gap-2">
                                         ${!item.isRead ? `
                                             <span class="ht-status-badge ht-notification-badge-unread py-0 px-2">
-                                                <span class="ht-notification-dot-small"></span>
+                                                <span class="ht-notification-dot-inline" aria-hidden="true"></span>
                                                 <span>Unread</span>
                                             </span>
                                         ` : `
@@ -692,9 +742,33 @@
             }, 3000);
         }
 
-        // Initialize
-        renderSidebar();
-        renderNotifications();
+        // Initialize from URL state
+        const urlParams = new URLSearchParams(window.location.search);
+        const roleParam = urlParams.get('role');
+        if (roleParam && roleParam.toLowerCase() === 'trainer') {
+            currentRole = 'trainer';
+        } else {
+            currentRole = 'client';
+        }
+
+        const hash = window.location.hash.toLowerCase();
+        if (hash === '#notifications') {
+            currentView = 'notifications';
+        } else {
+            currentView = 'feedback';
+        }
+
+        updateRoleUi();
+        switchView(currentView);
+
+        window.addEventListener('hashchange', function () {
+            const h = window.location.hash.toLowerCase();
+            if (h === '#notifications' && currentView !== 'notifications') {
+                switchView('notifications');
+            } else if ((h === '#feedback' || h === '') && currentView !== 'feedback') {
+                switchView('feedback');
+            }
+        });
     </script>
 </body>
 </html>

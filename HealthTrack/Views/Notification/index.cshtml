@@ -1,7 +1,7 @@
 @model IEnumerable<Notification>
 @{
-    bool isTrainer = User.IsInRole("Trainer") || string.Equals(Context.Request.Query["role"].ToString(), "trainer", StringComparison.OrdinalIgnoreCase);
-    bool isAdmin = User.IsInRole("Admin") || string.Equals(Context.Request.Query["role"].ToString(), "admin", StringComparison.OrdinalIgnoreCase);
+    bool isTrainer = User.IsInRole("Trainer");
+    bool isAdmin = User.IsInRole("Admin");
 
     Layout = isTrainer ? "_TrainerLayout" : (isAdmin ? "_Layout" : "_ClientLayout");
     ViewData["Title"] = "Notifications";
