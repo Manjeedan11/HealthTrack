@@ -25,31 +25,31 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View(model);
 
+        
+        model.role = "Client";
+
         var user = new User
         {
             UserName = model.email,
             Email = model.email,
-            role = model.role
+            role = "Client"
         };
 
         var result = await userManager.CreateAsync(user, model.password);
 
         if (result.Succeeded)
         {
-            await userManager.AddToRoleAsync(user, model.role);
+            await userManager.AddToRoleAsync(user, "Client");
 
-            if (model.role == "Client")
+            context.clients.Add(new Client
             {
-                context.clients.Add(new Client { userId = user.Id, name = model.name });
-            }
-            else if (model.role == "Trainer")
-            {
-                context.trainers.Add(new Trainer { userId = user.Id, name = model.name });
-            }
+                userId = user.Id,
+                name = model.name
+            });
             await context.SaveChangesAsync();
 
             await signInManager.SignInAsync(user, false);
-            return RedirectToAction("Index", "Client");
+            return RedirectToAction("index", "Client");
         }
 
         foreach (var error in result.Errors)
@@ -60,9 +60,6 @@ public class AccountController : Controller
 
     [HttpGet]
     public IActionResult login() => View();
-
-    [HttpGet]
-    public IActionResult AccessDenied() => View();
 
     [HttpPost]
     public async Task<IActionResult> login(LoginViewModel model)
@@ -76,10 +73,10 @@ public class AccountController : Controller
         {
             var user = await userManager.FindByEmailAsync(model.email);
             if (user.role == "Admin")
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("index", "Admin");
             if (user.role == "Trainer")
-                return RedirectToAction("Index", "Trainer");
-            return RedirectToAction("Index", "Client");
+                return RedirectToAction("index", "Trainer");
+            return RedirectToAction("index", "Client");
         }
 
         ModelState.AddModelError("", "Invalid login attempt.");
@@ -90,6 +87,9 @@ public class AccountController : Controller
     public async Task<IActionResult> logout()
     {
         await signInManager.SignOutAsync();
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("index", "Home");
     }
+
+    [HttpGet]
+    public IActionResult AccessDenied() => View();
 }

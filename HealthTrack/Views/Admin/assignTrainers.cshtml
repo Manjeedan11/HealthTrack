@@ -1,0 +1,83 @@
+@model AssignTrainerViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Assign Trainers to Clients";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>Assign Trainers to Clients</h2>
+            <p class="text-muted mb-0">Admin-only: link each client to a trainer</p>
+        </div>
+        <a asp-controller="Admin" asp-action="index" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (!Model.Clients.Any())
+    {
+        <div class="alert alert-info">No clients registered yet.</div>
+    }
+    else if (!Model.Trainers.Any())
+    {
+        <div class="alert alert-warning">No trainers registered yet. Ask a Trainer to self-register first.</div>
+    }
+    else
+    {
+        <div class="card p-3">
+            <table class="table table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Current Trainer</th>
+                        <th style="width: 380px;">Assign Trainer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var client in Model.Clients)
+                    {
+                        var currentTrainer = Model.Trainers.FirstOrDefault(t => t.trainerId == client.trainerId);
+                        <tr>
+                            <td>
+                                <strong>@client.name</strong>
+                                <div class="text-muted small">#CL-@client.clientId</div>
+                            </td>
+                            <td>
+                                @if (currentTrainer != null)
+                                {
+                                    <span class="badge bg-success">@currentTrainer.name</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Unassigned</span>
+                                }
+                            </td>
+                            <td>
+                                <form asp-controller="Admin" asp-action="assignTrainers" method="post" class="d-flex gap-2">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="clientId" value="@client.clientId" />
+
+                                    <select name="trainerId" class="form-select form-select-sm">
+                                        <option value="">— Unassign —</option>
+                                        @foreach (var trainer in Model.Trainers)
+                                        {
+                                            <option value="@trainer.trainerId" selected="@(client.trainerId == trainer.trainerId)">
+                                                @trainer.name (@trainer.specialization)
+                                            </option>
+                                        }
+                                    </select>
+
+                                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

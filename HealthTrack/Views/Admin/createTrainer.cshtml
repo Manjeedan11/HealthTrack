@@ -1,0 +1,54 @@
+@model HealthTrack.ViewModels.Admin.CreateTrainerViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Create Trainer";
+}
+
+<div class="container mt-4" style="max-width: 720px;">
+    <div class="mb-3">
+        <a asp-controller="Admin" asp-action="users" class="btn btn-outline-secondary btn-sm">← Back to Users</a>
+    </div>
+
+    <h2>Create Trainer Account</h2>
+    <p class="text-muted">Only Administrators can provision Trainer accounts.</p>
+
+    <div class="card p-4 mt-4">
+        <form asp-controller="Admin" asp-action="createTrainer" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="name" class="form-label">Full Name</label>
+                <input asp-for="name" class="form-control" placeholder="e.g., Coach Smith" />
+                <span asp-validation-for="name" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="email" class="form-label">Email Address</label>
+                <input asp-for="email" type="email" class="form-control" placeholder="coach@healthtrack.com" />
+                <span asp-validation-for="email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="password" class="form-label">Initial Password</label>
+                <input asp-for="password" type="password" class="form-control" placeholder="Minimum 6 characters" />
+                <span asp-validation-for="password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="specialization" class="form-label">Specialization <span class="text-muted small">(optional)</span></label>
+                <input asp-for="specialization" class="form-control" placeholder="e.g., Strength & Conditioning" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="bio" class="form-label">Bio <span class="text-muted small">(optional)</span></label>
+                <textarea asp-for="bio" class="form-control" rows="3" placeholder="Short professional bio..."></textarea>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a asp-controller="Admin" asp-action="users" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create Trainer</button>
+            </div>
+        </form>
+    </div>
+</div>

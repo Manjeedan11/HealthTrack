@@ -178,29 +178,6 @@ namespace HealthTrack.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clients",
-                columns: table => new
-                {
-                    clientId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    userId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    dateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    height = table.Column<float>(type: "real", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clients", x => x.clientId);
-                    table.ForeignKey(
-                        name: "FK_Clients_Users_userId",
-                        column: x => x.userId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "notifications",
                 columns: table => new
                 {
@@ -238,6 +215,35 @@ namespace HealthTrack.Migrations
                     table.PrimaryKey("PK_Trainers", x => x.trainerId);
                     table.ForeignKey(
                         name: "FK_Trainers_Users_userId",
+                        column: x => x.userId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    clientId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    userId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    dateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    height = table.Column<float>(type: "real", nullable: true),
+                    trainerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.clientId);
+                    table.ForeignKey(
+                        name: "FK_Clients_Trainers_trainerId",
+                        column: x => x.trainerId,
+                        principalTable: "Trainers",
+                        principalColumn: "trainerId");
+                    table.ForeignKey(
+                        name: "FK_Clients_Users_userId",
                         column: x => x.userId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -472,6 +478,11 @@ namespace HealthTrack.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_trainerId",
+                table: "Clients",
+                column: "trainerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_userId",

@@ -108,5 +108,11 @@ public class HealthTrackDbContext : IdentityDbContext<User>
         .WithMany(d => d.meals)
         .HasForeignKey(m => m.dietId)
         .OnDelete(DeleteBehavior.Cascade);
+
+    builder.Entity<Client>()
+    .HasOne(c => c.trainer)
+    .WithMany()
+    .HasForeignKey(c => c.trainerId)
+    .OnDelete(DeleteBehavior.NoAction);   
 }
 }

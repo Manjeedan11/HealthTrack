@@ -99,11 +99,16 @@ namespace HealthTrack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("trainerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("userId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("clientId");
+
+                    b.HasIndex("trainerId");
 
                     b.HasIndex("userId");
 
@@ -603,11 +608,18 @@ namespace HealthTrack.Migrations
 
             modelBuilder.Entity("Client", b =>
                 {
+                    b.HasOne("Trainer", "trainer")
+                        .WithMany()
+                        .HasForeignKey("trainerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("User", "user")
                         .WithMany()
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("trainer");
 
                     b.Navigation("user");
                 });
