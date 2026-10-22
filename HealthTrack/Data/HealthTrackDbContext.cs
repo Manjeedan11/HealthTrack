@@ -17,6 +17,8 @@ public class HealthTrackDbContext : IdentityDbContext<User>
     public DbSet<HealthMetric> healthMetrics { get; set; }
     public DbSet<Notification> notifications { get; set; }
     public DbSet<Feedback> feedbacks { get; set; }
+    public DbSet<WorkoutLog> workoutLogs { get; set; }
+    public DbSet<MealLog> mealLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
 {
@@ -110,9 +112,39 @@ public class HealthTrackDbContext : IdentityDbContext<User>
         .OnDelete(DeleteBehavior.Cascade);
 
     builder.Entity<Client>()
-    .HasOne(c => c.trainer)
-    .WithMany()
-    .HasForeignKey(c => c.trainerId)
-    .OnDelete(DeleteBehavior.NoAction);   
+        .HasOne(c => c.trainer)
+        .WithMany()
+        .HasForeignKey(c => c.trainerId)
+        .OnDelete(DeleteBehavior.NoAction);  
+
+    builder.Entity<WorkoutLog>()
+        .HasOne(w => w.client).WithMany()
+        .HasForeignKey(w => w.clientId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    builder.Entity<WorkoutLog>()
+        .HasOne(w => w.exercise).WithMany()
+        .HasForeignKey(w => w.exerciseId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+    builder.Entity<WorkoutLog>()
+        .HasOne(w => w.workoutPlan).WithMany()
+        .HasForeignKey(w => w.workoutPlanId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+    builder.Entity<MealLog>()
+        .HasOne(m => m.client).WithMany()
+        .HasForeignKey(m => m.clientId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    builder.Entity<MealLog>()
+        .HasOne(m => m.meal).WithMany()
+        .HasForeignKey(m => m.mealId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+    builder.Entity<MealLog>()
+        .HasOne(m => m.dietPlan).WithMany()
+        .HasForeignKey(m => m.dietPlanId)
+        .OnDelete(DeleteBehavior.NoAction); 
 }
 }

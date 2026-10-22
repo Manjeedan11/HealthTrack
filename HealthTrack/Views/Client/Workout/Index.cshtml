@@ -6,6 +6,22 @@
 }
 
 <div class="ht-dashboard-container">
+    <!-- Success / Error Alerts -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <!-- Breadcrumb & Back Link -->
     <div class="mb-3">
         <a asp-controller="@(isTrainer ? "Trainer" : "Client")" asp-action="index" class="ht-card-link-action p-0">
@@ -93,10 +109,10 @@
                             <table class="table ht-trainer-table align-middle mb-0" aria-label="Exercises for @plan.name">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="ht-th-col" style="width: 45%;">EXERCISE</th>
-                                        <th scope="col" class="ht-th-col" style="width: 18%;">SETS</th>
-                                        <th scope="col" class="ht-th-col" style="width: 18%;">REPS</th>
-                                        <th scope="col" class="ht-th-col text-end" style="width: 19%;">DURATION / REST</th>
+                                        <th scope="col" class="ht-th-col" style="width: 40%;">EXERCISE</th>
+                                        <th scope="col" class="ht-th-col" style="width: 15%;">SETS</th>
+                                        <th scope="col" class="ht-th-col" style="width: 15%;">REPS</th>
+                                        <th scope="col" class="ht-th-col text-end" style="width: 30%;">DURATION / ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -116,9 +132,20 @@
                                                 <span class="ht-workout-stat-badge">@ex.reps reps</span>
                                             </td>
                                             <td class="text-end">
-                                                <span class="ht-workout-duration-text">
-                                                    @(ex.duration > 0 ? $"{ex.duration} min" : "—")
-                                                </span>
+                                                <div class="d-flex flex-column align-items-end gap-1">
+                                                    <span class="ht-workout-duration-text">
+                                                        @(ex.duration > 0 ? $"{ex.duration} min" : "—")
+                                                    </span>
+                                                    @if (!isTrainer)
+                                                    {
+                                                        <a asp-controller="Workout" asp-action="log"
+                                                           asp-route-exerciseId="@ex.exerciseId"
+                                                           asp-route-planId="@plan.planId"
+                                                           class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.7rem;">
+                                                            Log Completed
+                                                        </a>
+                                                    }
+                                                </div>
                                             </td>
                                         </tr>
                                     }
@@ -164,5 +191,47 @@
                 </a>
             }
         </section>
+    }
+
+    <!-- Recent Workout Logs (Client only) -->
+    @if (!isTrainer && ViewBag.RecentLogs != null)
+    {
+        var logs = ViewBag.RecentLogs as List<WorkoutLog>;
+        if (logs != null && logs.Any())
+        {
+            <div class="ht-card mt-4">
+                <div class="ht-card-header-flex mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <h2 class="ht-card-title mb-0">Recent Workout Logs</h2>
+                        <span class="ht-status-badge ht-status-confirmed">@logs.Count entries</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ht-trainer-table align-middle mb-0" aria-label="Recent workout logs">
+                        <thead>
+                            <tr>
+                                <th class="ht-th-col" style="width: 25%;">DATE</th>
+                                <th class="ht-th-col" style="width: 30%;">EXERCISE</th>
+                                <th class="ht-th-col" style="width: 15%;">DURATION</th>
+                                <th class="ht-th-col" style="width: 15%;">CALORIES</th>
+                                <th class="ht-th-col text-end" style="width: 15%;">NOTES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lg in logs)
+                            {
+                                <tr>
+                                    <td><span class="fw-semibold">@lg.date.ToString("MMM d, yyyy · h:mm tt")</span></td>
+                                    <td>@(lg.exercise?.name ?? "Free-form workout")</td>
+                                    <td><span class="ht-workout-duration-text">@lg.durationMinutes min</span></td>
+                                    <td><span class="fw-semibold">@lg.caloriesBurned cal</span></td>
+                                    <td class="text-end text-muted small">@(string.IsNullOrWhiteSpace(lg.notes) ? "—" : lg.notes)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
     }
 </div>

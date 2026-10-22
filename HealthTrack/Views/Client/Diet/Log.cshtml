@@ -1,0 +1,122 @@
+@model MealLog
+@{
+    Layout = "_ClientLayout";
+    ViewData["Title"] = "Log Meal";
+    string mealName = ViewBag.SelectedMealName as string;
+}
+
+<div class="ht-dashboard-container">
+    <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+        <a asp-controller="Client" asp-action="index" class="ht-card-link-action p-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
+        <span class="text-muted" aria-hidden="true">&bull;</span>
+        <a asp-controller="Diet" asp-action="index" class="ht-card-link-action p-0">
+            <span>Back to Diet Plans</span>
+        </a>
+    </div>
+
+    <div class="ht-welcome-section mb-4">
+        <h1 class="ht-welcome-title">Log Consumed Meal</h1>
+        <p class="ht-welcome-subtitle">Record your meal — calories consumed, notes and compliance with your assigned plan.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+            <div class="ht-card">
+                <div class="ht-card-header-flex mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2v20"></path>
+                                <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                <path d="M8 10v12"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0">Meal Entry</h2>
+                            <p class="ht-card-subtitle mb-0">
+                                @if (!string.IsNullOrEmpty(mealName))
+                                {
+                                    <span>Logging consumption of: <strong>@mealName</strong></span>
+                                }
+                                else
+                                {
+                                    <span>Record a consumed meal</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="ht-validation-summary" role="alert"></div>
+
+                <form asp-controller="Diet" asp-action="log" method="post" id="mealLogForm" novalidate>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="mealId" />
+                    <input type="hidden" asp-for="dietPlanId" />
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="caloriesConsumed" class="ht-label">Calories Consumed <span class="text-danger">*</span></label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 2v20"></path>
+                                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                            <path d="M8 10v12"></path>
+                                        </svg>
+                                    </span>
+                                    <input asp-for="caloriesConsumed" type="number" min="0" max="5000" class="ht-input" placeholder="e.g., 550" required />
+                                </div>
+                                <span asp-validation-for="caloriesConsumed" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="notes" class="ht-label">Meal Notes <span class="text-muted small fw-normal">(Optional)</span></label>
+                                <textarea asp-for="notes" class="ht-input py-2" rows="3" placeholder="Followed plan? Any substitutions? Portion notes?"></textarea>
+                                <span asp-validation-for="notes" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="ht-workout-notice d-flex align-items-start gap-2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary mt-1">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <div class="small text-muted">
+                                    <strong>Automated System Stamping:</strong> The log timestamp (<code>DateTime.Now</code>) is evaluated server-side upon submission. Your trainer will be notified of your logged meal.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-3 border-top">
+                        <a asp-controller="Diet" asp-action="index" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+                        <button type="submit" class="ht-btn-submit px-4">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Save Meal Log</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,134 @@
+@model WorkoutLog
+@{
+    Layout = "_ClientLayout";
+    ViewData["Title"] = "Log Workout";
+    string exerciseName = ViewBag.SelectedExerciseName as string;
+}
+
+<div class="ht-dashboard-container">
+    <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+        <a asp-controller="Client" asp-action="index" class="ht-card-link-action p-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
+        <span class="text-muted" aria-hidden="true">&bull;</span>
+        <a asp-controller="Workout" asp-action="index" class="ht-card-link-action p-0">
+            <span>Back to Workout Plans</span>
+        </a>
+    </div>
+
+    <div class="ht-welcome-section mb-4">
+        <h1 class="ht-welcome-title">Log Completed Workout</h1>
+        <p class="ht-welcome-subtitle">Record your workout session — duration, calories burned, and any notes for your trainer.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+            <div class="ht-card">
+                <div class="ht-card-header-flex mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6.5 6.5 11 11"></path>
+                                <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0">Workout Session Entry</h2>
+                            <p class="ht-card-subtitle mb-0">
+                                @if (!string.IsNullOrEmpty(exerciseName))
+                                {
+                                    <span>Logging completion for: <strong>@exerciseName</strong></span>
+                                }
+                                else
+                                {
+                                    <span>Record your completed workout session</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="ht-validation-summary" role="alert"></div>
+
+                <form asp-controller="Workout" asp-action="log" method="post" id="workoutLogForm" novalidate>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="exerciseId" />
+                    <input type="hidden" asp-for="workoutPlanId" />
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-sm-6">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="durationMinutes" class="ht-label">Duration (minutes) <span class="text-danger">*</span></label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                    </span>
+                                    <input asp-for="durationMinutes" type="number" min="1" max="600" class="ht-input" placeholder="e.g., 30" required />
+                                </div>
+                                <span asp-validation-for="durationMinutes" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="caloriesBurned" class="ht-label">Calories Burned <span class="text-danger">*</span></label>
+                                <div class="ht-input-box">
+                                    <span class="ht-field-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                                        </svg>
+                                    </span>
+                                    <input asp-for="caloriesBurned" type="number" min="0" max="5000" class="ht-input" placeholder="e.g., 250" required />
+                                </div>
+                                <span asp-validation-for="caloriesBurned" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="ht-form-group mb-0">
+                                <label asp-for="notes" class="ht-label">Session Notes <span class="text-muted small fw-normal">(Optional)</span></label>
+                                <textarea asp-for="notes" class="ht-input py-2" rows="3" placeholder="How did you feel? Any exercises skipped? Weight used?"></textarea>
+                                <span asp-validation-for="notes" class="ht-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="ht-workout-notice d-flex align-items-start gap-2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary mt-1">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <div class="small text-muted">
+                                    <strong>Automated System Stamping:</strong> The log timestamp (<code>DateTime.Now</code>) is evaluated server-side upon submission. Your trainer will be notified of your completed workout.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-3 border-top">
+                        <a asp-controller="Workout" asp-action="index" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+                        <button type="submit" class="ht-btn-submit px-4">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Save Workout Log</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
