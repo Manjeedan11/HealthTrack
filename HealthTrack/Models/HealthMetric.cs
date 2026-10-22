@@ -7,7 +7,7 @@ public class HealthMetric
     public int clientId { get; set; }
     public Client? client { get; set; }
     public int? exerciseId { get; set; }
-    public Exercise exercise { get; set; }
+    public Exercise? exercise { get; set; }
     public int? mealId { get; set; }
     public Meal? meal { get; set; }
     public DateTime date { get; set; }

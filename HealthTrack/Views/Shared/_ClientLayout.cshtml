@@ -39,31 +39,22 @@
                 <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
             </div>
 
-            <!-- Primary Navigation Links -->
             @{
-                var routeCtrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
-                var routeAct = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
-                var queryView = Context.Request.Query["view"].ToString();
-                var queryReturn = Context.Request.Query["returnView"].ToString();
+                var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+                var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
 
-                bool isDashboard = string.Equals(routeCtrl, "Client", StringComparison.OrdinalIgnoreCase) &&
-                                   (string.Equals(routeAct, "index", StringComparison.OrdinalIgnoreCase) || string.Equals(routeAct, "Preview", StringComparison.OrdinalIgnoreCase));
-
-                bool isMeasurements = string.Equals(routeCtrl, "HealthMetric", StringComparison.OrdinalIgnoreCase) &&
-                                      (string.Equals(queryView, "measurements", StringComparison.OrdinalIgnoreCase) ||
-                                       (string.IsNullOrEmpty(queryView) && string.Equals(routeAct, "index", StringComparison.OrdinalIgnoreCase)) ||
-                                       (string.Equals(routeAct, "log", StringComparison.OrdinalIgnoreCase) && queryReturn != "progress"));
-
-                bool isProgress = string.Equals(routeCtrl, "HealthMetric", StringComparison.OrdinalIgnoreCase) &&
-                                  (string.Equals(queryView, "progress", StringComparison.OrdinalIgnoreCase) ||
-                                   (string.Equals(routeAct, "log", StringComparison.OrdinalIgnoreCase) && queryReturn == "progress"));
-
-                bool isAppointments = string.Equals(routeCtrl, "Appointment", StringComparison.OrdinalIgnoreCase);
-                bool isFeedback = string.Equals(routeCtrl, "Feedback", StringComparison.OrdinalIgnoreCase);
-                bool isNotifications = string.Equals(routeCtrl, "Notification", StringComparison.OrdinalIgnoreCase);
+                bool isDashboard    = controller.Equals("Client", StringComparison.OrdinalIgnoreCase) && action.Equals("index", StringComparison.OrdinalIgnoreCase);
+                bool isAppointments = controller.Equals("Appointment", StringComparison.OrdinalIgnoreCase);
+                bool isWorkout      = controller.Equals("Workout", StringComparison.OrdinalIgnoreCase);
+                bool isDiet         = controller.Equals("Diet", StringComparison.OrdinalIgnoreCase);
+                bool isHealth       = controller.Equals("HealthMetric", StringComparison.OrdinalIgnoreCase);
             }
+
             <nav class="ht-sidebar-menu">
-                <a asp-controller="Client" asp-action="index" class="ht-nav-item @(isDashboard ? "active" : "")" aria-current="@(isDashboard ? "page" : null)">
+                <!-- 1. Dashboard -->
+                <a asp-controller="Client" asp-action="index"
+                   class="ht-nav-item @(isDashboard ? "active" : "")"
+                   aria-current="@(isDashboard ? "page" : null)">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="7" x="3" y="3" rx="1"></rect>
@@ -75,65 +66,10 @@
                     <span>Dashboard</span>
                 </a>
 
-                <a asp-controller="Workout" asp-action="index" class="ht-nav-item">
-                    <span class="ht-nav-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 3h6v6"></path>
-                            <path d="M9 21H3v-6"></path>
-                            <path d="M21 3l-7 7"></path>
-                            <path d="M3 21l7-7"></path>
-                        </svg>
-                    </span>
-                    <span>Workout Plans</span>
-                </a>
-
-                <a asp-controller="Workout" asp-action="index" class="ht-nav-item">
-                    <span class="ht-nav-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                            <line x1="6" x2="6" y1="1" y2="4"></line>
-                            <line x1="10" x2="10" y1="1" y2="4"></line>
-                            <line x1="14" x2="14" y1="1" y2="4"></line>
-                        </svg>
-                    </span>
-                    <span>My Workouts</span>
-                </a>
-
-                <a asp-controller="Diet" asp-action="index" class="ht-nav-item">
-                    <span class="ht-nav-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 2v20"></path>
-                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
-                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
-                            <path d="M8 10v12"></path>
-                        </svg>
-                    </span>
-                    <span>Diet Plans</span>
-                </a>
-
-                <a asp-controller="HealthMetric" asp-action="index" asp-route-view="measurements" class="ht-nav-item @(isMeasurements ? "active" : "")" aria-current="@(isMeasurements ? "page" : null)">
-                    <span class="ht-nav-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="12" x="2" y="6" rx="2"></rect>
-                            <circle cx="12" cy="12" r="2"></circle>
-                            <path d="M6 12h.01M18 12h.01"></path>
-                        </svg>
-                    </span>
-                    <span>Health Measurements</span>
-                </a>
-
-                <a asp-controller="HealthMetric" asp-action="index" asp-route-view="progress" class="ht-nav-item @(isProgress ? "active" : "")" aria-current="@(isProgress ? "page" : null)">
-                    <span class="ht-nav-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 3v18h18"></path>
-                            <path d="m19 9-5 5-4-4-3 3"></path>
-                        </svg>
-                    </span>
-                    <span>Progress &amp; Analytics</span>
-                </a>
-
-                <a asp-controller="Appointment" asp-action="index" class="ht-nav-item @(isAppointments ? "active" : "")" aria-current="@(isAppointments ? "page" : null)">
+                <!-- 2. Appointments -->
+                <a asp-controller="Appointment" asp-action="index"
+                   class="ht-nav-item @(isAppointments ? "active" : "")"
+                   aria-current="@(isAppointments ? "page" : null)">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
@@ -145,23 +81,48 @@
                     <span>Appointments</span>
                 </a>
 
-                <a asp-controller="Feedback" asp-action="myFeedback" class="ht-nav-item @(isFeedback ? "active" : "")" aria-current="@(isFeedback ? "page" : null)">
+                <!-- 3. Workout Plans -->
+                <a asp-controller="Workout" asp-action="index"
+                   class="ht-nav-item @(isWorkout ? "active" : "")"
+                   aria-current="@(isWorkout ? "page" : null)">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            <path d="M15 3h6v6"></path>
+                            <path d="M9 21H3v-6"></path>
+                            <path d="M21 3l-7 7"></path>
+                            <path d="M3 21l7-7"></path>
                         </svg>
                     </span>
-                    <span>Trainer Feedback</span>
+                    <span>Workout Plans</span>
                 </a>
 
-                <a asp-controller="Notification" asp-action="index" class="ht-nav-item @(isNotifications ? "active" : "")" aria-current="@(isNotifications ? "page" : null)">
+                <!-- 4. Diet Plans -->
+                <a asp-controller="Diet" asp-action="index"
+                   class="ht-nav-item @(isDiet ? "active" : "")"
+                   aria-current="@(isDiet ? "page" : null)">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
                         </svg>
                     </span>
-                    <span>Notifications</span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Health Measurements -->
+                <a asp-controller="HealthMetric" asp-action="index"
+                   class="ht-nav-item @(isHealth ? "active" : "")"
+                   aria-current="@(isHealth ? "page" : null)">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <path d="M6 12h.01M18 12h.01"></path>
+                        </svg>
+                    </span>
+                    <span>Health Measurements</span>
                 </a>
             </nav>
 
@@ -219,7 +180,7 @@
                         </svg>
                     </a>
 
-                    <!-- User Profile Area matching reference -->
+                    <!-- User Profile Area -->
                     <div class="ht-topbar-profile">
                         <div class="ht-profile-avatar">
                             @(ViewData["ClientInitials"] ?? "DP")

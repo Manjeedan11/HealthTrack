@@ -1,49 +1,110 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 [Authorize(Roles = "Client")]
 public class HealthMetricController : Controller
 {
-    private readonly IHealthMetricService service;
-    private readonly UserManager<User> userManager;
     private readonly HealthTrackDbContext context;
+    private readonly UserManager<User> userManager;
 
-    public HealthMetricController(IHealthMetricService service,
-                                  UserManager<User> userManager,
-                                  HealthTrackDbContext context)
+    public HealthMetricController(HealthTrackDbContext context, UserManager<User> userManager)
     {
-        this.service = service;
-        this.userManager = userManager;
         this.context = context;
+        this.userManager = userManager;
     }
 
+    // GET: /HealthMetric?view=measurements  or  ?view=progress
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
+        if (user == null) return Challenge();
+
         var client = context.clients.FirstOrDefault(c => c.userId == user.Id);
         if (client == null) return NotFound();
 
-        var metrics = await service.getClientMetrics(client.clientId);
-        return View(metrics);
+        // Fetch metrics ordered newest-first (the view relies on this order)
+        var metrics = context.healthMetrics
+            .Where(m => m.clientId == client.clientId)
+            .OrderByDescending(m => m.date)
+            .ToList();
+
+        return View("~/Views/Client/HealthMetric/Index.cshtml", metrics);
     }
 
+    // GET: /HealthMetric/Log?returnView=measurements|progress
     [HttpGet]
-    public IActionResult log() => View();
-
-    [HttpPost]
-    public async Task<IActionResult> log(HealthMetric metric)
+    public IActionResult log()
     {
-        if (!ModelState.IsValid) return View(metric);
+        return View("~/Views/Client/HealthMetric/Log.cshtml", new HealthMetric());
+    }
 
+    // POST: /HealthMetric/Log
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> log(HealthMetric metric, [FromQuery] string? returnView)
+    {
         var user = await userManager.GetUserAsync(User);
         var client = context.clients.FirstOrDefault(c => c.userId == user.Id);
         if (client == null) return NotFound();
 
-        metric.clientId = client.clientId;
-        metric.bmi = await service.calculateBMI(metric.weight, client.height);
+        // Preserve view mode for post-save redirect
+        string viewMode = (returnView ?? "").ToLowerInvariant() == "progress" ? "progress" : "measurements";
 
-        await service.logMetric(metric);
-        return RedirectToAction("index");
+        if (!ModelState.IsValid)
+        {
+            return View("~/Views/Client/HealthMetric/Log.cshtml", metric);
+        }
+
+        try
+        {
+            // Stamp server-side fields
+            metric.clientId = client.clientId;
+            metric.date = DateTime.Now;
+
+            // Calculate BMI from client's stored height
+            if (client.height.HasValue && client.height.Value > 0)
+            {
+                float heightInMeters = client.height.Value / 100f;
+                float rawBmi = metric.weight / (heightInMeters * heightInMeters);
+                metric.bmi = (float)Math.Round(rawBmi, 2);
+            }
+            else
+            {
+                metric.bmi = 0;
+            }
+
+            context.healthMetrics.Add(metric);
+            await context.SaveChangesAsync();
+
+            // Notify assigned trainer if any
+            if (client.trainerId.HasValue)
+            {
+                var trainer = await context.trainers.FindAsync(client.trainerId);
+                if (trainer != null)
+                {
+                    context.notifications.Add(new Notification
+                    {
+                        userId = trainer.userId,
+                        message = $"{client.name} logged a new measurement: {metric.weight:0.0} kg, BMI {metric.bmi:0.0}.",
+                        date = DateTime.Now,
+                        isRead = false
+                    });
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            TempData["Success"] = $"Measurement logged: {metric.weight:0.0} kg · BMI {metric.bmi:0.0}.";
+            return RedirectToAction("index", new { view = viewMode });
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", $"Save failed: {ex.InnerException?.Message ?? ex.Message}");
+            return View("~/Views/Client/HealthMetric/Log.cshtml", metric);
+        }
     }
 }
