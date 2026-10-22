@@ -9,6 +9,7 @@ namespace HealthTrack.ViewModels.Shared
         public int PendingCount { get; set; }
         public int ConfirmedCount { get; set; }
         public int CancelledCount { get; set; }
+         public int CompletedCount { get; set; } 
         public bool IsTrainer { get; set; }
     }
 }

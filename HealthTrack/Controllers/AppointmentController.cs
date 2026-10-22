@@ -57,6 +57,7 @@ public class AppointmentController : Controller
         viewModel.PendingCount = viewModel.Appointments.Count(a => a.status == "Pending");
         viewModel.ConfirmedCount = viewModel.Appointments.Count(a => a.status == "Confirmed");
         viewModel.CancelledCount = viewModel.Appointments.Count(a => a.status == "Cancelled");
+        viewModel.CompletedCount = viewModel.Appointments.Count(a => a.status == "Completed");
 
         // Point to the new folder structure
         return View("~/Views/Client/Appointment/Index.cshtml", viewModel);
@@ -75,73 +76,154 @@ public class AppointmentController : Controller
         return View("~/Views/Client/Appointment/Book.cshtml", viewModel);
     }
 
-    // POST: /Appointment/Book
     [HttpPost]
     [Authorize(Roles = "Client")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> book(BookAppointmentViewModel viewModel)
+   {
+    Console.WriteLine("=== POST book() called ===");
+    Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
+
+    if (viewModel?.Appointment == null)
     {
-        if (!ModelState.IsValid)
-        {
-            viewModel.AvailableTrainers = context.trainers.ToList();
-            return View("~/Views/Client/Appointment/Book.cshtml", viewModel);
-        }
+        Console.WriteLine("=== viewModel.Appointment is NULL ===");
+        ModelState.AddModelError("", "Form submission failed.");
+        viewModel ??= new BookAppointmentViewModel();
+        viewModel.AvailableTrainers = context.trainers.ToList();
+        return View("~/Views/Client/Appointment/Book.cshtml", viewModel);
+    }
 
-        var user = await userManager.GetUserAsync(User);
-        var client = context.clients.FirstOrDefault(c => c.userId == user.Id);
-        
-        if (client == null) return NotFound();
+    Console.WriteLine($"Appointment.dateTime: {viewModel.Appointment.dateTime}");
+    Console.WriteLine($"Appointment.trainerId: {viewModel.Appointment.trainerId}");
+    Console.WriteLine($"Appointment.notes: '{viewModel.Appointment.notes}'");
 
-        // Map ViewModel to Entity
+    if (viewModel.Appointment.trainerId <= 0)
+    {
+        Console.WriteLine("=== trainerId is 0 or negative ===");
+        ModelState.AddModelError("Appointment.trainerId", "Please select a trainer.");
+    }
+
+    if (viewModel.Appointment.dateTime <= DateTime.Now)
+    {
+        Console.WriteLine("=== dateTime is in the past ===");
+        ModelState.AddModelError("Appointment.dateTime", "Appointment must be in the future.");
+    }
+
+    if (!ModelState.IsValid)
+    {
+        Console.WriteLine("=== ModelState invalid, returning form ===");
+        foreach (var err in ModelState.Values.SelectMany(v => v.Errors))
+            Console.WriteLine($"  Error: {err.ErrorMessage}");
+        viewModel.AvailableTrainers = context.trainers.ToList();
+        return View("~/Views/Client/Appointment/Book.cshtml", viewModel);
+    }
+
+    var user = await userManager.GetUserAsync(User);
+    var client = context.clients.FirstOrDefault(c => c.userId == user.Id);
+    Console.WriteLine($"=== Current user ID: {user.Id}");
+    Console.WriteLine($"=== Current client ID: {client?.clientId}");
+
+    if (client == null)
+    {
+        Console.WriteLine("=== client not found! ===");
+        return NotFound();
+    }
+
+    try
+    {
         var appointment = viewModel.Appointment;
         appointment.clientId = client.clientId;
         appointment.status = "Pending";
+        appointment.notes = appointment.notes ?? "";
+
+        Console.WriteLine($"=== Saving appointment: clientId={appointment.clientId}, trainerId={appointment.trainerId}, dateTime={appointment.dateTime} ===");
 
         context.appointments.Add(appointment);
         await context.SaveChangesAsync();
 
-        // Notify Trainer
-        var trainer = await context.trainers.FindAsync(appointment.trainerId);
-        if (trainer != null)
+        Console.WriteLine($"=== SAVED! appointmentId={appointment.appointmentId} ===");
+
+        // notify trainer ...
+        return RedirectToAction("index");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("=== EXCEPTION during save ===");
+        Console.WriteLine(ex.Message);
+        Console.WriteLine(ex.InnerException?.Message);
+        ModelState.AddModelError("", $"Save failed: {ex.InnerException?.Message ?? ex.Message}");
+        viewModel.AvailableTrainers = context.trainers.ToList();
+        return View("~/Views/Client/Appointment/Book.cshtml", viewModel);
+    }
+}
+
+
+[HttpPost]
+[Authorize(Roles = "Trainer")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> updateStatus(int id, string status)
+{
+    Console.WriteLine($"=== updateStatus called: id={id}, status={status} ===");
+
+    // Whitelist valid statuses
+    var validStatuses = new[] { "Confirmed", "Cancelled", "Completed" };
+    if (string.IsNullOrEmpty(status) || !validStatuses.Contains(status))
+    {
+        TempData["Error"] = "Invalid status value.";
+        return RedirectToAction("index");
+    }
+
+    var appointment = await context.appointments.FindAsync(id);
+    if (appointment == null)
+    {
+        TempData["Error"] = "Appointment not found.";
+        return RedirectToAction("index");
+    }
+
+    // Business rule: cannot complete a future appointment
+    if (status == "Completed" && appointment.dateTime > DateTime.Now)
+    {
+        TempData["Error"] = "Cannot mark a future appointment as completed.";
+        return RedirectToAction("index");
+    }
+
+    // Business rule: cannot mark complete unless it was Confirmed
+    if (status == "Completed" && appointment.status != "Confirmed")
+    {
+        TempData["Error"] = "Only confirmed appointments can be marked as completed.";
+        return RedirectToAction("index");
+    }
+
+    try
+    {
+        appointment.status = status;
+        await context.SaveChangesAsync();
+        Console.WriteLine($"=== Updated appointment {id} to {status} ===");
+
+        // Notify the client
+        var client = await context.clients.FindAsync(appointment.clientId);
+        if (client != null)
         {
+            string verb = status == "Completed" ? "marked as completed" : status.ToLower();
             context.notifications.Add(new Notification
             {
-                userId = trainer.userId,
-                message = $"New appointment request from {client.name} for {appointment.dateTime:MMM d, yyyy h:mm tt}.",
+                userId = client.userId,
+                message = $"Your appointment on {appointment.dateTime:MMM d, yyyy h:mm tt} has been {verb}.",
                 date = DateTime.Now,
                 isRead = false
             });
             await context.SaveChangesAsync();
         }
 
-        return RedirectToAction("index");
+        TempData["Success"] = $"Appointment {status.ToLower()} successfully.";
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"=== Exception: {ex.Message} ===");
+        TempData["Error"] = $"Update failed: {ex.InnerException?.Message ?? ex.Message}";
     }
 
-    // POST: /Appointment/UpdateStatus
-    [HttpPost]
-    [Authorize(Roles = "Trainer")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> updateStatus(int id, string status)
-    {
-        var appointment = await context.appointments.FindAsync(id);
-        if (appointment != null)
-        {
-            appointment.status = status;
-            await context.SaveChangesAsync();
-            
-            var client = await context.clients.FindAsync(appointment.clientId);
-            if (client != null)
-            {
-                context.notifications.Add(new Notification
-                {
-                    userId = client.userId,
-                    message = $"Your appointment on {appointment.dateTime:MMM d} has been {status}.",
-                    date = DateTime.Now,
-                    isRead = false
-                });
-                await context.SaveChangesAsync();
-            }
-        }
-        return RedirectToAction("index");
-    }
+    return RedirectToAction("index");
+}
+
 }
