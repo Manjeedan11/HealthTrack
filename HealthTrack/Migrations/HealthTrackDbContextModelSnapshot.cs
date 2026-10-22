@@ -188,6 +188,9 @@ namespace HealthTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("feedbackId"));
 
+                    b.Property<int?>("appointmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("clientId")
                         .HasColumnType("int");
 
@@ -202,6 +205,8 @@ namespace HealthTrack.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("feedbackId");
+
+                    b.HasIndex("appointmentId");
 
                     b.HasIndex("clientId");
 
@@ -733,6 +738,11 @@ namespace HealthTrack.Migrations
 
             modelBuilder.Entity("Feedback", b =>
                 {
+                    b.HasOne("Appointment", "appointment")
+                        .WithMany()
+                        .HasForeignKey("appointmentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Client", "client")
                         .WithMany("feedbacks")
                         .HasForeignKey("clientId")
@@ -744,6 +754,8 @@ namespace HealthTrack.Migrations
                         .HasForeignKey("trainerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("appointment");
 
                     b.Navigation("client");
 

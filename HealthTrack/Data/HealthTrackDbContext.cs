@@ -80,6 +80,12 @@ public class HealthTrackDbContext : IdentityDbContext<User>
         .HasForeignKey(f => f.trainerId)
         .OnDelete(DeleteBehavior.NoAction);
 
+    builder.Entity<Feedback>()
+        .HasOne(f => f.appointment)
+        .WithMany()
+        .HasForeignKey(f => f.appointmentId)
+        .OnDelete(DeleteBehavior.NoAction);
+
     builder.Entity<HealthMetric>()
         .HasOne(h => h.client)
         .WithMany(c => c.healthMetrics)

@@ -276,6 +276,14 @@
                                                     </form>
                                                 </div>
                                             }
+                                            else if (string.Equals(appt.status, "Completed", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <a asp-controller="Feedback" asp-action="give"
+                                                   asp-route-appointmentId="@appt.appointmentId"
+                                                   class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.75rem;">
+                                                    Give Feedback
+                                                </a>
+                                            }
                                         </div>
                                     </td>
                                 </tr>

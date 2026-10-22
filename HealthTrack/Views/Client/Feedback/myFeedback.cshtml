@@ -79,6 +79,8 @@
                     }
                 }
 
+                bool hasAppointmentContext = item.appointmentId.HasValue && item.appointment != null;
+
                 <article class="ht-card ht-feedback-card" id="feedback_@item.feedbackId">
                     <div class="ht-feedback-card-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 pb-3 border-bottom">
                         <div class="d-flex align-items-center gap-3">
@@ -100,6 +102,23 @@
                             </span>
                         </div>
                     </div>
+
+                    <!-- Appointment Context Banner (only when linked) -->
+                    @if (hasAppointmentContext)
+                    {
+                        <div class="ht-feedback-context mb-3 d-flex align-items-center gap-2 px-3 py-2"
+                             style="background-color: #eff6ff; border-left: 3px solid #2563eb; border-radius: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span class="small" style="color: #1e40af;">
+                                Regarding your consultation on <strong>@item.appointment!.dateTime.ToString("MMM d, yyyy · h:mm tt")</strong>
+                            </span>
+                        </div>
+                    }
 
                     <div class="ht-feedback-comment-box">
                         <p class="ht-feedback-comment-text mb-0">@item.comment</p>
