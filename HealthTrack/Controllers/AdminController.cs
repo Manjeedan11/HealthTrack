@@ -30,7 +30,7 @@ public class AdminController : Controller
         }
     }
 
-    // GET: /Admin — Dashboard
+    
     public async Task<IActionResult> index()
     {
         await SetAdminViewData();
@@ -104,7 +104,7 @@ public class AdminController : Controller
         return View("~/Views/Admin/Index.cshtml", viewModel);
     }
 
-    // GET: /Admin/users
+    
     public async Task<IActionResult> users()
     {
         await SetAdminViewData();
@@ -132,7 +132,7 @@ public class AdminController : Controller
         return View("~/Views/Admin/Users.cshtml", list);
     }
 
-    // GET: /Admin/createTrainer
+    
     [HttpGet]
     public async Task<IActionResult> createTrainer()
     {
@@ -140,7 +140,7 @@ public class AdminController : Controller
         return View("~/Views/Admin/CreateTrainer.cshtml");
     }
 
-    // POST: /Admin/createTrainer
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> createTrainer(CreateTrainerViewModel model)
@@ -181,7 +181,7 @@ public class AdminController : Controller
         return View("~/Views/Admin/CreateTrainer.cshtml", model);
     }
 
-    // GET: /Admin/assignTrainers
+    
     [HttpGet]
     public async Task<IActionResult> assignTrainers()
     {
@@ -216,7 +216,7 @@ public class AdminController : Controller
         return RedirectToAction("assignTrainers");
     }
 
-    // GET: /Admin/reports
+    
     [HttpGet]
     public async Task<IActionResult> reports(DateTime? dateFrom, DateTime? dateTo, string? reportType)
     {
@@ -248,7 +248,7 @@ public class AdminController : Controller
 
         var totalAdmins = users.Count(u => u.role == "Admin");
 
-        // SYSTEM USAGE — pies
+        
         var roleBreakdown = new List<BreakdownItem>
         {
             new() { Label = "Clients",  Count = clients.Count,  Color = "#0d6e5a" },
@@ -264,7 +264,7 @@ public class AdminController : Controller
             new() { Label = "Cancelled", Count = appointments.Count(a => a.status == "Cancelled"), Color = "#ef4444" }
         };
 
-        // ENGAGEMENT — bar chart over time
+        
         var days = new List<DateTime>();
         var cur = from.Date;
         while (cur <= to.Date && days.Count < 30)
@@ -284,7 +284,7 @@ public class AdminController : Controller
                   + metrics.Count(h => h.date.Date == d)
         }).ToList();
 
-        // CLIENT PERFORMANCE — bars per client
+        
         var clientPerf = clients.Select(c =>
         {
             var wc = workoutLogs.Count(w => w.clientId == c.clientId);
@@ -302,7 +302,7 @@ public class AdminController : Controller
             };
         }).OrderByDescending(c => c.TotalActivity).ToList();
 
-        // POPULAR ROUTINES — pies by workout/diet plan
+        
         var colors = new[] { "#0d6e5a", "#0284c7", "#f59e0b", "#8b5cf6", "#ef4444", "#10b981" };
 
         var workoutPlanNames = context.workoutPlans.ToDictionary(w => w.planId, w => w.name);
@@ -362,7 +362,7 @@ public class AdminController : Controller
         return View("~/Views/Admin/Reports.cshtml", viewModel);
     }
 
-    // GET: /Admin/exportCsv
+    
     [HttpGet]
     public async Task<IActionResult> exportCsv(DateTime? dateFrom, DateTime? dateTo)
     {

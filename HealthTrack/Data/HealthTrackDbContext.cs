@@ -77,10 +77,10 @@ public class HealthTrackDbContext : IdentityDbContext<User>
             .HasForeignKey(f => f.trainerId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        // FIXED: explicit collection for appointment → feedbacks
+        
         builder.Entity<Feedback>()
             .HasOne(f => f.appointment)
-            .WithMany(a => a.feedbacks)          // ← changed from .WithMany()
+            .WithMany(a => a.feedbacks)          
             .HasForeignKey(f => f.appointmentId)
             .OnDelete(DeleteBehavior.NoAction);
 

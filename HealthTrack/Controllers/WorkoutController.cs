@@ -20,7 +20,7 @@ public class WorkoutController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /Workout/Index — shared view for both Client and Trainer
+    
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -48,7 +48,7 @@ public class WorkoutController : Controller
                 .Where(p => p.clientId == client.clientId)
                 .ToList();
 
-            // Recent workout logs for the client
+            
             ViewBag.RecentLogs = context.workoutLogs
                 .Include(w => w.exercise)
                 .Where(w => w.clientId == client.clientId)
@@ -60,7 +60,7 @@ public class WorkoutController : Controller
         return View("~/Views/Client/Workout/Index.cshtml", plans);
     }
 
-    // GET: /Workout/Create — Trainer only
+    
     [HttpGet]
     [Authorize(Roles = "Trainer")]
     public async Task<IActionResult> create()
@@ -79,7 +79,7 @@ public class WorkoutController : Controller
         return View("~/Views/Trainer/Workout/Create.cshtml", viewModel);
     }
 
-    // POST: /Workout/Create
+    
     [HttpPost]
     [Authorize(Roles = "Trainer")]
     [ValidateAntiForgeryToken]
@@ -132,7 +132,7 @@ public class WorkoutController : Controller
         }
     }
 
-    // GET: /Workout/Log?exerciseId=X&planId=Y
+   
     [HttpGet]
     [Authorize(Roles = "Client")]
     public async Task<IActionResult> log(int? exerciseId, int? planId)
@@ -162,7 +162,7 @@ public class WorkoutController : Controller
         return View("~/Views/Client/Workout/Log.cshtml", log);
     }
 
-    // POST: /Workout/Log
+    
     [HttpPost]
     [Authorize(Roles = "Client")]
     [ValidateAntiForgeryToken]

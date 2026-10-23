@@ -19,7 +19,7 @@ public class TrainerController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /Trainer/Index — Trainer Dashboard
+    
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -94,7 +94,7 @@ public class TrainerController : Controller
         return View("~/Views/Trainer/Index.cshtml", viewModel);
     }
 
-    // GET: /Trainer/Clients — List all assigned clients
+    
     [HttpGet]
     public async Task<IActionResult> clients()
     {
@@ -134,7 +134,7 @@ public class TrainerController : Controller
         return View("~/Views/Trainer/Client/Clients.cshtml", clientItems);
     }
 
-    // GET: /Trainer/clientDetails/{id} — Individual client metrics & logs
+    
     [HttpGet]
     public async Task<IActionResult> clientDetails(int id)
     {
@@ -201,7 +201,7 @@ public class TrainerController : Controller
         return View("~/Views/Trainer/Client/ClientDetails.cshtml", viewModel);
     }
 
-    // GET: /Trainer/Routines — Combined workout + diet hub
+    
     [HttpGet]
     public async Task<IActionResult> routines()
     {
@@ -234,7 +234,7 @@ public class TrainerController : Controller
         return View("~/Views/Trainer/Routine/Routines.cshtml", viewModel);
     }
 
-    // GET: /Trainer/Reports
+    
     [HttpGet]
     public async Task<IActionResult> reports(DateTime? dateFrom, DateTime? dateTo, string? reportType)
     {
@@ -270,7 +270,7 @@ public class TrainerController : Controller
             .Where(h => assignedClientIds.Contains(h.clientId) && h.date >= from && h.date <= to)
             .ToList();
 
-        // Client performance
+        
         var clients = context.clients.Where(c => c.trainerId == trainer.trainerId).ToList();
         var clientPerf = clients.Select(c =>
         {
@@ -289,7 +289,7 @@ public class TrainerController : Controller
             };
         }).OrderByDescending(c => c.TotalActivity).ToList();
 
-        // Popular routines
+        
         var colors = new[] { "#0d6e5a", "#0284c7", "#f59e0b", "#8b5cf6", "#ef4444", "#10b981" };
 
         var popularWorkouts = context.workoutLogs
@@ -324,7 +324,7 @@ public class TrainerController : Controller
             .Take(6)
             .ToList();
 
-        // Engagement by day (max 30 entries)
+        
         var days = new System.Collections.Generic.List<DateTime>();
         var cur = from.Date;
         while (cur <= to.Date && days.Count < 30)
@@ -362,7 +362,7 @@ public class TrainerController : Controller
         return View("~/Views/Trainer/Reports/Reports.cshtml", viewModel);
     }
 
-    // GET: /Trainer/ExportCsv
+    
     [HttpGet]
     public async Task<IActionResult> exportCsv(DateTime? dateFrom, DateTime? dateTo)
     {

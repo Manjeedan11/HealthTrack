@@ -5,13 +5,13 @@ namespace HealthTrack.ViewModels.Admin
 {
     public class AdminDashboardViewModel
     {
-        // Admin identity
+        
         public string AdminName { get; set; } = "";
         public string FirstName { get; set; } = "";
         public string Initials { get; set; } = "";
         public bool IsDemonstrationData { get; set; } = false;
 
-        // KPI counts
+        
         public int TotalUsers { get; set; }
         public int TotalClients { get; set; }
         public int TotalTrainers { get; set; }
@@ -19,7 +19,7 @@ namespace HealthTrack.ViewModels.Admin
         public int TotalWorkoutPlans { get; set; }
         public int TotalDietPlans { get; set; }
 
-        // Lists
+        
         public List<AdminRecentUser> RecentUsers { get; set; } = new();
         public List<AdminRecentAppointment> RecentAppointments { get; set; } = new();
     }

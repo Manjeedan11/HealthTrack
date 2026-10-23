@@ -20,7 +20,7 @@ public class DietController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /Diet/Index  — shared view for both Client and Trainer
+    
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -60,7 +60,7 @@ public class DietController : Controller
         return View("~/Views/Client/Diet/Index.cshtml", plans);
     }
 
-    // GET: /Diet/Create — Trainer only
+    
     [HttpGet]
     [Authorize(Roles = "Trainer")]
     public async Task<IActionResult> create()
@@ -79,7 +79,7 @@ public class DietController : Controller
         return View("~/Views/Trainer/Diet/Create.cshtml", viewModel);
     }
 
-    // POST: /Diet/Create
+    
     [HttpPost]
     [Authorize(Roles = "Trainer")]
     [ValidateAntiForgeryToken]
@@ -132,7 +132,7 @@ public class DietController : Controller
         }
     }
 
-    // GET: /Diet/Log?mealId=X&planId=Y
+    
     [HttpGet]
     [Authorize(Roles = "Client")]
     public async Task<IActionResult> log(int? mealId, int? planId)
@@ -162,7 +162,7 @@ public class DietController : Controller
         return View("~/Views/Client/Diet/Log.cshtml", log);
     }
 
-    // POST: /Diet/Log
+    
     [HttpPost]
     [Authorize(Roles = "Client")]
     [ValidateAntiForgeryToken]

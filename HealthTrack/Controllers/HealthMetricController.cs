@@ -18,7 +18,7 @@ public class HealthMetricController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /HealthMetric?view=measurements  or  ?view=progress
+    
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -27,7 +27,7 @@ public class HealthMetricController : Controller
         var client = context.clients.FirstOrDefault(c => c.userId == user.Id);
         if (client == null) return NotFound();
 
-        // Fetch metrics ordered newest-first (the view relies on this order)
+        
         var metrics = context.healthMetrics
             .Where(m => m.clientId == client.clientId)
             .OrderByDescending(m => m.date)
@@ -36,14 +36,14 @@ public class HealthMetricController : Controller
         return View("~/Views/Client/HealthMetric/Index.cshtml", metrics);
     }
 
-    // GET: /HealthMetric/Log?returnView=measurements|progress
+    
     [HttpGet]
     public IActionResult log()
     {
         return View("~/Views/Client/HealthMetric/Log.cshtml", new HealthMetric());
     }
 
-    // POST: /HealthMetric/Log
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> log(HealthMetric metric, [FromQuery] string? returnView)
@@ -52,7 +52,7 @@ public class HealthMetricController : Controller
         var client = context.clients.FirstOrDefault(c => c.userId == user.Id);
         if (client == null) return NotFound();
 
-        // Preserve view mode for post-save redirect
+        
         string viewMode = (returnView ?? "").ToLowerInvariant() == "progress" ? "progress" : "measurements";
 
         if (!ModelState.IsValid)
@@ -62,11 +62,11 @@ public class HealthMetricController : Controller
 
         try
         {
-            // Stamp server-side fields
+            
             metric.clientId = client.clientId;
             metric.date = DateTime.Now;
 
-            // Calculate BMI from client's stored height
+            
             if (client.height.HasValue && client.height.Value > 0)
             {
                 float heightInMeters = client.height.Value / 100f;
@@ -81,7 +81,7 @@ public class HealthMetricController : Controller
             context.healthMetrics.Add(metric);
             await context.SaveChangesAsync();
 
-            // Notify assigned trainer if any
+           
             if (client.trainerId.HasValue)
             {
                 var trainer = await context.trainers.FindAsync(client.trainerId);

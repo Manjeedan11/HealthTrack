@@ -18,7 +18,7 @@ public class FeedbackController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /Feedback/MyFeedback — Client sees feedback received
+    
     [Authorize(Roles = "Client")]
     public async Task<IActionResult> myFeedback()
     {
@@ -36,7 +36,7 @@ public class FeedbackController : Controller
         return View("~/Views/Client/Feedback/MyFeedback.cshtml", feedbacks);
     }
 
-    // GET: /Feedback/Give?appointmentId=X  OR  ?clientId=X
+    
     [HttpGet]
     [Authorize(Roles = "Trainer")]
     public async Task<IActionResult> give(int? clientId, int? appointmentId)
@@ -45,7 +45,7 @@ public class FeedbackController : Controller
         var trainer = context.trainers.FirstOrDefault(t => t.userId == user.Id);
         if (trainer == null) return NotFound();
 
-        // If appointmentId is provided, derive clientId from it
+        
         if (appointmentId.HasValue)
         {
             var appt = await context.appointments
@@ -54,7 +54,7 @@ public class FeedbackController : Controller
 
             if (appt == null) return NotFound();
 
-            // Only the assigned trainer can give feedback on their own appointment
+            
             if (appt.trainerId != trainer.trainerId) return Forbid();
 
             clientId = appt.clientId;
@@ -80,7 +80,7 @@ public class FeedbackController : Controller
         return View("~/Views/Trainer/Feedback/Give.cshtml", feedback);
     }
 
-    // POST: /Feedback/Give
+    
     [HttpPost]
     [Authorize(Roles = "Trainer")]
     [ValidateAntiForgeryToken]
@@ -90,10 +90,10 @@ public class FeedbackController : Controller
         var trainer = context.trainers.FirstOrDefault(t => t.userId == user.Id);
         if (trainer == null) return NotFound();
 
-        // Guard: trainer must own this feedback target
+        
         if (feedback.clientId == 0) return BadRequest("clientId required");
 
-        // Guard: if appointmentId provided, verify it belongs to this trainer
+        
         if (feedback.appointmentId.HasValue)
         {
             var appt = await context.appointments.FindAsync(feedback.appointmentId.Value);
@@ -119,7 +119,7 @@ public class FeedbackController : Controller
             context.feedbacks.Add(feedback);
             await context.SaveChangesAsync();
 
-            // Notify the client
+            
             var client = await context.clients.FindAsync(feedback.clientId);
             if (client != null)
             {

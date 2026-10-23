@@ -20,7 +20,7 @@ public class AppointmentController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /Appointment/Index
+    
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -54,18 +54,17 @@ public class AppointmentController : Controller
                 .ToList();
         }
 
-        // Calculate counts for the dashboard cards
+       
         viewModel.TotalCount = viewModel.Appointments.Count;
         viewModel.PendingCount = viewModel.Appointments.Count(a => a.status == "Pending");
         viewModel.ConfirmedCount = viewModel.Appointments.Count(a => a.status == "Confirmed");
         viewModel.CancelledCount = viewModel.Appointments.Count(a => a.status == "Cancelled");
         viewModel.CompletedCount = viewModel.Appointments.Count(a => a.status == "Completed");
 
-        // Point to the new folder structure
         return View("~/Views/Client/Appointment/Index.cshtml", viewModel);
     }
 
-    // GET: /Appointment/Book
+   
     [HttpGet]
     [Authorize(Roles = "Client")]
     public IActionResult book()
@@ -145,7 +144,7 @@ public class AppointmentController : Controller
 
         Console.WriteLine($"=== SAVED! appointmentId={appointment.appointmentId} ===");
 
-        // notify trainer ...
+        
         return RedirectToAction("index");
     }
     catch (Exception ex)
@@ -167,7 +166,7 @@ public async Task<IActionResult> updateStatus(int id, string status)
 {
     Console.WriteLine($"=== updateStatus called: id={id}, status={status} ===");
 
-    // Whitelist valid statuses
+    
     var validStatuses = new[] { "Confirmed", "Cancelled", "Completed" };
     if (string.IsNullOrEmpty(status) || !validStatuses.Contains(status))
     {
@@ -182,14 +181,14 @@ public async Task<IActionResult> updateStatus(int id, string status)
         return RedirectToAction("index");
     }
 
-    // Business rule: cannot complete a future appointment
+    
     if (status == "Completed" && appointment.dateTime > DateTime.Now)
     {
         TempData["Error"] = "Cannot mark a future appointment as completed.";
         return RedirectToAction("index");
     }
 
-    // Business rule: cannot mark complete unless it was Confirmed
+    
     if (status == "Completed" && appointment.status != "Confirmed")
     {
         TempData["Error"] = "Only confirmed appointments can be marked as completed.";
@@ -202,7 +201,7 @@ public async Task<IActionResult> updateStatus(int id, string status)
         await context.SaveChangesAsync();
         Console.WriteLine($"=== Updated appointment {id} to {status} ===");
 
-        // Notify the client
+       
         var client = await context.clients.FindAsync(appointment.clientId);
         if (client != null)
         {
