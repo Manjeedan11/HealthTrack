@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports &amp; Analytics - HealthTrack Trainer Portal</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+
+    <style>
+        /* Scoped styles for Trainer Reports & Analytics */
+        .ht-reports-toolbar {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+
+        .ht-nav-tabs-reports {
+            border-bottom: 2px solid #e2e8f0;
+            gap: 8px;
+        }
+
+        .ht-nav-tabs-reports .nav-link {
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 10px 18px;
+            background: transparent;
+            transition: all 0.15s ease;
+        }
+
+        .ht-nav-tabs-reports .nav-link:hover {
+            color: #0d6e5a;
+            border-color: #cbd5e1;
+        }
+
+        .ht-nav-tabs-reports .nav-link.active {
+            color: #0d6e5a;
+            border-color: #0d6e5a;
+            background: transparent;
+        }
+
+        .ht-report-kpi {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 20px;
+            height: 100%;
+        }
+
+        .ht-report-kpi-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+        }
+
+        .ht-report-kpi-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .ht-svg-chart-container {
+            width: 100%;
+            height: 260px;
+            position: relative;
+        }
+
+        .ht-svg-chart {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .ht-chart-axis text {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            fill: #94a3b8;
+            font-weight: 500;
+        }
+
+        .ht-routine-metric-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .ht-routine-metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 110, 90, 0.06);
+        }
+
+        .ht-tag-preview {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background-color: #f1f5f9;
+            color: #475569;
+            letter-spacing: 0.03em;
+        }
+
+        .ht-tag-illustrative {
+            background-color: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
+        .ht-btn-export {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            color: #334155;
+            transition: all 0.15s ease;
+        }
+
+        .ht-btn-export:hover {
+            background-color: #f8fafc;
+            border-color: #94a3b8;
+            color: #0f172a;
+        }
+
+        .ht-arch-note {
+            background-color: #f8fafc;
+            border-left: 4px solid #0d6e5a;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            font-size: 0.82rem;
+            color: #334155;
+            margin-top: 24px;
+        }
+
+        .ht-empty-report {
+            padding: 48px 24px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation (255px wide desktop) -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Trainer Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="trainer-clients-preview.html?screen=dashboard" id="sidebarBrandLink">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub ht-brand-sub-trainer">TRAINER PORTAL</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching Coursework Specification -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard -->
+                <a href="trainer-clients-preview.html?screen=dashboard" class="ht-nav-item" id="navItemDashboard" title="Trainer Dashboard">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Clients -->
+                <a href="trainer-clients-preview.html?screen=clients" class="ht-nav-item" id="navItemClients" title="Clients Directory">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span>Clients</span>
+                </a>
+
+                <!-- 3. Workout Plans -->
+                <a href="workout-preview.html" class="ht-nav-item" id="navItemWorkout" title="Workout Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6.5 6.5 11 11"></path>
+                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                            <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a href="diet-preview.html" class="ht-nav-item" id="navItemDiet" title="Diet Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Manage Routines -->
+                <a href="trainer-routines-preview.html" class="ht-nav-item" id="navItemManageRoutines" title="Manage Routines">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </span>
+                    <span>Manage Routines</span>
+                </a>
+
+                <!-- 6. Appointments -->
+                <a href="appointments-preview.html?role=trainer" class="ht-nav-item" id="navItemAppointments" title="Appointments">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 7. Progress -->
+                <a href="trainer-progress-preview.html" class="ht-nav-item" id="navItemProgress" title="Client Progress Review">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                    </span>
+                    <span>Progress</span>
+                </a>
+
+                <!-- 8. Feedback -->
+                <a href="feedback-notifications-preview.html?role=trainer#feedback" class="ht-nav-item" id="navItemFeedback" title="Trainer Feedback">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    <span>Feedback</span>
+                </a>
+
+                <!-- 9. Notifications -->
+                <a href="feedback-notifications-preview.html?role=trainer#notifications" class="ht-nav-item" id="navItemNotifications" title="Notifications">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </span>
+                    <span>Notifications</span>
+                </a>
+
+                <!-- 10. Reports (ACTIVE) -->
+                <a href="trainer-reports-preview.html" class="ht-nav-item active" id="navItemReports" aria-current="page" title="Trainer Reports &amp; Analytics">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </span>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Profile & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="javascript:void(0);" class="ht-nav-item" onclick="alert('Trainer Profile: Marcus Vance · Certified Strength & Conditioning Specialist (CSCS)');" aria-label="Trainer profile">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span>Profile</span>
+                </a>
+
+                <a href="javascript:void(0);" class="ht-nav-item ht-nav-signout w-100" onclick="alert('Preview Mode: Sign out simulated.');">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6e5a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="d-none d-sm-inline">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                        </svg>
+                        <span class="fw-semibold text-dark" style="font-size: 0.95rem;">Trainer Reports &amp; Analytics Preview</span>
+                    </div>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell with indicator -->
+                    <a href="feedback-notifications-preview.html?role=trainer#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications" title="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- User Profile Area -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar" id="trainerAvatar">MV</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name" id="trainerFullName">Marcus Vance</span>
+                            <span class="ht-profile-role">Trainer</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- ======================================================== -->
+                    <!-- PREVIEW NOTICE BANNER                                    -->
+                    <!-- ======================================================== -->
+                    <div class="ht-demo-notice alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div class="small">
+                                <strong>PREVIEW MODE — DEMONSTRATION DATA ONLY. NOT LIVE DATABASE DATA.</strong>
+                                <span class="d-none d-md-inline ms-1 text-muted">
+                                    Coursework 2 reporting categories: Client Performance, Popular Routines, and Engagement Summary.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnToggleEmptyReport">
+                                Test Empty State
+                            </button>
+                            <a href="trainer-progress-preview.html" class="btn btn-sm btn-outline-primary">
+                                Single Client Progress →
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Breadcrumbs & Back Navigation -->
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <a href="trainer-clients-preview.html?screen=dashboard" class="ht-card-link-action p-0">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            <span>Back to Trainer Dashboard</span>
+                        </a>
+                        <span class="text-muted" aria-hidden="true">•</span>
+                        <a href="trainer-clients-preview.html?screen=clients" class="ht-card-link-action p-0">
+                            <span>Clients Directory</span>
+                        </a>
+                    </div>
+
+                    <!-- Page Header & Action Row -->
+                    <div class="ht-trainer-header-row mb-4">
+                        <div class="ht-welcome-section">
+                            <h1 class="ht-welcome-title">Trainer Reports &amp; Analytics</h1>
+                            <p class="ht-welcome-subtitle">
+                                Generate aggregate client progress reports, analyze workout routine popularity, and review consultation engagement metrics.
+                            </p>
+                        </div>
+
+                        <div class="ht-trainer-actions-group">
+                            <button type="button" class="ht-btn-export" id="btnExportDemoCsv" title="Export Demonstration CSV">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                <span>Export CSV (Demo)</span>
+                            </button>
+                            <button type="button" class="ht-btn-export" id="btnGenerateReportModal" title="Generate PDF Report">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                                </svg>
+                                <span>Generate Report (Notice)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Controls Toolbar: Category Tabs & Timeframe Filter -->
+                    <section class="ht-reports-toolbar mb-4" aria-label="Report Filter Controls">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                            <!-- Report Category Tabs -->
+                            <ul class="nav ht-nav-tabs-reports flex-grow-1" id="reportTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="tab-performance-btn" data-category="performance" type="button" role="tab" aria-selected="true">
+                                        Client Performance
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab-routines-btn" data-category="routines" type="button" role="tab" aria-selected="false">
+                                        Popular Routines
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab-engagement-btn" data-category="engagement" type="button" role="tab" aria-selected="false">
+                                        Engagement Summary
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <!-- Date Range Filter -->
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="dateRangeFilter" class="small fw-semibold text-muted text-nowrap">Timeframe:</label>
+                                <select class="form-select form-select-sm" id="dateRangeFilter" style="width: 170px;" aria-label="Select Date Range">
+                                    <option value="30">Last 30 Days</option>
+                                    <option value="90" selected>Last Quarter (90d)</option>
+                                    <option value="ytd">Year to Date (2026)</option>
+                                    <option value="all">All Available Logs</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Main Report Content Switcher -->
+                    <div id="reportContentArea">
+                        <!-- ======================================================== -->
+                        <!-- CATEGORY 1: CLIENT PERFORMANCE REPORT                   -->
+                        <!-- ======================================================== -->
+                        <div class="report-section" id="report-performance">
+                            <!-- KPI Summary Row -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Active Clients Analyzed</div>
+                                        <div class="ht-report-kpi-value">4 <span class="small text-muted fw-normal" style="font-size:0.9rem;">/ 5 Assigned</span></div>
+                                        <div class="small text-muted mt-2">1 client has 0 logs (Ruwan C-005)</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Average Weight Change</div>
+                                        <div class="ht-report-kpi-value text-success">-2.1 <span class="small text-muted fw-normal" style="font-size:0.9rem;">kg</span></div>
+                                        <div class="small text-muted mt-2">Targeted metabolic progression</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Normal BMI Rate</div>
+                                        <div class="ht-report-kpi-value text-primary">75% <span class="small text-muted fw-normal" style="font-size:0.9rem;">compliant</span></div>
+                                        <div class="small text-muted mt-2">3 of 4 clients within 18.5 – 24.9</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Total Logged Entries</div>
+                                        <div class="ht-report-kpi-value">20 <span class="small text-muted fw-normal" style="font-size:0.9rem;">milestones</span></div>
+                                        <div class="small text-muted mt-2">Bi-weekly recording adherence</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Performance Comparison Chart & Summary -->
+                            <div class="row g-4 mb-4">
+                                <div class="col-12 col-lg-7">
+                                    <section class="ht-card h-100" aria-labelledby="headingComparativeChart">
+                                        <div class="ht-card-header-flex mb-3">
+                                            <div>
+                                                <h3 class="ht-card-title mb-0" id="headingComparativeChart">Client Weight Shift Comparison</h3>
+                                                <p class="ht-card-subtitle mb-0">Net change in kilograms across assigned client roster</p>
+                                            </div>
+                                            <span class="ht-tag-preview ht-tag-illustrative">Illustrative Preview</span>
+                                        </div>
+                                        <div class="ht-svg-chart-container" id="svgWeightShiftBox">
+                                            <svg class="ht-svg-chart" id="svgWeightShiftChart" viewBox="0 0 600 240" preserveAspectRatio="none">
+                                                <!-- Drawn via JavaScript -->
+                                            </svg>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-2 pt-2 border-top small text-muted">
+                                            <span>Green: Weight Reduction / Lean Toning</span>
+                                            <span>Amber: Hypertrophy / Mass Building</span>
+                                        </div>
+                                    </section>
+                                </div>
+
+                                <div class="col-12 col-lg-5">
+                                    <section class="ht-card h-100" aria-labelledby="headingBmiSummaryCard">
+                                        <div class="ht-card-header-flex mb-3">
+                                            <div>
+                                                <h3 class="ht-card-title mb-0" id="headingBmiSummaryCard">BMI Category Distribution</h3>
+                                                <p class="ht-card-subtitle mb-0">Client health classifications</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-light rounded-3 mb-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <span class="fw-semibold text-dark">Normal Weight (18.5 – 24.9)</span>
+                                                <strong class="text-success">3 Clients (75%)</strong>
+                                            </div>
+                                            <div class="progress" style="height: 8px;">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-light rounded-3 mb-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <span class="fw-semibold text-dark">Overweight / Hypertrophy (25.0 – 29.9)</span>
+                                                <strong class="text-warning">1 Client (25%)</strong>
+                                            </div>
+                                            <div class="progress" style="height: 8px;">
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="small text-muted mt-1">Kasun Fernando: Lean athletic mass gain (CSCS target)</div>
+                                        </div>
+                                        <div class="p-3 bg-light rounded-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <span class="fw-semibold text-dark">Unrecorded Biometrics</span>
+                                                <strong class="text-secondary">1 Client</strong>
+                                            </div>
+                                            <div class="small text-muted">Ruwan Wickramasinghe has no measurements registered yet.</div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+
+                            <!-- Performance Roster Table -->
+                            <section class="ht-card" aria-labelledby="headingPerformanceRoster">
+                                <div class="ht-card-header-flex mb-3">
+                                    <div>
+                                        <h3 class="ht-card-title mb-0" id="headingPerformanceRoster">Comparative Client Performance Roster</h3>
+                                        <p class="ht-card-subtitle mb-0">Baseline vs. latest metrics from verified <code>HealthMetric</code> entity fields</p>
+                                    </div>
+                                    <span class="badge bg-light text-secondary border">5 Assigned Clients</span>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table ht-trainer-table align-middle mb-0" aria-label="Client Performance Table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="ht-th-col">CLIENT</th>
+                                                <th scope="col" class="ht-th-col">BASELINE</th>
+                                                <th scope="col" class="ht-th-col">LATEST WEIGHT</th>
+                                                <th scope="col" class="ht-th-col">NET SHIFT</th>
+                                                <th scope="col" class="ht-th-col">BMI STATUS</th>
+                                                <th scope="col" class="ht-th-col">ENTRIES</th>
+                                                <th scope="col" class="ht-th-col text-end">ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="ht-client-avatar">DP</div>
+                                                        <div>
+                                                            <div class="ht-client-name">Dhammika Perera</div>
+                                                            <div class="ht-client-id">ID: C-001</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>82.0 kg</td>
+                                                <td><strong>78.5 kg</strong></td>
+                                                <td><span class="badge bg-success-subtle text-success fw-semibold">-3.5 kg (-4.3%)</span></td>
+                                                <td><span class="badge bg-success text-white">24.2 (Normal)</span></td>
+                                                <td>6 logs</td>
+                                                <td class="text-end">
+                                                    <a href="trainer-progress-preview.html?clientId=1" class="ht-view-details-link">
+                                                        <span>Progress View</span>
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="ht-client-avatar">KF</div>
+                                                        <div>
+                                                            <div class="ht-client-name">Kasun Fernando</div>
+                                                            <div class="ht-client-id">ID: C-002</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>81.5 kg</td>
+                                                <td><strong>84.0 kg</strong></td>
+                                                <td><span class="badge bg-warning-subtle text-warning fw-semibold">+2.5 kg (+3.1%)</span></td>
+                                                <td><span class="badge bg-warning text-dark">25.9 (Overweight)</span></td>
+                                                <td>5 logs</td>
+                                                <td class="text-end">
+                                                    <a href="trainer-progress-preview.html?clientId=2" class="ht-view-details-link">
+                                                        <span>Progress View</span>
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="ht-client-avatar">NW</div>
+                                                        <div>
+                                                            <div class="ht-client-name">Nimal Wijesinghe</div>
+                                                            <div class="ht-client-id">ID: C-003</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>72.8 kg</td>
+                                                <td><strong>71.2 kg</strong></td>
+                                                <td><span class="badge bg-success-subtle text-success fw-semibold">-1.6 kg (-2.2%)</span></td>
+                                                <td><span class="badge bg-success text-white">23.3 (Normal)</span></td>
+                                                <td>4 logs</td>
+                                                <td class="text-end">
+                                                    <a href="trainer-progress-preview.html?clientId=3" class="ht-view-details-link">
+                                                        <span>Progress View</span>
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="ht-client-avatar">AS</div>
+                                                        <div>
+                                                            <div class="ht-client-name">Anoma Senanayake</div>
+                                                            <div class="ht-client-id">ID: C-004</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>66.5 kg</td>
+                                                <td><strong>63.8 kg</strong></td>
+                                                <td><span class="badge bg-success-subtle text-success fw-semibold">-2.7 kg (-4.1%)</span></td>
+                                                <td><span class="badge bg-success text-white">23.4 (Normal)</span></td>
+                                                <td>5 logs</td>
+                                                <td class="text-end">
+                                                    <a href="trainer-progress-preview.html?clientId=4" class="ht-view-details-link">
+                                                        <span>Progress View</span>
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="ht-client-avatar">RW</div>
+                                                        <div>
+                                                            <div class="ht-client-name">Ruwan Wickramasinghe</div>
+                                                            <div class="ht-client-id">ID: C-005</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>—</td>
+                                                <td><span class="text-muted">Unrecorded</span></td>
+                                                <td><span class="badge bg-light text-muted border">No logs</span></td>
+                                                <td><span class="badge bg-light text-muted border">Pending</span></td>
+                                                <td>0 logs</td>
+                                                <td class="text-end">
+                                                    <a href="trainer-progress-preview.html?clientId=5" class="ht-view-details-link text-muted">
+                                                        <span>Inspect</span>
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+
+                        <!-- ======================================================== -->
+                        <!-- CATEGORY 2: POPULAR ROUTINES REPORT                     -->
+                        <!-- ======================================================== -->
+                        <div class="report-section d-none" id="report-routines">
+                            <div class="alert alert-warning d-flex align-items-center gap-2 mb-4" role="alert">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <div class="small">
+                                    <strong>Analytical Disclaimer:</strong> Routine assignment counts and completion rates are illustrative preview calculations based on <code>WorkoutPlan</code> templates. Real-world telemetry will connect to persistent client workout completion logs in Phase 2.
+                                </div>
+                            </div>
+
+                            <!-- Routines Overview Cards -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Catalogued Routines</div>
+                                        <div class="ht-report-kpi-value">6 <span class="small text-muted fw-normal" style="font-size:0.9rem;">templates</span></div>
+                                        <div class="small text-muted mt-2">Mapped from <code>trainer-routines</code></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Most Assigned Regimen</div>
+                                        <div class="ht-report-kpi-value text-dark" style="font-size:1.25rem;">Upper Body Hypertrophy</div>
+                                        <div class="small text-muted mt-2">Assigned across 3 client profiles</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Average Session Length</div>
+                                        <div class="ht-report-kpi-value">38 <span class="small text-muted fw-normal" style="font-size:0.9rem;">mins</span></div>
+                                        <div class="small text-muted mt-2">Optimal cardiovascular target</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Avg. Completion Rate</div>
+                                        <div class="ht-report-kpi-value text-success">88%</div>
+                                        <div class="small text-muted mt-2">Demonstration completion score</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Routines Table & Distribution -->
+                            <section class="ht-card mb-4" aria-labelledby="headingPopularRoutinesTable">
+                                <div class="ht-card-header-flex mb-3">
+                                    <div>
+                                        <h3 class="ht-card-title mb-0" id="headingPopularRoutinesTable">Routine Popularity &amp; Assignment Breakdown</h3>
+                                        <p class="ht-card-subtitle mb-0">Synchronized with standardized regimens from Trainer Manage Routines</p>
+                                    </div>
+                                    <a href="trainer-routines-preview.html" class="ht-card-link-action p-0">
+                                        <span>Manage Routines Catalog</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ms-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </a>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table ht-trainer-table align-middle mb-0" aria-label="Popular Routines Table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="ht-th-col">ROUTINE NAME</th>
+                                                <th scope="col" class="ht-th-col">CATEGORY</th>
+                                                <th scope="col" class="ht-th-col">EXERCISES</th>
+                                                <th scope="col" class="ht-th-col">EST. DURATION</th>
+                                                <th scope="col" class="ht-th-col">ASSIGNMENTS</th>
+                                                <th scope="col" class="ht-th-col text-end">POPULARITY INDEX</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="fw-bold text-dark">Upper Body Strength &amp; Hypertrophy</div>
+                                                    <div class="small text-muted">Bench Press, Dumbbell Row, Overhead Extension</div>
+                                                </td>
+                                                <td><span class="badge bg-primary-subtle text-primary border">Hypertrophy</span></td>
+                                                <td>4 Exercises</td>
+                                                <td>45 mins</td>
+                                                <td><strong>3 Clients</strong></td>
+                                                <td class="text-end">
+                                                    <div class="d-inline-flex align-items-center gap-2">
+                                                        <div class="progress" style="width: 80px; height: 6px;">
+                                                            <div class="progress-bar bg-success" style="width: 92%;"></div>
+                                                        </div>
+                                                        <span class="fw-semibold text-dark">92%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="fw-bold text-dark">Lower Body Power &amp; Core Stability</div>
+                                                    <div class="small text-muted">Back Squat, Romanian Deadlift, Lunges, Leg Raises</div>
+                                                </td>
+                                                <td><span class="badge bg-info-subtle text-info border">Power &amp; Core</span></td>
+                                                <td>4 Exercises</td>
+                                                <td>50 mins</td>
+                                                <td><strong>2 Clients</strong></td>
+                                                <td class="text-end">
+                                                    <div class="d-inline-flex align-items-center gap-2">
+                                                        <div class="progress" style="width: 80px; height: 6px;">
+                                                            <div class="progress-bar bg-primary" style="width: 85%;"></div>
+                                                        </div>
+                                                        <span class="fw-semibold text-dark">85%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="fw-bold text-dark">High-Intensity Interval Conditioning (HIIT)</div>
+                                                    <div class="small text-muted">Kettlebell Swings, Box Jumps, Battle Ropes, Rower</div>
+                                                </td>
+                                                <td><span class="badge bg-warning-subtle text-warning border">Cardio &amp; HIIT</span></td>
+                                                <td>4 Exercises</td>
+                                                <td>30 mins</td>
+                                                <td><strong>2 Clients</strong></td>
+                                                <td class="text-end">
+                                                    <div class="d-inline-flex align-items-center gap-2">
+                                                        <div class="progress" style="width: 80px; height: 6px;">
+                                                            <div class="progress-bar bg-warning" style="width: 78%;"></div>
+                                                        </div>
+                                                        <span class="fw-semibold text-dark">78%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="fw-bold text-dark">Functional Mobility &amp; Joint Restoration</div>
+                                                    <div class="small text-muted">Thoracic Spine Rotation, 90/90 Hip Openers, Band Pulls</div>
+                                                </td>
+                                                <td><span class="badge bg-secondary-subtle text-secondary border">Mobility</span></td>
+                                                <td>4 Exercises</td>
+                                                <td>25 mins</td>
+                                                <td><strong>1 Client</strong></td>
+                                                <td class="text-end">
+                                                    <div class="d-inline-flex align-items-center gap-2">
+                                                        <div class="progress" style="width: 80px; height: 6px;">
+                                                            <div class="progress-bar bg-info" style="width: 70%;"></div>
+                                                        </div>
+                                                        <span class="fw-semibold text-dark">70%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+
+                        <!-- ======================================================== -->
+                        <!-- CATEGORY 3: ENGAGEMENT SUMMARY REPORT                   -->
+                        <!-- ======================================================== -->
+                        <div class="report-section d-none" id="report-engagement">
+                            <div class="alert alert-secondary d-flex align-items-center gap-2 mb-4" role="alert">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <div class="small">
+                                    <strong>Entity Data Mapping:</strong> Consultation statistics reflect the <code>Appointment</code> entity structure (status: Confirmed, Pending, Cancelled) and client feedback notes.
+                                </div>
+                            </div>
+
+                            <!-- Engagement KPI Cards -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Completed Consultations</div>
+                                        <div class="ht-report-kpi-value text-success">14 <span class="small text-muted fw-normal" style="font-size:0.9rem;">sessions</span></div>
+                                        <div class="small text-muted mt-2">100% attended as scheduled</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Upcoming / Pending</div>
+                                        <div class="ht-report-kpi-value text-primary">3 <span class="small text-muted fw-normal" style="font-size:0.9rem;">sessions</span></div>
+                                        <div class="small text-muted mt-2">2 confirmed, 1 pending review</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Feedback Notes Given</div>
+                                        <div class="ht-report-kpi-value">12 <span class="small text-muted fw-normal" style="font-size:0.9rem;">entries</span></div>
+                                        <div class="small text-muted mt-2">Stored via <code>Feedback</code> repository</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                    <div class="ht-report-kpi">
+                                        <div class="ht-report-kpi-label">Consultation Adherence</div>
+                                        <div class="ht-report-kpi-value text-success">93.3%</div>
+                                        <div class="small text-muted mt-2">Low cancellation rate (1 cancelled)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Engagement Breakdown Table -->
+                            <section class="ht-card" aria-labelledby="headingEngagementBreakdown">
+                                <div class="ht-card-header-flex mb-3">
+                                    <div>
+                                        <h3 class="ht-card-title mb-0" id="headingEngagementBreakdown">Consultation Service Type Engagement</h3>
+                                        <p class="ht-card-subtitle mb-0">Breakdown of appointments and client interaction touchpoints</p>
+                                    </div>
+                                    <a href="appointments-preview.html?role=trainer" class="ht-card-link-action p-0">
+                                        <span>View Appointments Board</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ms-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </a>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table ht-trainer-table align-middle mb-0" aria-label="Consultation Service Engagement Table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="ht-th-col">CONSULTATION SERVICE TYPE</th>
+                                                <th scope="col" class="ht-th-col">COMPLETED</th>
+                                                <th scope="col" class="ht-th-col">PENDING</th>
+                                                <th scope="col" class="ht-th-col">AVG DURATION</th>
+                                                <th scope="col" class="ht-th-col text-end">ATTENDANCE RATE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="fw-bold text-dark">Personal Fitness &amp; Movement Assessment</div>
+                                                    <div class="small text-muted">Initial biometric &amp; posture screening</div>
+                                                </td>
+                                                <td>5 sessions</td>
+                                                <td>1 pending</td>
+                                                <td>60 mins</td>
+                                                <td class="text-end"><span class="badge bg-success text-white">100%</span></td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="fw-bold text-dark">Strength Routine Progression Review</div>
+                                                    <div class="small text-muted">Form check, load adjustments, progressive overload</div>
+                                                </td>
+                                                <td>6 sessions</td>
+                                                <td>1 confirmed</td>
+                                                <td>45 mins</td>
+                                                <td class="text-end"><span class="badge bg-success text-white">100%</span></td>
+                                            </tr>
+                                            <tr class="ht-client-row">
+                                                <td>
+                                                    <div class="fw-bold text-dark">Dietary &amp; Nutrition Consultation</div>
+                                                    <div class="small text-muted">Caloric deficit review and meal allocation</div>
+                                                </td>
+                                                <td>3 sessions</td>
+                                                <td>1 pending</td>
+                                                <td>30 mins</td>
+                                                <td class="text-end"><span class="badge bg-success text-white">85%</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <!-- Simulated Empty Report State -->
+                    <div class="ht-card text-center ht-empty-report d-none" id="emptyReportState" aria-live="polite">
+                        <div class="ht-workout-empty-icon mx-auto mb-3" style="width: 56px; height: 56px; background-color: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                        </div>
+                        <h2 class="ht-card-title mb-2">No Report Data in Selected Timeframe</h2>
+                        <p class="text-muted mx-auto mb-4" style="max-width: 480px;">
+                            No client performance logs, routine assignments, or consultations were recorded for the selected filter interval.
+                        </p>
+                        <button type="button" class="btn btn-primary" id="btnRestoreReport">
+                            Restore Demonstration Report Data
+                        </button>
+                    </div>
+
+                    <!-- Technical Viva Integration Handoff Callout -->
+                    <div class="ht-arch-note" role="note">
+                        <strong>Reporting Architecture &amp; Data Contract Note (CS6004ES):</strong>
+                        HealthTrack's current backend implements operational CRUD controllers (e.g., <code>WorkoutController</code>, <code>DietController</code>, <code>AppointmentController</code>), but does not yet contain a dedicated reporting service (e.g., <code>ITrainerReportService</code>) or analytical database queries. This preview specifies the required reporting schema: Client Performance, Popular Routines, and Engagement Metrics, ready for Phase 2 backend aggregation.
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Backend Integration Notice Modal -->
+    <div class="modal fade" id="reportNoticeModal" tabindex="-1" aria-labelledby="reportNoticeModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="reportNoticeModalTitle">Report Generation Architecture Notice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3 text-dark">
+                        Live PDF and database report generation requires the Phase 2 backend reporting pipeline and database aggregation queries.
+                    </p>
+                    <div class="p-3 bg-light rounded-3 border mb-3 small text-muted">
+                        <strong>Required Backend Contracts:</strong>
+                        <ul class="mb-0 ps-3 mt-1">
+                            <li><code>ITrainerReportService.GetClientPerformanceSummary(int trainerId, DateTime from, DateTime to)</code></li>
+                            <li><code>ITrainerReportService.GetPopularRoutines(int trainerId)</code></li>
+                            <li><code>ITrainerReportService.GetEngagementSummary(int trainerId)</code></li>
+                        </ul>
+                    </div>
+                    <p class="small text-muted mb-0">
+                        In this static preview, you can click <strong>Export CSV (Demo)</strong> on the top bar to inspect a client-side CSV generated from the demonstration dataset.
+                    </p>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // Sidebar drawer handling
+            const portalSidebar = document.getElementById('portalSidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            const openSidebarBtn = document.getElementById('openSidebarBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+            function openDrawer() {
+                if (portalSidebar) portalSidebar.classList.add('show');
+                if (sidebarBackdrop) sidebarBackdrop.classList.add('show');
+            }
+            function closeDrawer() {
+                if (portalSidebar) portalSidebar.classList.remove('show');
+                if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+            }
+            if (openSidebarBtn) openSidebarBtn.addEventListener('click', openDrawer);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeDrawer);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+            // Report Tabs handling
+            const tabButtons = document.querySelectorAll('.ht-nav-tabs-reports .nav-link');
+            const reportSections = {
+                performance: document.getElementById('report-performance'),
+                routines: document.getElementById('report-routines'),
+                engagement: document.getElementById('report-engagement')
+            };
+
+            let currentCategory = 'performance';
+
+            function switchTab(category) {
+                currentCategory = category;
+                tabButtons.forEach(btn => {
+                    const active = btn.getAttribute('data-category') === category;
+                    btn.classList.toggle('active', active);
+                    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+
+                Object.keys(reportSections).forEach(cat => {
+                    if (reportSections[cat]) {
+                        reportSections[cat].classList.toggle('d-none', cat !== category);
+                    }
+                });
+            }
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const cat = this.getAttribute('data-category');
+                    switchTab(cat);
+                });
+            });
+
+            // Empty state simulation
+            const reportContentArea = document.getElementById('reportContentArea');
+            const emptyReportState = document.getElementById('emptyReportState');
+            const btnToggleEmpty = document.getElementById('btnToggleEmptyReport');
+            const btnRestore = document.getElementById('btnRestoreReport');
+
+            let isEmptySimulated = false;
+
+            function toggleEmpty(state) {
+                isEmptySimulated = state;
+                reportContentArea.classList.toggle('d-none', isEmptySimulated);
+                emptyReportState.classList.toggle('d-none', !isEmptySimulated);
+                btnToggleEmpty.textContent = isEmptySimulated ? "Restore Demo Data" : "Test Empty State";
+            }
+
+            if (btnToggleEmpty) {
+                btnToggleEmpty.addEventListener('click', () => toggleEmpty(!isEmptySimulated));
+            }
+            if (btnRestore) {
+                btnRestore.addEventListener('click', () => toggleEmpty(false));
+            }
+
+            // Report Notice Modal
+            const btnGenReport = document.getElementById('btnGenerateReportModal');
+            const reportNoticeModalElem = document.getElementById('reportNoticeModal');
+            let bsModal = null;
+            if (reportNoticeModalElem && window.bootstrap) {
+                bsModal = new bootstrap.Modal(reportNoticeModalElem);
+            }
+            if (btnGenReport && bsModal) {
+                btnGenReport.addEventListener('click', () => bsModal.show());
+            }
+
+            // Client-Side Demo CSV Export
+            const btnExport = document.getElementById('btnExportDemoCsv');
+            if (btnExport) {
+                btnExport.addEventListener('click', function () {
+                    let csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "# HealthTrack Demonstration Report Export\n";
+                    csvContent += "# PREVIEW MODE — DEMONSTRATION DATA ONLY. NOT LIVE DATABASE DATA.\n";
+                    csvContent += `# Category: ${currentCategory.toUpperCase()}\n`;
+                    csvContent += `# Generated: ${new Date().toISOString()}\n\n`;
+
+                    if (currentCategory === 'performance') {
+                        csvContent += "Client Name,Client ID,Baseline Weight (kg),Latest Weight (kg),Net Shift (kg),BMI,BMI Status,Entries Logged\n";
+                        csvContent += "Dhammika Perera,C-001,82.0,78.5,-3.5,24.2,Normal,6\n";
+                        csvContent += "Kasun Fernando,C-002,81.5,84.0,+2.5,25.9,Overweight,5\n";
+                        csvContent += "Nimal Wijesinghe,C-003,72.8,71.2,-1.6,23.3,Normal,4\n";
+                        csvContent += "Anoma Senanayake,C-004,66.5,63.8,-2.7,23.4,Normal,5\n";
+                        csvContent += "Ruwan Wickramasinghe,C-005,N/A,N/A,N/A,N/A,Pending,0\n";
+                    } else if (currentCategory === 'routines') {
+                        csvContent += "Routine Name,Category,Exercise Count,Duration (mins),Assignments,Popularity\n";
+                        csvContent += "Upper Body Strength & Hypertrophy,Hypertrophy,4,45,3,92%\n";
+                        csvContent += "Lower Body Power & Core Stability,Power,4,50,2,85%\n";
+                        csvContent += "High-Intensity Interval Conditioning (HIIT),Cardio,4,30,2,78%\n";
+                        csvContent += "Functional Mobility & Joint Restoration,Mobility,4,25,1,70%\n";
+                    } else {
+                        csvContent += "Service Type,Completed,Pending,Duration (mins),Attendance Rate\n";
+                        csvContent += "Personal Fitness Assessment,5,1,60,100%\n";
+                        csvContent += "Strength Routine Progression Review,6,1,45,100%\n";
+                        csvContent += "Dietary & Nutrition Consultation,3,1,30,85%\n";
+                    }
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", `healthtrack-demo-report-${currentCategory}-20261023.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+            }
+
+            // Draw Inline SVG Comparative Weight Shift Bar Chart
+            function renderWeightShiftChart() {
+                const svg = document.getElementById('svgWeightShiftChart');
+                if (!svg) return;
+
+                const clients = [
+                    { name: "Dhammika (C-001)", shift: -3.5, color: "#10b981" },
+                    { name: "Kasun (C-002)", shift: 2.5, color: "#f59e0b" },
+                    { name: "Nimal (C-003)", shift: -1.6, color: "#10b981" },
+                    { name: "Anoma (C-004)", shift: -2.7, color: "#10b981" }
+                ];
+
+                const width = 600;
+                const height = 240;
+                const zeroY = 120; // Zero baseline
+
+                let html = `
+                    <line x1="40" y1="${zeroY}" x2="560" y2="${zeroY}" stroke="#94a3b8" stroke-width="1.5" />
+                    <text x="35" y="${zeroY + 4}" font-size="10" fill="#94a3b8" text-anchor="end">0 kg</text>
+                    <text x="35" y="40" font-size="10" fill="#94a3b8" text-anchor="end">+4 kg</text>
+                    <text x="35" y="200" font-size="10" fill="#94a3b8" text-anchor="end">-4 kg</text>
+                `;
+
+                const barWidth = 60;
+                const spacing = 125;
+                const startX = 80;
+
+                clients.forEach((c, idx) => {
+                    const x = startX + idx * spacing;
+                    // Scale: 4 kg = 80 px
+                    const barHeight = Math.abs(c.shift) * 20;
+                    const y = c.shift < 0 ? zeroY : zeroY - barHeight;
+
+                    html += `
+                        <rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="4" fill="${c.color}" opacity="0.85" />
+                        <text x="${x + barWidth / 2}" y="${c.shift < 0 ? y + barHeight + 16 : y - 6}" font-size="11" font-weight="700" fill="${c.color}" text-anchor="middle">
+                            ${c.shift > 0 ? '+' : ''}${c.shift.toFixed(1)} kg
+                        </text>
+                        <text x="${x + barWidth / 2}" y="230" font-size="10" fill="#475569" font-weight="500" text-anchor="middle">
+                            ${c.name}
+                        </text>
+                    `;
+                });
+
+                svg.innerHTML = html;
+            }
+
+            renderWeightShiftChart();
+
+        })();
+    </script>
+</body>
+</html>
