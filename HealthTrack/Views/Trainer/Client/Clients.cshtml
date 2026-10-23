@@ -1,0 +1,79 @@
+@model List<HealthTrack.ViewModels.Trainer.AssignedClientItem>
+@{
+    Layout = "_TrainerLayout";
+    ViewData["Title"] = "My Clients";
+}
+
+<div class="ht-dashboard-container">
+    <!-- Breadcrumb -->
+    <div class="mb-3">
+        <a asp-controller="Trainer" asp-action="index" class="ht-card-link-action p-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+
+    <!-- Header -->
+    <div class="ht-welcome-section mb-4">
+        <h1 class="ht-welcome-title">My Clients</h1>
+        <p class="ht-welcome-subtitle">View details, metrics and activity for each assigned client.</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-3">
+            @foreach (var client in Model)
+            {
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="ht-card h-100 d-flex flex-column">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="ht-client-avatar" style="width: 52px; height: 52px; font-size: 1.1rem;">
+                                @client.Initials
+                            </div>
+                            <div>
+                                <div class="ht-client-name">@client.Name</div>
+                                <div class="ht-client-id small text-muted">ID: @client.DisplayId</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 small text-muted">
+                            <span class="ht-prog-label">Latest Weight:</span>
+                            <strong class="ht-prog-val">
+                                @(client.LatestWeight.HasValue ? $"{client.LatestWeight:F1} {client.WeightUnit}" : "—")
+                            </strong>
+                        </div>
+
+                        <a asp-controller="Trainer" asp-action="clientDetails" asp-route-id="@client.ClientId"
+                           class="ht-btn-submit d-inline-flex px-3 py-2 w-100 justify-content-center mt-auto">
+                            <span>View Details</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="ms-2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <section class="ht-card text-center py-5">
+            <div class="mb-3" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+            <h2 class="ht-card-title mb-2">No Clients Assigned</h2>
+            <p class="ht-card-subtitle mx-auto mb-0" style="max-width: 480px;">
+                You have no clients assigned yet. Contact the administrator to be assigned clients.
+            </p>
+        </section>
+    }
+</div>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HealthTrack.ViewModels.Trainer;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,13 +20,13 @@ public class WorkoutController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /Workout/Index
+    // GET: /Workout/Index — shared view for both Client and Trainer
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
         if (user == null) return Challenge();
 
-        System.Collections.Generic.List<WorkoutPlan> plans;
+        List<WorkoutPlan> plans;
 
         if (User.IsInRole("Trainer"))
         {
@@ -119,7 +120,7 @@ public class WorkoutController : Controller
             }
 
             TempData["Success"] = $"Workout plan '{plan.name}' created successfully.";
-            return RedirectToAction("index");
+            return RedirectToAction("routines", "Trainer");
         }
         catch (Exception ex)
         {

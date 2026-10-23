@@ -23,7 +23,6 @@
 
     <!-- Top Header & Quick Actions Row -->
     <div class="ht-trainer-header-row mb-4">
-        <!-- Welcome Heading on the Left -->
         <div class="ht-welcome-section">
             <h1 class="ht-welcome-title">
                 Welcome back,<br />@Model.FirstName
@@ -31,9 +30,7 @@
             <p class="ht-welcome-subtitle">Here's your client and appointment overview.</p>
         </div>
 
-        <!-- Action Cards on the Right matching attached screenshot -->
         <div class="ht-trainer-actions-group" role="toolbar" aria-label="Trainer Quick Actions">
-            <!-- Create / Assign Workout -->
             <a asp-controller="Workout" asp-action="create" class="ht-action-card-btn">
                 <span class="ht-action-card-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -44,7 +41,6 @@
                 <span class="ht-action-card-text">Create / Assign<br />Workout</span>
             </a>
 
-            <!-- Create / Assign Diet -->
             <a asp-controller="Diet" asp-action="create" class="ht-action-card-btn">
                 <span class="ht-action-card-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -55,7 +51,6 @@
                 <span class="ht-action-card-text">Create / Assign<br />Diet</span>
             </a>
 
-            <!-- Provide Feedback -->
             <a asp-controller="Feedback" asp-action="give" class="ht-action-card-btn">
                 <span class="ht-action-card-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -97,7 +92,6 @@
                     </a>
                 </div>
 
-                <!-- Clients Table / Roster -->
                 <div class="table-responsive">
                     <table class="table ht-trainer-table align-middle mb-0">
                         <thead>
@@ -131,7 +125,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a asp-controller="Workout" asp-action="index" asp-route-clientId="@client.ClientId" class="ht-view-details-link">
+                                            <a asp-controller="Trainer" asp-action="clientDetails" asp-route-id="@client.ClientId" class="ht-view-details-link">
                                                 <span>View Details</span>
                                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -172,8 +166,8 @@
                             <p class="ht-card-subtitle mb-0">Recent weight log updates from assigned clients</p>
                         </div>
                     </div>
-                    <a asp-controller="HealthMetric" asp-action="index" class="ht-card-link-action">
-                        <span>View Client Progress</span>
+                    <a asp-controller="Trainer" asp-action="routines" class="ht-card-link-action">
+                        <span>Manage Routines</span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                             <polyline points="12 5 19 12 12 19"></polyline>
@@ -181,7 +175,6 @@
                     </a>
                 </div>
 
-                <!-- 3 Mini Cards in a Row -->
                 <div class="ht-progress-summary-grid">
                     @if (Model.ProgressSummaries.Any())
                     {
@@ -236,7 +229,6 @@
                     <span class="ht-badge-total">@Model.TotalAppointments Total</span>
                 </div>
 
-                <!-- Appointment Items List -->
                 <div class="ht-appointments-list flex-grow-1">
                     @if (Model.UpcomingAppointments.Any())
                     {
@@ -273,7 +265,6 @@
                     }
                 </div>
 
-                <!-- View Appointments Button at Bottom -->
                 <div class="mt-3">
                     <a asp-controller="Appointment" asp-action="index" class="ht-btn-view-appointments">
                         <span>View Appointments</span>

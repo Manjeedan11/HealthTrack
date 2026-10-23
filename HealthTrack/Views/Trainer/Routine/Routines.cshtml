@@ -1,0 +1,298 @@
+@model HealthTrack.ViewModels.Trainer.ManageRoutinesViewModel
+@{
+    Layout = "_TrainerLayout";
+    ViewData["Title"] = "Manage Routines";
+    ViewData["TrainerName"] = ViewBag.TrainerName;
+    ViewData["TrainerInitials"] = ViewBag.TrainerInitials;
+
+    int workoutCount = Model.WorkoutPlans?.Count ?? 0;
+    int dietCount = Model.DietPlans?.Count ?? 0;
+}
+
+<div class="ht-dashboard-container">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Breadcrumb -->
+    <div class="mb-3">
+        <a asp-controller="Trainer" asp-action="index" class="ht-card-link-action p-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+
+    <!-- Page Header -->
+    <div class="ht-welcome-section mb-4">
+        <h1 class="ht-welcome-title">Manage Routines</h1>
+        <p class="ht-welcome-subtitle">Create, review and assign workout and diet plans for your clients.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 1: WORKOUT PLANS                                     -->
+    <!-- ============================================================ -->
+    <div class="ht-trainer-header-row mb-3">
+        <div>
+            <h2 class="ht-card-title mb-1">
+                Workout Plans
+                <span class="ht-status-badge ht-status-confirmed ms-2">@workoutCount</span>
+            </h2>
+            <p class="text-muted small mb-0">Manage workout routines, exercises and client assignments.</p>
+        </div>
+        <div class="ht-trainer-actions-group">
+            <a asp-controller="Workout" asp-action="create" class="ht-action-card-btn" id="btn-create-workout-plan">
+                <span class="ht-action-card-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </span>
+                <span class="ht-action-card-text">Create / Assign<br />Workout</span>
+            </a>
+        </div>
+    </div>
+
+    @if (Model.WorkoutPlans != null && Model.WorkoutPlans.Any())
+    {
+        <div class="d-flex flex-column gap-4 mb-5">
+            @foreach (var plan in Model.WorkoutPlans)
+            {
+                <article class="ht-card ht-workout-card">
+                    <div class="ht-card-header-flex mb-3">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="ht-header-icon-badge ht-workout-icon-badge" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m6.5 6.5 11 11"></path>
+                                    <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="ht-card-title mb-1">@plan.name</h3>
+                                <p class="ht-card-subtitle mb-0">
+                                    @(string.IsNullOrWhiteSpace(plan.description) ? "No detailed instructions provided." : plan.description)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="ht-badge-total ht-workout-badge-date">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                @plan.dateCreated.ToString("MMM d, yyyy")
+                            </span>
+                            <span class="ht-status-badge ht-status-confirmed">
+                                @(plan.exercises?.Count ?? 0) @(plan.exercises?.Count == 1 ? "Exercise" : "Exercises")
+                            </span>
+                        </div>
+                    </div>
+
+                    @if (plan.exercises != null && plan.exercises.Any())
+                    {
+                        <div class="table-responsive mt-3">
+                            <table class="table ht-trainer-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ht-th-col" style="width: 45%;">EXERCISE</th>
+                                        <th class="ht-th-col" style="width: 18%;">SETS</th>
+                                        <th class="ht-th-col" style="width: 18%;">REPS</th>
+                                        <th class="ht-th-col text-end" style="width: 19%;">DURATION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var ex in plan.exercises)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="ht-workout-exercise-bullet" aria-hidden="true"></span>
+                                                    <span class="ht-client-name">@ex.name</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="ht-workout-stat-badge">@ex.sets sets</span></td>
+                                            <td><span class="ht-workout-stat-badge">@ex.reps reps</span></td>
+                                            <td class="text-end">
+                                                <span class="ht-workout-duration-text">
+                                                    @(ex.duration > 0 ? $"{ex.duration} min" : "—")
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 text-muted text-center">No exercises in this plan yet.</div>
+                    }
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <section class="ht-card text-center py-4 mb-5">
+            <h3 class="ht-card-title mb-2">No Workout Plans Yet</h3>
+            <p class="ht-card-subtitle mx-auto mb-3" style="max-width: 480px;">
+                Create your first workout plan to start assigning routines to your clients.
+            </p>
+            <a asp-controller="Workout" asp-action="create" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Create First Workout Plan
+            </a>
+        </section>
+    }
+
+    <hr class="my-5" />
+
+    <!-- ============================================================ -->
+    <!-- SECTION 2: DIET PLANS                                        -->
+    <!-- ============================================================ -->
+    <div class="ht-trainer-header-row mb-3">
+        <div>
+            <h2 class="ht-card-title mb-1">
+                Diet Plans
+                <span class="ht-status-badge ht-status-confirmed ms-2">@dietCount</span>
+            </h2>
+            <p class="text-muted small mb-0">Manage nutrition plans, meals and calorie targets.</p>
+        </div>
+        <div class="ht-trainer-actions-group">
+            <a asp-controller="Diet" asp-action="create" class="ht-action-card-btn" id="btn-create-diet-plan">
+                <span class="ht-action-card-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </span>
+                <span class="ht-action-card-text">Create / Assign<br />Diet Plan</span>
+            </a>
+        </div>
+    </div>
+
+    @if (Model.DietPlans != null && Model.DietPlans.Any())
+    {
+        <div class="d-flex flex-column gap-4">
+            @foreach (var plan in Model.DietPlans)
+            {
+                <article class="ht-card ht-diet-card">
+                    <div class="ht-card-header-flex mb-3">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="ht-header-icon-badge ht-diet-icon-badge" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 2v20"></path>
+                                    <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                    <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                    <path d="M8 10v12"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="ht-card-title mb-1">@plan.name</h3>
+                                <p class="ht-card-subtitle mb-0">
+                                    @(string.IsNullOrWhiteSpace(plan.description) ? "No dietary instructions provided." : plan.description)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="ht-badge-total ht-diet-badge-date">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                @plan.dateCreated.ToString("MMM d, yyyy")
+                            </span>
+                            <span class="ht-status-badge ht-status-confirmed">
+                                @(plan.meals?.Count ?? 0) @(plan.meals?.Count == 1 ? "Meal" : "Meals")
+                            </span>
+                            <span class="ht-diet-calorie-badge">
+                                @(plan.meals != null && plan.meals.Any() ? plan.meals.Sum(m => m.calories) : 0) kcal
+                            </span>
+                        </div>
+                    </div>
+
+                    @if (plan.meals != null && plan.meals.Any())
+                    {
+                        <div class="table-responsive mt-3">
+                            <table class="table ht-trainer-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ht-th-col" style="width: 48%;">MEAL</th>
+                                        <th class="ht-th-col" style="width: 30%;">TIMING</th>
+                                        <th class="ht-th-col text-end" style="width: 22%;">CALORIES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var meal in plan.meals)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="ht-diet-meal-bullet" aria-hidden="true"></span>
+                                                    <span class="ht-client-name">@meal.name</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="ht-diet-time-badge">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1 text-muted">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                                    </svg>
+                                                    @meal.mealTime
+                                                </span>
+                                            </td>
+                                            <td class="text-end">
+                                                <span class="ht-workout-duration-text">@meal.calories kcal</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 text-muted text-center">No meals in this plan yet.</div>
+                    }
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <section class="ht-card text-center py-4">
+            <h3 class="ht-card-title mb-2">No Diet Plans Yet</h3>
+            <p class="ht-card-subtitle mx-auto mb-3" style="max-width: 480px;">
+                Create your first diet plan to start assigning nutrition plans to your clients.
+            </p>
+            <a asp-controller="Diet" asp-action="create" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Create First Diet Plan
+            </a>
+        </section>
+    }
+</div>

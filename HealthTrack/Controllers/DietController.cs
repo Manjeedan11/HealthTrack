@@ -20,7 +20,7 @@ public class DietController : Controller
         this.userManager = userManager;
     }
 
-    // GET: /Diet/Index
+    // GET: /Diet/Index  — shared view for both Client and Trainer
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -76,7 +76,7 @@ public class DietController : Controller
                 .ToList()
         };
 
-        return View("~/Views/Client/Diet/Create.cshtml", viewModel);
+        return View("~/Views/Trainer/Diet/Create.cshtml", viewModel);
     }
 
     // POST: /Diet/Create
@@ -94,7 +94,7 @@ public class DietController : Controller
             viewModel.AvailableClients = context.clients
                 .Where(c => c.trainerId == trainer.trainerId)
                 .ToList();
-            return View("~/Views/Client/Diet/Create.cshtml", viewModel);
+            return View("~/Views/Trainer/Diet/Create.cshtml", viewModel);
         }
 
         try
@@ -120,7 +120,7 @@ public class DietController : Controller
             }
 
             TempData["Success"] = $"Diet plan '{dietPlan.name}' created successfully.";
-            return RedirectToAction("index");
+            return RedirectToAction("routines", "Trainer");
         }
         catch (Exception ex)
         {
@@ -128,7 +128,7 @@ public class DietController : Controller
             viewModel.AvailableClients = context.clients
                 .Where(c => c.trainerId == trainer.trainerId)
                 .ToList();
-            return View("~/Views/Client/Diet/Create.cshtml", viewModel);
+            return View("~/Views/Trainer/Diet/Create.cshtml", viewModel);
         }
     }
 

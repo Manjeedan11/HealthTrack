@@ -1,0 +1,326 @@
+@model HealthTrack.ViewModels.Trainer.TrainerClientDetailsViewModel
+@{
+    Layout = "_TrainerLayout";
+    ViewData["Title"] = $"{Model.ClientName} — Client Details";
+}
+
+<div class="ht-dashboard-container">
+    <!-- Breadcrumb -->
+    <div class="mb-3">
+        <a asp-controller="Trainer" asp-action="index" class="ht-card-link-action p-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+
+    <!-- Client Header Card -->
+    <div class="ht-card mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ht-client-avatar" style="width: 64px; height: 64px; font-size: 1.4rem;">
+                @Model.Initials
+            </div>
+            <div class="flex-grow-1">
+                <h1 class="ht-welcome-title mb-1" style="font-size: 1.6rem;">@Model.ClientName</h1>
+                <p class="text-muted mb-0 small">
+                    ID: @Model.DisplayId
+                    @if (!string.IsNullOrEmpty(Model.Gender))
+                    {
+                        <span> · @Model.Gender</span>
+                    }
+                    @if (Model.Height.HasValue)
+                    {
+                        <span> · @Model.Height.Value.ToString("0.0") cm</span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI Summary Row -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top">
+                    <span class="ht-kpi-label">LATEST WEIGHT</span>
+                    <span class="ht-kpi-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 22h14"></path>
+                            <path d="M5 2h14"></path>
+                            <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
+                        </svg>
+                    </span>
+                </div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val">@(Model.LatestWeight?.ToString("0.0") ?? "—")</span>
+                    <span class="ht-kpi-unit">kg</span>
+                </div>
+                <div class="text-muted small mt-2">
+                    @(Model.LastMetricDate?.ToString("MMM d, yyyy") ?? "No measurements yet")
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top">
+                    <span class="ht-kpi-label">LATEST BMI</span>
+                    <span class="ht-kpi-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <path d="m9 20 3-6 3 6"></path>
+                            <path d="m6 8 6 2 6-2"></path>
+                        </svg>
+                    </span>
+                </div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val">@(Model.LatestBmi?.ToString("0.0") ?? "—")</span>
+                    <span class="ht-kpi-unit">kg/m²</span>
+                </div>
+                <div class="text-muted small mt-2">@Model.TotalMetrics total measurements</div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top">
+                    <span class="ht-kpi-label">WORKOUT LOGS</span>
+                    <span class="ht-kpi-icon text-success" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6.5 6.5 11 11"></path>
+                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                        </svg>
+                    </span>
+                </div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val text-success">@Model.TotalWorkoutLogs</span>
+                    <span class="ht-kpi-unit">sessions</span>
+                </div>
+                <div class="text-muted small mt-2">Completed exercises logged</div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top">
+                    <span class="ht-kpi-label">MEAL LOGS</span>
+                    <span class="ht-kpi-icon text-warning" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                </div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val text-warning">@Model.TotalMealLogs</span>
+                    <span class="ht-kpi-unit">meals</span>
+                </div>
+                <div class="text-muted small mt-2">Consumed meals logged</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: HEALTH METRICS -->
+    <section class="ht-card mb-4">
+        <div class="ht-card-header-flex">
+            <div class="d-flex align-items-center gap-3">
+                <div class="ht-header-icon-badge" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <path d="M6 12h.01M18 12h.01"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="ht-card-title mb-0">Health Metrics</h2>
+                    <p class="ht-card-subtitle mb-0">Recent weight, BMI and calorie measurements</p>
+                </div>
+            </div>
+            <span class="ht-badge-total">@Model.TotalMetrics Total</span>
+        </div>
+
+        @if (Model.RecentMetrics.Any())
+        {
+            <div class="ht-progress-summary-grid mb-3">
+                @foreach (var metric in Model.RecentMetrics.Take(3))
+                {
+                    <div class="ht-progress-summary-card">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="ht-summary-client-name">@metric.date.ToString("MMM d")</span>
+                            <div class="ht-summary-scale-icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                    <path d="M7 21h10"></path>
+                                    <path d="M12 3v18"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ht-summary-weight">
+                            @metric.weight.ToString("F1") <span class="ht-summary-unit">kg</span>
+                        </div>
+                        <div class="ht-summary-note">BMI @metric.bmi.ToString("F1") · @metric.caloriesBurned cal burned</div>
+                    </div>
+                }
+            </div>
+
+            <div class="table-responsive">
+                <table class="table ht-trainer-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ht-th-col" style="width: 22%;">DATE</th>
+                            <th class="ht-th-col" style="width: 15%;">WEIGHT</th>
+                            <th class="ht-th-col" style="width: 15%;">BMI</th>
+                            <th class="ht-th-col" style="width: 24%;">CALORIES BURNED</th>
+                            <th class="ht-th-col text-end" style="width: 24%;">CALORIES CONSUMED</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var metric in Model.RecentMetrics)
+                        {
+                            <tr class="ht-client-row">
+                                <td><span class="fw-semibold">@metric.date.ToString("MMM d, yyyy")</span></td>
+                                <td><span class="fw-bold">@metric.weight.ToString("F1") kg</span></td>
+                                <td><span class="fw-semibold">@metric.bmi.ToString("F1")</span></td>
+                                <td><span class="ht-workout-duration-text">@metric.caloriesBurned.ToString("N0") kcal</span></td>
+                                <td class="text-end"><span class="fw-semibold text-muted">@metric.caloriesConsumed.ToString("N0") kcal</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4 text-muted">
+                <em>No health measurements recorded yet.</em>
+            </div>
+        }
+    </section>
+
+    <!-- SECTION 2: WORKOUT LOGS -->
+    <section class="ht-card mb-4">
+        <div class="ht-card-header-flex">
+            <div class="d-flex align-items-center gap-3">
+                <div class="ht-header-icon-badge" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m6.5 6.5 11 11"></path>
+                        <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="ht-card-title mb-0">Workout Activity</h2>
+                    <p class="ht-card-subtitle mb-0">Completed exercises logged by this client</p>
+                </div>
+            </div>
+            <span class="ht-badge-total">@Model.TotalWorkoutLogs Total</span>
+        </div>
+
+        @if (Model.RecentWorkoutLogs.Any())
+        {
+            <div class="table-responsive">
+                <table class="table ht-trainer-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ht-th-col" style="width: 22%;">DATE</th>
+                            <th class="ht-th-col" style="width: 30%;">EXERCISE</th>
+                            <th class="ht-th-col" style="width: 16%;">DURATION</th>
+                            <th class="ht-th-col" style="width: 16%;">CALORIES</th>
+                            <th class="ht-th-col text-end" style="width: 16%;">NOTES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in Model.RecentWorkoutLogs)
+                        {
+                            <tr class="ht-client-row">
+                                <td><span class="fw-semibold">@log.date.ToString("MMM d, yyyy · h:mm tt")</span></td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="ht-workout-exercise-bullet" aria-hidden="true"></span>
+                                        <span class="ht-client-name">@(log.exercise?.name ?? "Free-form workout")</span>
+                                    </div>
+                                </td>
+                                <td><span class="ht-workout-stat-badge">@log.durationMinutes min</span></td>
+                                <td><span class="ht-workout-duration-text">@log.caloriesBurned cal</span></td>
+                                <td class="text-end text-muted small">
+                                    @(string.IsNullOrWhiteSpace(log.notes) ? "—" : log.notes)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4 text-muted">
+                <em>No workout logs recorded yet.</em>
+            </div>
+        }
+    </section>
+
+    <!-- SECTION 3: MEAL LOGS -->
+    <section class="ht-card">
+        <div class="ht-card-header-flex">
+            <div class="d-flex align-items-center gap-3">
+                <div class="ht-header-icon-badge" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2v20"></path>
+                        <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                        <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                        <path d="M8 10v12"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="ht-card-title mb-0">Meal Activity</h2>
+                    <p class="ht-card-subtitle mb-0">Consumed meals logged by this client</p>
+                </div>
+            </div>
+            <span class="ht-badge-total">@Model.TotalMealLogs Total</span>
+        </div>
+
+        @if (Model.RecentMealLogs.Any())
+        {
+            <div class="table-responsive">
+                <table class="table ht-trainer-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ht-th-col" style="width: 22%;">DATE</th>
+                            <th class="ht-th-col" style="width: 35%;">MEAL</th>
+                            <th class="ht-th-col" style="width: 18%;">CALORIES</th>
+                            <th class="ht-th-col text-end" style="width: 25%;">NOTES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in Model.RecentMealLogs)
+                        {
+                            <tr class="ht-client-row">
+                                <td><span class="fw-semibold">@log.date.ToString("MMM d, yyyy · h:mm tt")</span></td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="ht-diet-meal-bullet" aria-hidden="true"></span>
+                                        <span class="ht-client-name">@(log.meal?.name ?? "Free-form meal")</span>
+                                    </div>
+                                </td>
+                                <td><span class="ht-workout-duration-text">@log.caloriesConsumed kcal</span></td>
+                                <td class="text-end text-muted small">
+                                    @(string.IsNullOrWhiteSpace(log.notes) ? "—" : log.notes)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4 text-muted">
+                <em>No meal logs recorded yet.</em>
+            </div>
+        }
+    </section>
+</div>

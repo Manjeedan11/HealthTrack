@@ -1,4 +1,4 @@
-@model WorkoutPlan
+@model HealthTrack.ViewModels.Trainer.CreateWorkoutPlanViewModel
 @{
     Layout = "_TrainerLayout";
     ViewData["Title"] = "Create / Assign Workout";
@@ -7,12 +7,12 @@
 <div class="ht-dashboard-container">
     <!-- Breadcrumb & Back Link -->
     <div class="mb-3">
-        <a asp-controller="Trainer" asp-action="index" class="ht-card-link-action p-0">
+        <a asp-controller="Trainer" asp-action="routines" class="ht-card-link-action p-0">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
-            <span>Back to Trainer Dashboard</span>
+            <span>Back to Manage Routines</span>
         </a>
     </div>
 
@@ -26,13 +26,12 @@
     <div class="row g-4">
         <div class="col-12 col-xl-10">
             <div class="ht-card">
-                <!-- Card Header -->
                 <div class="ht-card-header-flex mb-4">
                     <div class="d-flex align-items-center gap-3">
                         <div class="ht-header-icon-badge ht-workout-icon-badge" aria-hidden="true">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <path d="m6.5 6.5 11 11"></path>
+                                <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
                             </svg>
                         </div>
                         <div>
@@ -42,10 +41,8 @@
                     </div>
                 </div>
 
-                <!-- Validation Summary -->
                 <div asp-validation-summary="ModelOnly" class="ht-validation-summary" role="alert"></div>
 
-                <!-- MVC Create Form -->
                 <form asp-controller="Workout" asp-action="create" method="post" id="workoutCreateForm" novalidate>
                     @Html.AntiForgeryToken()
 
@@ -53,30 +50,29 @@
                         <!-- Workout Plan Name -->
                         <div class="col-12 col-md-7">
                             <div class="ht-form-group mb-0">
-                                <label asp-for="name" class="ht-label">Workout Plan Name <span class="text-danger">*</span></label>
+                                <label asp-for="WorkoutPlan.name" class="ht-label">Workout Plan Name <span class="text-danger">*</span></label>
                                 <div class="ht-input-box">
                                     <span class="ht-field-icon" aria-hidden="true">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="m6.5 6.5 11 11"></path>
                                             <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
-                                            <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
                                         </svg>
                                     </span>
-                                    <input asp-for="name"
+                                    <input asp-for="WorkoutPlan.name"
                                            class="ht-input"
                                            placeholder="e.g., Upper Body Strength & Hypertrophy"
                                            required
                                            aria-required="true"
                                            id="plan-name-input" />
                                 </div>
-                                <span asp-validation-for="name" class="ht-field-validation"></span>
+                                <span asp-validation-for="WorkoutPlan.name" class="ht-field-validation"></span>
                             </div>
                         </div>
 
                         <!-- Client Assignment Selector -->
                         <div class="col-12 col-md-5">
                             <div class="ht-form-group mb-0">
-                                <label asp-for="clientId" class="ht-label">Assign To Client <span class="text-danger">*</span></label>
+                                <label asp-for="WorkoutPlan.clientId" class="ht-label">Assign To Client <span class="text-danger">*</span></label>
                                 <div class="ht-input-box">
                                     <span class="ht-field-icon" aria-hidden="true">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -86,24 +82,31 @@
                                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                         </svg>
                                     </span>
-                                    <select asp-for="clientId" class="ht-input ht-select" id="plan-client-select" aria-describedby="client-selector-note">
+                                    <select asp-for="WorkoutPlan.clientId" class="ht-input ht-select" id="plan-client-select" required>
                                         <option value="" disabled selected>-- Select an assigned client --</option>
+                                        @if (Model.AvailableClients != null)
+                                        {
+                                            foreach (var client in Model.AvailableClients)
+                                            {
+                                                <option value="@client.clientId">@client.name</option>
+                                            }
+                                        }
                                     </select>
                                 </div>
-                                <span asp-validation-for="clientId" class="ht-field-validation"></span>
+                                <span asp-validation-for="WorkoutPlan.clientId" class="ht-field-validation"></span>
                             </div>
                         </div>
 
-                        <!-- Backend Integration Guidance Note -->
+                        <!-- Info Note -->
                         <div class="col-12">
-                            <div class="ht-workout-notice d-flex align-items-center gap-2" id="client-selector-note">
+                            <div class="ht-workout-notice d-flex align-items-center gap-2">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-primary">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="16" x2="12" y2="12"></line>
                                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
                                 </svg>
                                 <span class="small text-muted">
-                                    <strong>Client Roster Integration:</strong> Client dropdown options and <code>trainerId</code> session identity are injected by backend services during production database integration.
+                                    <strong>Client Roster:</strong> Only clients assigned to you by the Administrator appear here.
                                 </span>
                             </div>
                         </div>
@@ -111,25 +114,25 @@
                         <!-- Plan Description -->
                         <div class="col-12">
                             <div class="ht-form-group mb-0">
-                                <label asp-for="description" class="ht-label">Routine Description & Instructions</label>
-                                <textarea asp-for="description"
+                                <label asp-for="WorkoutPlan.description" class="ht-label">Routine Description & Instructions</label>
+                                <textarea asp-for="WorkoutPlan.description"
                                           class="form-control ht-workout-textarea"
                                           rows="3"
                                           placeholder="Provide warm-up recommendations, rest periods, coaching cues and progression instructions..."
                                           id="plan-description-input"></textarea>
-                                <span asp-validation-for="description" class="ht-field-validation"></span>
+                                <span asp-validation-for="WorkoutPlan.description" class="ht-field-validation"></span>
                             </div>
                         </div>
 
-                        <!-- Trainer Identity Summary -->
+                        <!-- Trainer Identity -->
                         <div class="col-12">
                             <div class="ht-workout-trainer-badge-card">
                                 <div class="ht-profile-avatar">
-                                    @(ViewData["TrainerInitials"] ?? "MV")
+                                    @(ViewData["TrainerInitials"] ?? "TR")
                                 </div>
                                 <div class="d-flex flex-column">
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="ht-client-name">@(ViewData["TrainerName"] ?? "Marcus Vance")</span>
+                                        <span class="ht-client-name">@(ViewData["TrainerName"] ?? "Trainer Account")</span>
                                         <span class="ht-status-badge ht-status-confirmed py-0 px-2" style="font-size: 0.68rem;">Verified Trainer</span>
                                     </div>
                                     <span class="ht-workout-trainer-caption">Assigned Trainer Account · ID linked to authenticated identity</span>
@@ -138,12 +141,12 @@
                         </div>
                     </div>
 
-                    <!-- Exercises Builder Section -->
+                    <!-- Exercises Builder -->
                     <div class="ht-workout-builder-section mt-4 pt-3 border-top">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <div>
                                 <h3 class="ht-card-heading mb-1">Exercise Regimen</h3>
-                                <p class="text-muted small mb-0">Define exercises with designated sets, repetitions, and rest intervals.</p>
+                                <p class="text-muted small mb-0">Define exercises with designated sets, repetitions, and durations.</p>
                             </div>
                             <button type="button" class="ht-action-btn" id="btnAddExerciseRow" aria-label="Add another exercise row">
                                 <span class="ht-action-icon" aria-hidden="true">
@@ -156,7 +159,6 @@
                             </button>
                         </div>
 
-                        <!-- Exercise Rows Container -->
                         <div class="table-responsive">
                             <table class="table ht-trainer-table align-middle mb-0" id="exercisesTable">
                                 <thead>
@@ -169,51 +171,45 @@
                                     </tr>
                                 </thead>
                                 <tbody id="exerciseRowsContainer">
-                                    <!-- Row 0: Default Initial Row -->
                                     <tr class="ht-workout-builder-row" data-row-index="0">
                                         <td>
                                             <input type="text"
-                                                   name="exercises[0].name"
+                                                   name="WorkoutPlan.exercises[0].name"
                                                    class="form-control ht-workout-table-input"
                                                    placeholder="e.g., Barbell Bench Press"
-                                                   required
-                                                   aria-label="Exercise name for item 1" />
+                                                   required />
                                         </td>
                                         <td>
                                             <input type="number"
-                                                   name="exercises[0].sets"
+                                                   name="WorkoutPlan.exercises[0].sets"
                                                    class="form-control ht-workout-table-input"
                                                    placeholder="4"
                                                    min="1"
                                                    value="3"
-                                                   required
-                                                   aria-label="Sets for item 1" />
+                                                   required />
                                         </td>
                                         <td>
                                             <input type="number"
-                                                   name="exercises[0].reps"
+                                                   name="WorkoutPlan.exercises[0].reps"
                                                    class="form-control ht-workout-table-input"
                                                    placeholder="10"
                                                    min="1"
                                                    value="10"
-                                                   required
-                                                   aria-label="Reps for item 1" />
+                                                   required />
                                         </td>
                                         <td>
                                             <input type="number"
-                                                   name="exercises[0].duration"
+                                                   name="WorkoutPlan.exercises[0].duration"
                                                    class="form-control ht-workout-table-input"
                                                    placeholder="2"
                                                    min="0"
-                                                   value="0"
-                                                   aria-label="Duration in minutes for item 1" />
+                                                   value="0" />
                                         </td>
                                         <td class="text-end">
                                             <button type="button"
                                                     class="btn btn-sm ht-workout-btn-remove btnRemoveRow"
                                                     disabled
-                                                    title="At least one exercise row is required"
-                                                    aria-label="Remove exercise row 1">
+                                                    title="At least one exercise row is required">
                                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                                     <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -226,19 +222,14 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top">
-                        <a asp-controller="Trainer" asp-action="index" class="btn btn-outline-secondary px-4 py-2" id="btnCancelCreate">
-                            Cancel
-                        </a>
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="submit" class="ht-btn-submit px-4" id="btnSubmitWorkoutPlan">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                                <span>Create Workout Plan</span>
-                            </button>
-                        </div>
+                        <a asp-controller="Trainer" asp-action="routines" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+                        <button type="submit" class="ht-btn-submit px-4">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Create Workout Plan</span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -251,7 +242,6 @@
     <script>
         (function () {
             'use strict';
-
             const container = document.getElementById('exerciseRowsContainer');
             const addBtn = document.getElementById('btnAddExerciseRow');
 
@@ -259,122 +249,66 @@
                 const rows = container.querySelectorAll('.ht-workout-builder-row');
                 rows.forEach((row, index) => {
                     row.setAttribute('data-row-index', index);
-                    
                     const nameInput = row.querySelector('input[name$=".name"]');
                     const setsInput = row.querySelector('input[name$=".sets"]');
                     const repsInput = row.querySelector('input[name$=".reps"]');
                     const durInput = row.querySelector('input[name$=".duration"]');
                     const removeBtn = row.querySelector('.btnRemoveRow');
 
-                    if (nameInput) {
-                        nameInput.name = `exercises[${index}].name`;
-                        nameInput.setAttribute('aria-label', `Exercise name for item ${index + 1}`);
-                    }
-                    if (setsInput) {
-                        setsInput.name = `exercises[${index}].sets`;
-                        setsInput.setAttribute('aria-label', `Sets for item ${index + 1}`);
-                    }
-                    if (repsInput) {
-                        repsInput.name = `exercises[${index}].reps`;
-                        repsInput.setAttribute('aria-label', `Reps for item ${index + 1}`);
-                    }
-                    if (durInput) {
-                        durInput.name = `exercises[${index}].duration`;
-                        durInput.setAttribute('aria-label', `Duration in minutes for item ${index + 1}`);
-                    }
+                    if (nameInput) nameInput.name = `WorkoutPlan.exercises[${index}].name`;
+                    if (setsInput) setsInput.name = `WorkoutPlan.exercises[${index}].sets`;
+                    if (repsInput) repsInput.name = `WorkoutPlan.exercises[${index}].reps`;
+                    if (durInput) durInput.name = `WorkoutPlan.exercises[${index}].duration`;
+
                     if (removeBtn) {
-                        removeBtn.setAttribute('aria-label', `Remove exercise row ${index + 1}`);
-                        if (rows.length === 1) {
-                            removeBtn.disabled = true;
-                            removeBtn.title = "At least one exercise row is required";
-                        } else {
-                            removeBtn.disabled = false;
-                            removeBtn.title = "Remove this exercise";
-                        }
+                        removeBtn.disabled = rows.length === 1;
+                        removeBtn.title = rows.length === 1 ? "At least one exercise row is required" : "Remove this exercise";
                     }
                 });
             }
 
             if (addBtn && container) {
                 addBtn.addEventListener('click', function () {
-                    const rows = container.querySelectorAll('.ht-workout-builder-row');
-                    const newIndex = rows.length;
+                    const newIndex = container.querySelectorAll('.ht-workout-builder-row').length;
                     const tr = document.createElement('tr');
                     tr.className = 'ht-workout-builder-row';
                     tr.setAttribute('data-row-index', newIndex);
-
                     tr.innerHTML = `
                         <td>
-                            <input type="text"
-                                   name="exercises[${newIndex}].name"
-                                   class="form-control ht-workout-table-input"
-                                   placeholder="e.g., Dumbbell Lateral Raise"
-                                   required
-                                   aria-label="Exercise name for item ${newIndex + 1}" />
+                            <input type="text" name="WorkoutPlan.exercises[${newIndex}].name" class="form-control ht-workout-table-input" placeholder="e.g., Dumbbell Lateral Raise" required />
                         </td>
                         <td>
-                            <input type="number"
-                                   name="exercises[${newIndex}].sets"
-                                   class="form-control ht-workout-table-input"
-                                   placeholder="3"
-                                   min="1"
-                                   value="3"
-                                   required
-                                   aria-label="Sets for item ${newIndex + 1}" />
+                            <input type="number" name="WorkoutPlan.exercises[${newIndex}].sets" class="form-control ht-workout-table-input" min="1" value="3" required />
                         </td>
                         <td>
-                            <input type="number"
-                                   name="exercises[${newIndex}].reps"
-                                   class="form-control ht-workout-table-input"
-                                   placeholder="12"
-                                   min="1"
-                                   value="12"
-                                   required
-                                   aria-label="Reps for item ${newIndex + 1}" />
+                            <input type="number" name="WorkoutPlan.exercises[${newIndex}].reps" class="form-control ht-workout-table-input" min="1" value="12" required />
                         </td>
                         <td>
-                            <input type="number"
-                                   name="exercises[${newIndex}].duration"
-                                   class="form-control ht-workout-table-input"
-                                   placeholder="1"
-                                   min="0"
-                                   value="0"
-                                   aria-label="Duration in minutes for item ${newIndex + 1}" />
+                            <input type="number" name="WorkoutPlan.exercises[${newIndex}].duration" class="form-control ht-workout-table-input" min="0" value="0" />
                         </td>
                         <td class="text-end">
-                            <button type="button"
-                                    class="btn btn-sm ht-workout-btn-remove btnRemoveRow"
-                                    aria-label="Remove exercise row ${newIndex + 1}">
+                            <button type="button" class="btn btn-sm ht-workout-btn-remove btnRemoveRow">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
                             </button>
-                        </td>
-                    `;
-
+                        </td>`;
                     container.appendChild(tr);
                     updateRowIndices();
-                    const firstInput = tr.querySelector('input');
-                    if (firstInput) firstInput.focus();
+                    tr.querySelector('input').focus();
                 });
 
                 container.addEventListener('click', function (e) {
                     const removeBtn = e.target.closest('.btnRemoveRow');
                     if (!removeBtn) return;
-
                     const rows = container.querySelectorAll('.ht-workout-builder-row');
                     if (rows.length <= 1) return;
-
-                    const row = removeBtn.closest('.ht-workout-builder-row');
-                    if (row) {
-                        row.remove();
-                        updateRowIndices();
-                    }
+                    removeBtn.closest('.ht-workout-builder-row').remove();
+                    updateRowIndices();
                 });
             }
 
-            // Initial state check
             updateRowIndices();
         })();
     </script>
