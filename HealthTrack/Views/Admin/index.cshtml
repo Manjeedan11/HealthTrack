@@ -1,41 +1,301 @@
+@model HealthTrack.ViewModels.Admin.AdminDashboardViewModel
 @{
+    Layout = "_AdminLayout";
     ViewData["Title"] = "Admin Dashboard";
+    ViewData["AdminName"] = Model.AdminName;
+    ViewData["AdminInitials"] = Model.Initials;
 }
 
-<div class="container mt-4">
-    <h2>Admin Dashboard</h2>
-    <p class="text-muted">System overview and management</p>
+<div class="ht-dashboard-container">
+    @if (Model.IsDemonstrationData)
+    {
+        <div class="ht-demo-notice alert alert-info d-flex align-items-center mb-4" role="alert">
+            <svg class="me-2 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <div class="small">
+                <strong>Demonstration Preview:</strong> Displaying representative system data matching the coursework specification. Live records will populate automatically upon configuring the database connection.
+            </div>
+        </div>
+    }
 
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card p-3 text-center">
-                <h5>Total Users</h5>
-                <h2>@ViewBag.UserCount</h2>
-            </div>
+    <!-- Top Header & Quick Actions Row -->
+    <div class="ht-trainer-header-row mb-4">
+        <div class="ht-welcome-section">
+            <h1 class="ht-welcome-title">
+                Welcome back,<br />@Model.FirstName
+            </h1>
+            <p class="ht-welcome-subtitle">Here's your system overview and management tools.</p>
         </div>
-        <div class="col-md-3">
-            <div class="card p-3 text-center">
-                <h5>Clients</h5>
-                <h2>@ViewBag.ClientCount</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 text-center">
-                <h5>Trainers</h5>
-                <h2>@ViewBag.TrainerCount</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 text-center">
-                <h5>Appointments</h5>
-                <h2>@ViewBag.AppointmentCount</h2>
-            </div>
+
+        <div class="ht-trainer-actions-group" role="toolbar" aria-label="Admin Quick Actions">
+            <!-- Create Trainer -->
+            <a asp-controller="Admin" asp-action="createTrainer" class="ht-action-card-btn">
+                <span class="ht-action-card-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </span>
+                <span class="ht-action-card-text">Create<br />Trainer</span>
+            </a>
+
+            <!-- Assign Trainers -->
+            <a asp-controller="Admin" asp-action="assignTrainers" class="ht-action-card-btn">
+                <span class="ht-action-card-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </span>
+                <span class="ht-action-card-text">Assign<br />Trainers</span>
+            </a>
+
+            <!-- Manage Users -->
+            <a asp-controller="Admin" asp-action="users" class="ht-action-card-btn">
+                <span class="ht-action-card-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </span>
+                <span class="ht-action-card-text">Manage<br />Users</span>
+            </a>
         </div>
     </div>
 
-    <div class="mt-4">
-        <a asp-controller="Admin" asp-action="users" class="btn btn-primary">Manage Users</a>
-        <a asp-controller="Admin" asp-action="createTrainer" class="btn btn-success ms-2">+ Create Trainer</a>
-        <a asp-controller="Admin" asp-action="assignTrainers" class="btn btn-info ms-2">Assign Trainers</a>
+    <!-- Main Dashboard Two-Column Grid -->
+    <div class="row g-4">
+        <!-- Left Column: KPI Cards + Recent Users -->
+        <div class="col-12 col-lg-7 col-xl-7 d-flex flex-column gap-4">
+
+            <!-- Card 1: System KPI Summary -->
+            <section class="ht-card" aria-labelledby="headingSystemOverview">
+                <div class="ht-card-header-flex">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3v18h18"></path>
+                                <path d="m19 9-5 5-4-4-3 3"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0" id="headingSystemOverview">System Overview</h2>
+                            <p class="ht-card-subtitle mb-0">Platform-wide metrics at a glance</p>
+                        </div>
+                    </div>
+                    <a asp-controller="Admin" asp-action="reports" class="ht-card-link-action">
+                        <span>View Reports</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="ht-progress-summary-grid">
+                    <div class="ht-progress-summary-card">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="ht-summary-client-name">Total Users</span>
+                            <div class="ht-summary-scale-icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ht-summary-weight">@Model.TotalUsers</div>
+                        <div class="ht-summary-note">@Model.TotalClients clients · @Model.TotalTrainers trainers</div>
+                    </div>
+
+                    <div class="ht-progress-summary-card">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="ht-summary-client-name">Appointments</span>
+                            <div class="ht-summary-scale-icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ht-summary-weight">@Model.TotalAppointments</div>
+                        <div class="ht-summary-note">Total consultations booked</div>
+                    </div>
+
+                    <div class="ht-progress-summary-card">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="ht-summary-client-name">Plans Created</span>
+                            <div class="ht-summary-scale-icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m6.5 6.5 11 11"></path>
+                                    <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ht-summary-weight">@(Model.TotalWorkoutPlans + Model.TotalDietPlans)</div>
+                        <div class="ht-summary-note">@Model.TotalWorkoutPlans workout · @Model.TotalDietPlans diet</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card 2: Recent Users -->
+            <section class="ht-card" id="users-roster" aria-labelledby="headingRecentUsers">
+                <div class="ht-card-header-flex">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0" id="headingRecentUsers">Recent Users</h2>
+                            <p class="ht-card-subtitle mb-0">Latest registrations across all roles</p>
+                        </div>
+                    </div>
+                    <a asp-controller="Admin" asp-action="users" class="ht-card-link-action">
+                        <span>View All Users</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table ht-trainer-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="ht-th-col">USER</th>
+                                <th scope="col" class="ht-th-col">ROLE</th>
+                                <th scope="col" class="ht-th-col text-end">EMAIL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RecentUsers.Any())
+                            {
+                                @foreach (var u in Model.RecentUsers)
+                                {
+                                    <tr class="ht-client-row">
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="ht-client-avatar">@u.Initials</div>
+                                                <div class="d-flex flex-column">
+                                                    <span class="ht-client-name">@u.Name</span>
+                                                    <span class="ht-client-id">@u.DisplayId</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="ht-status-badge @(u.Role == "Admin" ? "ht-status-cancelled" : u.Role == "Trainer" ? "ht-status-confirmed" : "ht-status-pending")">
+                                                @u.Role
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="text-muted small">@u.Email</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center py-4 text-muted">
+                                        No users registered yet.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Column: Recent Appointments -->
+        <div class="col-12 col-lg-5 col-xl-5">
+            <section class="ht-card h-100 d-flex flex-column" aria-labelledby="headingAppointments">
+                <div class="ht-card-header-flex">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ht-header-icon-badge" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                <line x1="16" x2="16" y1="2" y2="6"></line>
+                                <line x1="8" y1="8" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="ht-card-title mb-0" id="headingAppointments">Appointments</h2>
+                            <p class="ht-card-subtitle mb-0">Most recent bookings</p>
+                        </div>
+                    </div>
+                    <span class="ht-badge-total">@Model.TotalAppointments Total</span>
+                </div>
+
+                <div class="ht-appointments-list flex-grow-1">
+                    @if (Model.RecentAppointments.Any())
+                    {
+                        @foreach (var appt in Model.RecentAppointments)
+                        {
+                            <div class="ht-appointment-box mb-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="ht-appointment-time d-flex align-items-center gap-2">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                        <span>@appt.TimeFormatted</span>
+                                    </div>
+                                    @if (string.Equals(appt.Status, "Confirmed", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="ht-status-badge ht-status-confirmed">Confirmed</span>
+                                    }
+                                    else if (string.Equals(appt.Status, "Completed", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="ht-status-badge" style="background-color: #dbeafe; color: #1e40af;">Completed</span>
+                                    }
+                                    else if (string.Equals(appt.Status, "Cancelled", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="ht-status-badge ht-status-cancelled">Cancelled</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ht-status-badge ht-status-pending">Pending</span>
+                                    }
+                                </div>
+                                <h3 class="ht-appointment-client-name mb-1">@appt.ClientName</h3>
+                                <div class="ht-appointment-type">with @appt.TrainerName</div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-4 text-muted">
+                            No appointments scheduled.
+                        </div>
+                    }
+                </div>
+
+                <div class="mt-3">
+                    <a asp-controller="Appointment" asp-action="index" class="ht-btn-view-appointments">
+                        <span>View All Appointments</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </section>
+        </div>
     </div>
 </div>

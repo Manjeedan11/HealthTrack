@@ -1,0 +1,688 @@
+@model HealthTrack.ViewModels.Admin.AdminReportsViewModel
+@using System.Globalization
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Reports & Analytics";
+    ViewData["AdminName"] = ViewData["AdminName"] ?? "Administrator";
+    ViewData["AdminInitials"] = "AD";
+
+    var inv = CultureInfo.InvariantCulture;
+    bool showSystemUsage    = Model.ReportType == "all" || Model.ReportType == "system-usage";
+    bool showEngagement     = Model.ReportType == "all" || Model.ReportType == "engagement";
+    bool showClientPerf     = Model.ReportType == "all" || Model.ReportType == "client-performance";
+    bool showPopularRoutines = Model.ReportType == "all" || Model.ReportType == "popular-routines";
+
+    var roleTotal = Model.RoleBreakdown.Sum(x => x.Count);
+    var apptTotal = Model.AppointmentStatus.Sum(x => x.Count);
+    var workoutTotal = Model.PopularWorkoutPlans.Sum(x => x.UsageCount);
+    var dietTotal = Model.PopularDietPlans.Sum(x => x.UsageCount);
+    int maxClientActivity = Model.ClientPerformance.Any() ? Model.ClientPerformance.Max(c => c.TotalActivity) : 1;
+    if (maxClientActivity == 0) maxClientActivity = 1;
+    int maxDayEngagement = Model.EngagementByDay.Any() ? Model.EngagementByDay.Max(d => d.Total) : 1;
+    if (maxDayEngagement == 0) maxDayEngagement = 1;
+}
+
+@functions {
+    string PieSlicePath(double cx, double cy, double r, double startAngle, double endAngle)
+    {
+        var inv = CultureInfo.InvariantCulture;
+        double startRad = (startAngle - 90) * Math.PI / 180.0;
+        double endRad = (endAngle - 90) * Math.PI / 180.0;
+        double x1 = cx + r * Math.Cos(startRad);
+        double y1 = cy + r * Math.Sin(startRad);
+        double x2 = cx + r * Math.Cos(endRad);
+        double y2 = cy + r * Math.Sin(endRad);
+        int largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+        return $"M {cx.ToString(inv)} {cy.ToString(inv)} L {x1.ToString("F2", inv)} {y1.ToString("F2", inv)} A {r.ToString(inv)} {r.ToString(inv)} 0 {largeArc} 1 {x2.ToString("F2", inv)} {y2.ToString("F2", inv)} Z";
+    }
+}
+
+<style>
+    .report-filter-card {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+    }
+    .report-filter-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 12px;
+        align-items: end;
+    }
+    @@media (max-width: 992px) {
+        .report-filter-row { grid-template-columns: 1fr 1fr; }
+    }
+    @@media (max-width: 576px) {
+        .report-filter-row { grid-template-columns: 1fr; }
+    }
+    .client-bar-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    .client-bar-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 180px;
+        font-size: 0.85rem;
+    }
+    .client-bar-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #0d6e5a;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+    .client-bar-track {
+        flex: 1;
+        height: 26px;
+        background: #f1f5f9;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .client-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #0d6e5a 0%, #10b981 100%);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 8px;
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 700;
+        min-width: 30px;
+        transition: width 0.4s ease;
+    }
+    .chart-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+    }
+    .chart-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+    }
+    .chart-legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+    .engagement-legend {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+    }
+    .engagement-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        color: #475569;
+    }
+    .engagement-legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+    }
+    .empty-chart {
+        text-align: center;
+        padding: 40px 20px;
+        color: #94a3b8;
+        font-style: italic;
+    }
+    @@media print {
+        .ht-portal-sidebar, .ht-portal-topbar, .ht-sidebar-backdrop,
+        .report-filter-card, .no-print { display: none !important; }
+        .ht-portal-main { margin-left: 0 !important; }
+        .ht-portal-content { padding: 20px !important; }
+        .ht-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; page-break-inside: avoid; }
+        body { background: white !important; }
+        .ht-portal-shell { display: block !important; }
+    }
+</style>
+
+<div class="ht-dashboard-container">
+
+    <!-- Header with Export Buttons -->
+    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="ht-welcome-title">Reports &amp; Analytics</h1>
+            <p class="ht-welcome-subtitle">System usage, engagement, client performance and popular routines.</p>
+        </div>
+        <div class="d-flex gap-2 no-print">
+            <a asp-controller="Admin"
+               asp-action="exportCsv"
+               asp-route-dateFrom="@Model.DateFrom?.ToString("yyyy-MM-dd")"
+               asp-route-dateTo="@Model.DateTo?.ToString("yyyy-MM-dd")"
+               class="btn btn-outline-success">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Export CSV
+            </a>
+            <button type="button" class="btn btn-outline-primary" onclick="window.print()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect width="12" height="8" x="6" y="14"></rect>
+                </svg>
+                Export PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Card -->
+    <form method="get" asp-controller="Admin" asp-action="reports" class="report-filter-card mb-4 no-print">
+        <div class="report-filter-row">
+            <div>
+                <label class="form-label small text-muted mb-1">Date From</label>
+                <input type="date" name="dateFrom" value="@Model.DateFrom?.ToString("yyyy-MM-dd")" class="form-control form-control-sm" />
+            </div>
+            <div>
+                <label class="form-label small text-muted mb-1">Date To</label>
+                <input type="date" name="dateTo" value="@Model.DateTo?.ToString("yyyy-MM-dd")" class="form-control form-control-sm" />
+            </div>
+            <div>
+                <label class="form-label small text-muted mb-1">Report Type</label>
+                <select name="reportType" class="form-select form-select-sm">
+                    <option value="all" selected="@(Model.ReportType == "all")">All Reports</option>
+                    <option value="system-usage" selected="@(Model.ReportType == "system-usage")">System Usage</option>
+                    <option value="engagement" selected="@(Model.ReportType == "engagement")">Engagement Statistics</option>
+                    <option value="client-performance" selected="@(Model.ReportType == "client-performance")">Client Performance</option>
+                    <option value="popular-routines" selected="@(Model.ReportType == "popular-routines")">Popular Routines</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary btn-sm w-100">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    Apply
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- KPI Summary -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">TOTAL USERS</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val">@Model.TotalUsers</span>
+                    <span class="ht-kpi-unit">accounts</span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">APPOINTMENTS</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val text-success">@Model.TotalAppointments</span>
+                    <span class="ht-kpi-unit">booked</span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">ENGAGEMENT EVENTS</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val text-warning">@Model.TotalEngagement</span>
+                    <span class="ht-kpi-unit">logs</span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">PLANS CREATED</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val" style="color: #8b5cf6;">@(Model.TotalWorkoutPlans + Model.TotalDietPlans)</span>
+                    <span class="ht-kpi-unit">total</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 1: SYSTEM USAGE                                      -->
+    <!-- ============================================================ -->
+    @if (showSystemUsage)
+    {
+        <div class="row g-4 mb-4">
+            <!-- Users by Role Pie -->
+            <div class="col-12 col-lg-6">
+                <section class="ht-card h-100">
+                    <div class="ht-card-header-flex mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="ht-card-title mb-0">Users by Role</h2>
+                                <p class="ht-card-subtitle mb-0">Distribution across the platform</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (roleTotal > 0)
+                    {
+                        <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+                            <svg viewBox="0 0 200 200" width="200" height="200" aria-label="Users by role pie">
+                                @if (Model.RoleBreakdown.Count(x => x.Count > 0) == 1)
+                                {
+                                    var single = Model.RoleBreakdown.First(x => x.Count > 0);
+                                    <circle cx="100" cy="100" r="80" fill="@single.Color" />
+                                }
+                                else
+                                {
+                                    double startAngle = 0;
+                                    foreach (var item in Model.RoleBreakdown.Where(x => x.Count > 0))
+                                    {
+                                        var pct = (double)item.Count / roleTotal;
+                                        var span = pct * 360;
+                                        var endAngle = startAngle + span;
+                                        var path = PieSlicePath(100, 100, 80, startAngle, endAngle);
+                                        <path d="@path" fill="@item.Color" stroke="#ffffff" stroke-width="2"></path>
+                                        startAngle = endAngle;
+                                    }
+                                }
+                                <circle cx="100" cy="100" r="45" fill="#ffffff" />
+                                @Html.Raw($"<text x=\"100\" y=\"96\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"700\" fill=\"#0f172a\">{roleTotal}</text>")
+                                @Html.Raw("<text x=\"100\" y=\"114\" text-anchor=\"middle\" font-size=\"10\" fill=\"#64748b\">users</text>")
+                            </svg>
+                            <div class="chart-legend">
+                                @foreach (var item in Model.RoleBreakdown)
+                                {
+                                    var pct = roleTotal > 0 ? (double)item.Count / roleTotal * 100 : 0;
+                                    <div class="chart-legend-item">
+                                        <span class="chart-legend-dot" style="background: @item.Color;"></span>
+                                        <span>@item.Label — @item.Count (@pct.ToString("F0", inv)%)</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-chart">No users in the system.</div>
+                    }
+                </section>
+            </div>
+
+            <!-- Appointment Status Pie -->
+            <div class="col-12 col-lg-6">
+                <section class="ht-card h-100">
+                    <div class="ht-card-header-flex mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="ht-card-title mb-0">Appointment Status</h2>
+                                <p class="ht-card-subtitle mb-0">Bookings within date range</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (apptTotal > 0)
+                    {
+                        <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+                            <svg viewBox="0 0 200 200" width="200" height="200" aria-label="Appointment status pie">
+                                @if (Model.AppointmentStatus.Count(x => x.Count > 0) == 1)
+                                {
+                                    var single = Model.AppointmentStatus.First(x => x.Count > 0);
+                                    <circle cx="100" cy="100" r="80" fill="@single.Color" />
+                                }
+                                else
+                                {
+                                    double startAngle = 0;
+                                    foreach (var item in Model.AppointmentStatus.Where(x => x.Count > 0))
+                                    {
+                                        var pct = (double)item.Count / apptTotal;
+                                        var span = pct * 360;
+                                        var endAngle = startAngle + span;
+                                        var path = PieSlicePath(100, 100, 80, startAngle, endAngle);
+                                        <path d="@path" fill="@item.Color" stroke="#ffffff" stroke-width="2"></path>
+                                        startAngle = endAngle;
+                                    }
+                                }
+                                <circle cx="100" cy="100" r="45" fill="#ffffff" />
+                                @Html.Raw($"<text x=\"100\" y=\"96\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"700\" fill=\"#0f172a\">{apptTotal}</text>")
+                                @Html.Raw("<text x=\"100\" y=\"114\" text-anchor=\"middle\" font-size=\"10\" fill=\"#64748b\">appointments</text>")
+                            </svg>
+                            <div class="chart-legend">
+                                @foreach (var item in Model.AppointmentStatus)
+                                {
+                                    var pct = apptTotal > 0 ? (double)item.Count / apptTotal * 100 : 0;
+                                    <div class="chart-legend-item">
+                                        <span class="chart-legend-dot" style="background: @item.Color;"></span>
+                                        <span>@item.Label — @item.Count (@pct.ToString("F0", inv)%)</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-chart">No appointments in this date range.</div>
+                    }
+                </section>
+            </div>
+        </div>
+    }
+
+    <!-- ============================================================ -->
+    <!-- SECTION 2: ENGAGEMENT STATISTICS                             -->
+    <!-- ============================================================ -->
+    @if (showEngagement)
+    {
+        <section class="ht-card mb-4">
+            <div class="ht-card-header-flex mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="ht-header-icon-badge" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"></path>
+                            <path d="m19 9-5 5-4-4-3 3"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="ht-card-title mb-0">Engagement Statistics</h2>
+                        <p class="ht-card-subtitle mb-0">Daily activity across all log types</p>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.EngagementByDay.Any(d => d.Total > 0))
+            {
+                var chartW = 900;
+                var chartH = 320;
+                var padL = 50;
+                var padR = 20;
+                var padT = 30;
+                var padB = 60;
+                var plotW = chartW - padL - padR;
+                var plotH = chartH - padT - padB;
+                var barCount = Model.EngagementByDay.Count;
+                var slotWidth = (double)plotW / Math.Max(1, barCount);
+                var barWidth = slotWidth * 0.65;
+
+                <div class="engagement-legend">
+                    <div class="engagement-legend-item">
+                        <span class="engagement-legend-dot" style="background: #0d6e5a;"></span> Workouts
+                    </div>
+                    <div class="engagement-legend-item">
+                        <span class="engagement-legend-dot" style="background: #f59e0b;"></span> Meals
+                    </div>
+                    <div class="engagement-legend-item">
+                        <span class="engagement-legend-dot" style="background: #8b5cf6;"></span> Metrics
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <svg viewBox="0 0 @chartW @chartH" width="100%" height="320" preserveAspectRatio="xMidYMid meet" aria-label="Engagement bar chart">
+                        @for (int grid = 0; grid <= 4; grid++)
+                        {
+                            var yVal = (int)((double)maxDayEngagement * grid / 4);
+                            var yPos = padT + plotH - (grid * plotH / 4);
+                            <line x1="@padL" y1="@yPos" x2="@(chartW - padR)" y2="@yPos" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 3"></line>
+                            @Html.Raw($"<text x=\"{padL - 8}\" y=\"{yPos + 4}\" text-anchor=\"end\" font-size=\"10\" fill=\"#94a3b8\">{yVal}</text>")
+                        }
+
+                        @for (int i = 0; i < barCount; i++)
+                        {
+                            var day = Model.EngagementByDay[i];
+                            var slotX = padL + i * slotWidth;
+                            var barX = slotX + (slotWidth - barWidth) / 2;
+                            var currentY = (double)(padT + plotH);
+
+                            var wH = (double)day.WorkoutLogs / maxDayEngagement * plotH;
+                            currentY -= wH;
+                            if (wH > 0)
+                            {
+                                <rect x="@barX.ToString("F1", inv)" y="@currentY.ToString("F1", inv)" width="@barWidth.ToString("F1", inv)" height="@wH.ToString("F1", inv)" fill="#0d6e5a" rx="2"></rect>
+                            }
+
+                            var mH = (double)day.MealLogs / maxDayEngagement * plotH;
+                            currentY -= mH;
+                            if (mH > 0)
+                            {
+                                <rect x="@barX.ToString("F1", inv)" y="@currentY.ToString("F1", inv)" width="@barWidth.ToString("F1", inv)" height="@mH.ToString("F1", inv)" fill="#f59e0b" rx="2"></rect>
+                            }
+
+                            var meH = (double)day.Metrics / maxDayEngagement * plotH;
+                            currentY -= meH;
+                            if (meH > 0)
+                            {
+                                <rect x="@barX.ToString("F1", inv)" y="@currentY.ToString("F1", inv)" width="@barWidth.ToString("F1", inv)" height="@meH.ToString("F1", inv)" fill="#8b5cf6" rx="2"></rect>
+                            }
+
+                            if (barCount <= 15 || i % 2 == 0)
+                            {
+                                var labelX = slotX + slotWidth / 2;
+                                @Html.Raw($"<text x=\"{labelX:F1}\" y=\"{chartH - padB + 20}\" text-anchor=\"middle\" font-size=\"10\" fill=\"#64748b\">{day.Date:MMM d}</text>")
+                            }
+                        }
+
+                        <line x1="@padL" y1="@(padT + plotH)" x2="@(chartW - padR)" y2="@(padT + plotH)" stroke="#cbd5e1" stroke-width="1"></line>
+                    </svg>
+                </div>
+            }
+            else
+            {
+                <div class="empty-chart">No engagement events recorded in this date range.</div>
+            }
+        </section>
+    }
+
+    <!-- ============================================================ -->
+    <!-- SECTION 3: CLIENT PERFORMANCE                                -->
+    <!-- ============================================================ -->
+    @if (showClientPerf)
+    {
+        <section class="ht-card mb-4">
+            <div class="ht-card-header-flex mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="ht-header-icon-badge" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="ht-card-title mb-0">Client Performance</h2>
+                        <p class="ht-card-subtitle mb-0">Activity breakdown across all clients</p>
+                    </div>
+                </div>
+                <span class="ht-badge-total">@Model.ClientPerformance.Count Clients</span>
+            </div>
+
+            @if (Model.ClientPerformance.Any(c => c.TotalActivity > 0))
+            {
+                @foreach (var c in Model.ClientPerformance.Take(10))
+                {
+                    var pct = (double)c.TotalActivity / maxClientActivity * 100;
+                    <div class="client-bar-row">
+                        <div class="client-bar-label">
+                            <div class="client-bar-avatar">@c.Initials</div>
+                            <div>
+                                <div class="fw-semibold text-dark">@c.ClientName</div>
+                                <div class="text-muted" style="font-size: 0.72rem;">
+                                    @c.WorkoutLogs W · @c.MealLogs M · @c.HealthMetrics H
+                                </div>
+                            </div>
+                        </div>
+                        <div class="client-bar-track">
+                            <div class="client-bar-fill" style="width: @(pct.ToString("F1", inv))%">
+                                @c.TotalActivity
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-chart">No client activity recorded in this date range.</div>
+            }
+        </section>
+    }
+
+    <!-- ============================================================ -->
+    <!-- SECTION 4: POPULAR ROUTINES                                  -->
+    <!-- ============================================================ -->
+    @if (showPopularRoutines)
+    {
+        <div class="row g-4 mb-4">
+            <!-- Popular Workout Plans Pie -->
+            <div class="col-12 col-lg-6">
+                <section class="ht-card h-100">
+                    <div class="ht-card-header-flex mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m6.5 6.5 11 11"></path>
+                                    <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="ht-card-title mb-0">Popular Workout Plans</h2>
+                                <p class="ht-card-subtitle mb-0">By log usage count</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.PopularWorkoutPlans.Any())
+                    {
+                        <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+                            <svg viewBox="0 0 200 200" width="200" height="200" aria-label="Popular workout plans pie">
+                                @if (Model.PopularWorkoutPlans.Count == 1)
+                                {
+                                    <circle cx="100" cy="100" r="80" fill="@Model.PopularWorkoutPlans[0].Color" />
+                                }
+                                else
+                                {
+                                    double startAngle = 0;
+                                    foreach (var item in Model.PopularWorkoutPlans)
+                                    {
+                                        var pct = (double)item.UsageCount / workoutTotal;
+                                        var span = pct * 360;
+                                        var endAngle = startAngle + span;
+                                        var path = PieSlicePath(100, 100, 80, startAngle, endAngle);
+                                        <path d="@path" fill="@item.Color" stroke="#ffffff" stroke-width="2"></path>
+                                        startAngle = endAngle;
+                                    }
+                                }
+                                <circle cx="100" cy="100" r="45" fill="#ffffff" />
+                                @Html.Raw($"<text x=\"100\" y=\"96\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"700\" fill=\"#0f172a\">{workoutTotal}</text>")
+                                @Html.Raw("<text x=\"100\" y=\"114\" text-anchor=\"middle\" font-size=\"10\" fill=\"#64748b\">total logs</text>")
+                            </svg>
+                            <div class="chart-legend">
+                                @foreach (var item in Model.PopularWorkoutPlans)
+                                {
+                                    var pct = workoutTotal > 0 ? (double)item.UsageCount / workoutTotal * 100 : 0;
+                                    <div class="chart-legend-item">
+                                        <span class="chart-legend-dot" style="background: @item.Color;"></span>
+                                        <span>@item.Name — @item.UsageCount (@pct.ToString("F0", inv)%)</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-chart">No workout plan logs in this date range.</div>
+                    }
+                </section>
+            </div>
+
+            <!-- Popular Diet Plans Pie -->
+            <div class="col-12 col-lg-6">
+                <section class="ht-card h-100">
+                    <div class="ht-card-header-flex mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 2v20"></path>
+                                    <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                    <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                    <path d="M8 10v12"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="ht-card-title mb-0">Popular Diet Plans</h2>
+                                <p class="ht-card-subtitle mb-0">By log usage count</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.PopularDietPlans.Any())
+                    {
+                        <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+                            <svg viewBox="0 0 200 200" width="200" height="200" aria-label="Popular diet plans pie">
+                                @if (Model.PopularDietPlans.Count == 1)
+                                {
+                                    <circle cx="100" cy="100" r="80" fill="@Model.PopularDietPlans[0].Color" />
+                                }
+                                else
+                                {
+                                    double startAngle = 0;
+                                    foreach (var item in Model.PopularDietPlans)
+                                    {
+                                        var pct = (double)item.UsageCount / dietTotal;
+                                        var span = pct * 360;
+                                        var endAngle = startAngle + span;
+                                        var path = PieSlicePath(100, 100, 80, startAngle, endAngle);
+                                        <path d="@path" fill="@item.Color" stroke="#ffffff" stroke-width="2"></path>
+                                        startAngle = endAngle;
+                                    }
+                                }
+                                <circle cx="100" cy="100" r="45" fill="#ffffff" />
+                                @Html.Raw($"<text x=\"100\" y=\"96\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"700\" fill=\"#0f172a\">{dietTotal}</text>")
+                                @Html.Raw("<text x=\"100\" y=\"114\" text-anchor=\"middle\" font-size=\"10\" fill=\"#64748b\">total logs</text>")
+                            </svg>
+                            <div class="chart-legend">
+                                @foreach (var item in Model.PopularDietPlans)
+                                {
+                                    var pct = dietTotal > 0 ? (double)item.UsageCount / dietTotal * 100 : 0;
+                                    <div class="chart-legend-item">
+                                        <span class="chart-legend-dot" style="background: @item.Color;"></span>
+                                        <span>@item.Name — @item.UsageCount (@pct.ToString("F0", inv)%)</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-chart">No diet plan logs in this date range.</div>
+                    }
+                </section>
+            </div>
+        </div>
+    }
+
+</div>
