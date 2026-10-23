@@ -1,10 +1,68 @@
 @model TrainerDashboardViewModel
 @{
     Layout = "_TrainerLayout";
-    ViewData["Title"] = "Trainer Dashboard";
     ViewData["TrainerName"] = Model.TrainerName;
     ViewData["TrainerInitials"] = Model.Initials;
+
+    var screen = Context.Request.Query["screen"].ToString().ToLowerInvariant();
+    int.TryParse(Context.Request.Query["clientId"], out int selectedClientId);
 }
+
+@if (screen == "clients")
+{
+    ViewData["Title"] = "Trainer Clients";
+    <partial name="_ClientsListPartial" model="Model" />
+}
+else if (screen == "client")
+{
+    var selectedClient = Model.AssignedClients.FirstOrDefault(c => c.ClientId == selectedClientId);
+    ViewData["Title"] = selectedClient != null ? $"{selectedClient.Name} - Client Overview" : "Client Overview";
+
+    if (selectedClient != null)
+    {
+        <partial name="_ClientOverviewPartial" model="selectedClient" />
+    }
+    else
+    {
+        <div class="ht-dashboard-container">
+            <!-- Breadcrumb Navigation -->
+            <div class="mb-3">
+                <a asp-controller="Trainer" asp-action="index" asp-route-screen="clients" class="ht-card-link-action p-0">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Back to Clients</span>
+                </a>
+            </div>
+
+            <!-- Safe Client Not Found State -->
+            <div class="ht-card text-center py-5">
+                <div class="ht-workout-empty-icon mx-auto mb-3" aria-hidden="true">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h2 class="ht-card-title mb-2">Client Not Found</h2>
+                <p class="text-muted mb-4">The client record with ID #@Context.Request.Query["clientId"] was not found in the current client registry.</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a asp-controller="Trainer" asp-action="index" asp-route-screen="clients" class="ht-action-card-btn">
+                        <span>Return to Clients Directory</span>
+                    </a>
+                    <a asp-controller="Trainer" asp-action="index" class="ht-action-card-btn">
+                        <span>Back to Trainer Dashboard</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    ViewData["Title"] = "Trainer Dashboard";
+
 
 <div class="ht-dashboard-container">
     @if (Model.IsDemonstrationData)
@@ -88,7 +146,7 @@
                             <p class="ht-card-subtitle mb-0">Active roster and direct profile access</p>
                         </div>
                     </div>
-                    <a href="#clients-roster" class="ht-card-link-action">
+                    <a asp-controller="Trainer" asp-action="index" asp-route-screen="clients" class="ht-card-link-action">
                         <span>View All Clients</span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -131,8 +189,8 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a asp-controller="Workout" asp-action="index" asp-route-clientId="@client.ClientId" class="ht-view-details-link">
-                                                <span>View Details</span>
+                                            <a asp-controller="Trainer" asp-action="index" asp-route-screen="client" asp-route-clientId="@client.ClientId" class="ht-view-details-link">
+                                                <span>View Client</span>
                                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                                     <polyline points="12 5 19 12 12 19"></polyline>
@@ -287,3 +345,4 @@
         </div>
     </div>
 </div>
+}

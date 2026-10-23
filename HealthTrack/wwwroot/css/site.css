@@ -2414,3 +2414,42 @@ body.ht-portal-body {
   background-color: #0d6e5a;
   color: #ffffff;
 }
+
+/* --------------------------------------------------------------------------
+   18. Trainer Clients & Client Overview Screens
+   -------------------------------------------------------------------------- */
+.ht-client-avatar-lg {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: #0284c7;
+  font-weight: 800;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #bae6fd;
+}
+
+.ht-client-overview-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: #0f172a;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ht-client-overview-action:hover {
+  border-color: #0d6e5a;
+  background-color: #f0fdf9;
+  color: #095c4d;
+  transform: translateX(3px);
+}
