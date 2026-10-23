@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports &amp; Activity (Preview) - HealthTrack Admin Portal</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation (255px wide desktop) -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Admin Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="admin-dashboard-preview.html">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub ht-brand-sub-admin">ADMIN PORTAL</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links: Strictly the 4 Coursework Administrator Responsibilities -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard -->
+                <a href="admin-dashboard-preview.html" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. User Management -->
+                <a href="admin-users-preview.html" class="ht-nav-item">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span>User Management</span>
+                </a>
+
+                <!-- 3. Trainer Assignments -->
+                <a href="admin-trainer-assignments-preview.html" class="ht-nav-item" title="Trainer Assignments">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span>Trainer Assignments</span>
+                </a>
+
+                <!-- 4. Reports & Activity (Active Screen) -->
+                <a href="admin-reports-preview.html" class="ht-nav-item active" aria-current="page" title="Reports & Activity">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </span>
+                    <span>Reports & Activity</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Admin Identity & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <div class="px-2 py-1 mb-1 text-muted small d-flex align-items-center gap-2">
+                    <span class="ht-status-dot-active" aria-hidden="true"></span>
+                    <span>Admin Active</span>
+                </div>
+
+                <form action="/Account/logout" method="post" class="m-0">
+                    <button type="submit" class="ht-nav-item ht-nav-signout w-100">
+                        <span class="ht-nav-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </span>
+                        <span>Sign Out</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6e5a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="d-none d-sm-inline">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                        <span class="fw-semibold text-dark" style="font-size: 0.95rem;">Admin Portal</span>
+                    </div>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning px-3 py-2">
+                        Preview Mode &bull; Intended Route: /Admin/Reports
+                    </span>
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar" style="background-color: #095c4d;">
+                            AD
+                        </div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name">admin@healthtrack.com</span>
+                            <span class="ht-profile-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- Header -->
+                    <div class="ht-welcome-section mb-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div>
+                                <h1 class="ht-welcome-title">Administrative Reports & System Activity</h1>
+                                <p class="ht-welcome-subtitle">Comprehensive analytics on platform usage, client progress, trainer engagement, and routine allocations.</p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="alert('Export Notice:\n\nAutomated CSV and PDF reporting endpoints are pending backend implementation. This UI demonstrates the complete reporting metrics.');">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                    <span>Export Summary (Pending Backend API)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Auditability Handover Notice -->
+                    <div class="ht-admin-notice-banner notice-info" role="alert">
+                        <div class="ht-notice-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                        </div>
+                        <div class="ht-notice-content">
+                            <h4>Coursework Auditability & Accountability Gap</h4>
+                            <p>
+                                <strong>Inspection Finding:</strong> The non-functional requirements (Table 2) mandate recording critical administrative actions, logins, and status changes for accountability.
+                                The current database schema does not have a dedicated <code>AuditLog</code> table or service; system activity below reflects actual entity operations (notifications, appointments, and registrations).
+                                <strong>Recommendation for Backend Developer:</strong> Implement an <code>AuditLog</code> entity (Action, Timestamp, UserId, Details) to record significant Admin operations.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 1: System Usage Totals -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h2 class="h5 fw-bold text-dark mb-0">1. System Usage & Entity Statistics</h2>
+                            <span class="text-muted small">Aggregated Platform Totals</span>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="ht-card p-3">
+                                    <div class="text-muted small fw-bold text-uppercase mb-1">Workout Plans</div>
+                                    <div class="fs-4 fw-bold text-dark">12</div>
+                                    <div class="text-muted small mt-1">42 associated exercises</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="ht-card p-3">
+                                    <div class="text-muted small fw-bold text-uppercase mb-1">Diet Plans</div>
+                                    <div class="fs-4 fw-bold text-dark">8</div>
+                                    <div class="text-muted small mt-1">26 scheduled meals</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="ht-card p-3">
+                                    <div class="text-muted small fw-bold text-uppercase mb-1">Health Logs</div>
+                                    <div class="fs-4 fw-bold text-dark">47</div>
+                                    <div class="text-muted small mt-1">Weight & BMI data points</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="ht-card p-3">
+                                    <div class="text-muted small fw-bold text-uppercase mb-1">Consultations</div>
+                                    <div class="fs-4 fw-bold text-dark">19</div>
+                                    <div class="text-muted small mt-1">Appointments scheduled</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ht-card p-4">
+                            <div class="fw-bold text-dark mb-2">Entity Distribution Across Storage</div>
+                            <div class="row g-4 align-items-center">
+                                <div class="col-md-6">
+                                    <div class="ht-stat-breakdown-row">
+                                        <span class="text-muted">Client Profiles</span>
+                                        <span class="fw-bold text-dark">6 profiles</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <span class="text-muted">Trainer Profiles</span>
+                                        <span class="fw-bold text-dark">3 profiles</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <span class="text-muted">Administrator Accounts</span>
+                                        <span class="fw-bold text-dark">1 account</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ht-stat-breakdown-row">
+                                        <span class="text-muted">Feedback Messages</span>
+                                        <span class="fw-bold text-dark">14 entries</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <span class="text-muted">System Notifications</span>
+                                        <span class="fw-bold text-dark">38 delivered</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <span class="text-muted">Authentication Provider</span>
+                                        <span class="fw-bold text-dark">ASP.NET Core Identity</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Client Performance Trends (Privacy-Preserving Aggregates) -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div>
+                                <h2 class="h5 fw-bold text-dark mb-0">2. Client Performance & Progress Overview</h2>
+                                <span class="text-muted small">Aggregated health metric coverage without exposing personal medical records</span>
+                            </div>
+                            <span class="badge bg-light text-dark border">Privacy Preserving</span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-lg-6">
+                                <div class="ht-card h-100 p-4">
+                                    <div class="fw-bold text-dark mb-3">Measurement Logging Compliance</div>
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small text-muted">Clients with &gt; 1 Logged Metric</span>
+                                        <span class="small fw-bold text-dark">83% (5 of 6 clients)</span>
+                                    </div>
+                                    <div class="ht-progress-track mb-4">
+                                        <div class="ht-progress-fill" style="width: 83%;"></div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small text-muted">Clients with Weekly Logs (Last 14 Days)</span>
+                                        <span class="small fw-bold text-dark">67% (4 of 6 clients)</span>
+                                    </div>
+                                    <div class="ht-progress-track mb-3">
+                                        <div class="ht-progress-fill" style="width: 67%;"></div>
+                                    </div>
+
+                                    <div class="p-3 bg-light rounded-3 border small text-muted mt-3">
+                                        <strong class="text-dark">Privacy Note:</strong> In compliance with the non-functional data protection standards, administrators review aggregate progress trends rather than individual client weight sheets.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="ht-card h-100 p-4">
+                                    <div class="fw-bold text-dark mb-3">Aggregated BMI Distribution</div>
+                                    <div class="d-flex justify-content-between small text-muted mb-1">
+                                        <span>Normal Range (18.5 – 24.9)</span>
+                                        <span class="fw-bold text-dark">50% (3 clients)</span>
+                                    </div>
+                                    <div class="ht-progress-track mb-3">
+                                        <div class="ht-progress-fill" style="width: 50%; background-color: #10b981;"></div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between small text-muted mb-1">
+                                        <span>Overweight (25.0 – 29.9)</span>
+                                        <span class="fw-bold text-dark">33% (2 clients)</span>
+                                    </div>
+                                    <div class="ht-progress-track mb-3">
+                                        <div class="ht-progress-fill" style="width: 33%; background-color: #f59e0b;"></div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between small text-muted mb-1">
+                                        <span>Underweight (&lt; 18.5)</span>
+                                        <span class="fw-bold text-dark">17% (1 client)</span>
+                                    </div>
+                                    <div class="ht-progress-track mb-3">
+                                        <div class="ht-progress-fill" style="width: 17%; background-color: #6366f1;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: Trainer Engagement Breakdown -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h2 class="h5 fw-bold text-dark mb-0">3. Trainer Engagement & Activity Breakdown</h2>
+                            <span class="text-muted small">Workouts Created, Consultations Hosted, & Feedback Delivered</span>
+                        </div>
+
+                        <div class="ht-admin-table-card">
+                            <div class="table-responsive">
+                                <table class="table ht-admin-table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Trainer Name</th>
+                                            <th scope="col">Specialization</th>
+                                            <th scope="col" class="text-center">Assigned Clients</th>
+                                            <th scope="col" class="text-center">Workout Plans</th>
+                                            <th scope="col" class="text-center">Diet Plans</th>
+                                            <th scope="col" class="text-center">Appointments</th>
+                                            <th scope="col" class="text-center">Feedback Sent</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="ht-user-avatar" style="background:#fef3c7; color:#b45309;">MV</div>
+                                                    <span class="fw-bold text-dark">Marcus Vance</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border">Strength & Conditioning</span></td>
+                                            <td class="text-center fw-semibold">2</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">9</td>
+                                            <td class="text-center">8</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="ht-user-avatar" style="background:#fef3c7; color:#b45309;">ER</div>
+                                                    <span class="fw-bold text-dark">Elena Rostova</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border">Weight Loss & Cardio</span></td>
+                                            <td class="text-center fw-semibold">1</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">4</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="ht-user-avatar" style="background:#fef3c7; color:#b45309;">LB</div>
+                                                    <span class="fw-bold text-dark">Liam Bennett</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border">Rehabilitation & Mobility</span></td>
+                                            <td class="text-center fw-semibold">1</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">2</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: Routine Overview (Popular Routines by Plan Allocations) -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div>
+                                <h2 class="h5 fw-bold text-dark mb-0">4. Routine Popularity Overview</h2>
+                                <span class="text-muted small">Most frequently allocated workout and nutrition plans across client profiles</span>
+                            </div>
+                            <span class="badge bg-light text-muted border">Plan Allocation Stats</span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="ht-card p-4">
+                                    <div class="fw-bold text-dark mb-3">Top Workout Routines by Assignment</div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <div>
+                                            <div class="fw-semibold text-dark">Upper Body Strength Foundation</div>
+                                            <span class="text-muted small">5 exercises &bull; 45 mins</span>
+                                        </div>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">4 clients</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <div>
+                                            <div class="fw-semibold text-dark">HIIT Cardio & Core Blast</div>
+                                            <span class="text-muted small">6 exercises &bull; 30 mins</span>
+                                        </div>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">3 clients</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <div>
+                                            <div class="fw-semibold text-dark">Lower Body Mobility & Stretch</div>
+                                            <span class="text-muted small">4 exercises &bull; 25 mins</span>
+                                        </div>
+                                        <span class="badge bg-light text-dark border">2 clients</span>
+                                    </div>
+                                    <div class="mt-3 small text-muted">
+                                        <em>Note: Statistics reflect routine assignment counts created by trainers for clients, not client self-logged workout completions.</em>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="ht-card p-4">
+                                    <div class="fw-bold text-dark mb-3">Top Diet Plans by Assignment</div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <div>
+                                            <div class="fw-semibold text-dark">High-Protein Lean Muscle Meal Plan</div>
+                                            <span class="text-muted small">4 meals &bull; 2,200 kcal</span>
+                                        </div>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">3 clients</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <div>
+                                            <div class="fw-semibold text-dark">Caloric Deficit Balanced Diet</div>
+                                            <span class="text-muted small">3 meals &bull; 1,800 kcal</span>
+                                        </div>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">3 clients</span>
+                                    </div>
+                                    <div class="ht-stat-breakdown-row">
+                                        <div>
+                                            <div class="fw-semibold text-dark">Endurance Hydration & Recovery Plan</div>
+                                            <span class="text-muted small">4 meals &bull; 2,500 kcal</span>
+                                        </div>
+                                        <span class="badge bg-light text-dark border">2 clients</span>
+                                    </div>
+                                    <div class="mt-3 small text-muted">
+                                        <em>Note: Represents nutrition guidelines structured by trainers via DietPlan & Meal entities.</em>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 5: Recent Platform Activity & Notification Stream -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h2 class="h5 fw-bold text-dark mb-0">5. Recent Activity & System Notifications</h2>
+                            <span class="text-muted small">Operational Event Stream</span>
+                        </div>
+
+                        <div class="ht-card p-4">
+                            <div class="ht-activity-timeline">
+                                <div class="ht-timeline-item">
+                                    <div class="ht-timeline-dot"></div>
+                                    <span class="ht-timeline-time">Today, 14:30</span>
+                                    <div class="ht-timeline-title">Appointment Confirmed</div>
+                                    <p class="ht-timeline-desc">Trainer Marcus Vance approved consultation with client Sarah Jenkins for Friday, 10:00 AM.</p>
+                                </div>
+
+                                <div class="ht-timeline-item">
+                                    <div class="ht-timeline-dot"></div>
+                                    <span class="ht-timeline-time">Today, 11:15</span>
+                                    <div class="ht-timeline-title">Workout Plan Created</div>
+                                    <p class="ht-timeline-desc">Elena Rostova published 'HIIT Cardio & Core Blast' and allocated to Emma Watson.</p>
+                                </div>
+
+                                <div class="ht-timeline-item">
+                                    <div class="ht-timeline-dot"></div>
+                                    <span class="ht-timeline-time">Yesterday, 16:45</span>
+                                    <div class="ht-timeline-title">Health Metric Logged</div>
+                                    <p class="ht-timeline-desc">Client David Ross recorded weekly weight (76.5 kg) and BMI (23.8).</p>
+                                </div>
+
+                                <div class="ht-timeline-item">
+                                    <div class="ht-timeline-dot"></div>
+                                    <span class="ht-timeline-time">Yesterday, 09:20</span>
+                                    <div class="ht-timeline-title">New User Account Registered</div>
+                                    <p class="ht-timeline-desc">Account <code>robert.p@example.com</code> registered with role <code>Client</code>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/site.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

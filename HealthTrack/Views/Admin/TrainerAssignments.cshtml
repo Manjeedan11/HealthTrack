@@ -1,0 +1,310 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Trainer Assignments";
+}
+
+<div class="ht-dashboard-container">
+    <!-- Header -->
+    <div class="ht-welcome-section mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h1 class="ht-welcome-title">Trainer Allocation & Management</h1>
+                <p class="ht-welcome-subtitle">Assign dedicated certified coaches to registered clients for customized routines and guidance.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-light text-dark border px-3 py-2 fs-7">
+                    Integration Ready View &bull; <code>/Admin/TrainerAssignments</code>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schema & Backend Handover Notice -->
+    <div class="ht-admin-notice-banner notice-warning" role="alert">
+        <div class="ht-notice-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+        </div>
+        <div class="ht-notice-content">
+            <h4>Database Schema Handover: Client-to-Trainer Direct Relationship</h4>
+            <p>
+                <strong>Current Runtime State:</strong> The current Entity Framework Core schema does not contain a direct foreign key from <code>Client</code> to <code>Trainer</code>.
+                Associations only exist indirectly through individual <code>WorkoutPlan</code>, <code>DietPlan</code>, and <code>Appointment</code> records.
+            </p>
+            <p class="mt-2">
+                <strong>Recommended Implementation for Backend Developer:</strong>
+                Add a nullable <code>int? trainerId</code> and navigation property <code>Trainer? trainer</code> to <code>Client.cs</code> with <code>DeleteBehavior.SetNull</code> in <code>HealthTrackDbContext.cs</code>, then execute an EF Core migration.
+                Once added, wire up <code>public IActionResult TrainerAssignments()</code> and <code>[HttpPost] public IActionResult AssignTrainer(int clientId, int trainerId)</code>.
+            </p>
+        </div>
+    </div>
+
+    <!-- Overview KPI Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="ht-card p-3">
+                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Total Clients</span>
+                <span class="fs-4 fw-bold text-dark">6</span>
+                <span class="d-block text-muted small mt-1">Registered fitness clients</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="ht-card p-3">
+                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Assigned Clients</span>
+                <span class="fs-4 fw-bold text-dark">4</span>
+                <span class="d-block text-success small mt-1">66% assignment coverage</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="ht-card p-3">
+                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Unassigned Clients</span>
+                <span class="fs-4 fw-bold text-warning-emphasis">2</span>
+                <span class="d-block text-muted small mt-1">Awaiting trainer allocation</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="ht-card p-3">
+                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Available Trainers</span>
+                <span class="fs-4 fw-bold text-dark">3</span>
+                <span class="d-block text-muted small mt-1">Coaches taking new clients</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Assignment Table -->
+    <div class="ht-admin-table-card">
+        <div class="p-3 border-bottom bg-light d-flex align-items-center justify-content-between">
+            <div class="fw-bold text-dark">Client Roster & Trainer Allocation Status</div>
+            <span class="badge bg-secondary text-white">Preview Data</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table ht-admin-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 250px;">Client Name</th>
+                        <th scope="col">Account Email</th>
+                        <th scope="col">Assigned Trainer</th>
+                        <th scope="col">Trainer Specialization</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end" style="width: 160px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ht-user-avatar" style="background:#e0f2fe; color:#0369a1;">SJ</div>
+                                <div>
+                                    <div class="fw-bold text-dark">Sarah Jenkins</div>
+                                    <span class="text-muted small">ID: #CLT-001</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>sarah.j@example.com</td>
+                        <td>
+                            <span class="fw-semibold text-dark">Marcus Vance</span>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">Strength & Conditioning</span></td>
+                        <td>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Assigned</span>
+                        </td>
+                        <td class="text-end">
+                            <button type="button" class="ht-btn-action-sm ht-assign-trainer-btn"
+                                    data-client-id="1"
+                                    data-client-name="Sarah Jenkins"
+                                    data-current-trainer="Marcus Vance">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                <span>Reassign</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ht-user-avatar" style="background:#e0f2fe; color:#0369a1;">DR</div>
+                                <div>
+                                    <div class="fw-bold text-dark">David Ross</div>
+                                    <span class="text-muted small">ID: #CLT-002</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>david.ross@example.com</td>
+                        <td>
+                            <span class="fw-semibold text-dark">Marcus Vance</span>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">Strength & Conditioning</span></td>
+                        <td>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Assigned</span>
+                        </td>
+                        <td class="text-end">
+                            <button type="button" class="ht-btn-action-sm ht-assign-trainer-btn"
+                                    data-client-id="2"
+                                    data-client-name="David Ross"
+                                    data-current-trainer="Marcus Vance">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                <span>Reassign</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ht-user-avatar" style="background:#e0f2fe; color:#0369a1;">EW</div>
+                                <div>
+                                    <div class="fw-bold text-dark">Emma Watson</div>
+                                    <span class="text-muted small">ID: #CLT-003</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>emma.w@example.com</td>
+                        <td>
+                            <span class="fw-semibold text-dark">Elena Rostova</span>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">Weight Loss & Cardio</span></td>
+                        <td>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Assigned</span>
+                        </td>
+                        <td class="text-end">
+                            <button type="button" class="ht-btn-action-sm ht-assign-trainer-btn"
+                                    data-client-id="3"
+                                    data-client-name="Emma Watson"
+                                    data-current-trainer="Elena Rostova">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                <span>Reassign</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ht-user-avatar" style="background:#e0f2fe; color:#0369a1;">MC</div>
+                                <div>
+                                    <div class="fw-bold text-dark">Michael Chen</div>
+                                    <span class="text-muted small">ID: #CLT-004</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>michael.c@example.com</td>
+                        <td>
+                            <span class="fw-semibold text-dark">Liam Bennett</span>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">Rehabilitation & Mobility</span></td>
+                        <td>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Assigned</span>
+                        </td>
+                        <td class="text-end">
+                            <button type="button" class="ht-btn-action-sm ht-assign-trainer-btn"
+                                    data-client-id="4"
+                                    data-client-name="Michael Chen"
+                                    data-current-trainer="Liam Bennett">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                <span>Reassign</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="table-warning-subtle">
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ht-user-avatar" style="background:#fef3c7; color:#b45309;">AL</div>
+                                <div>
+                                    <div class="fw-bold text-dark">Alice Cooper</div>
+                                    <span class="text-muted small">ID: #CLT-005</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>alice.c@example.com</td>
+                        <td>
+                            <span class="text-muted fst-italic">None (Unassigned)</span>
+                        </td>
+                        <td><span class="text-muted">—</span></td>
+                        <td>
+                            <span class="badge bg-warning text-dark">Pending Assignment</span>
+                        </td>
+                        <td class="text-end">
+                            <button type="button" class="ht-btn-action-sm ht-assign-trainer-btn"
+                                    data-client-id="5"
+                                    data-client-name="Alice Cooper"
+                                    data-current-trainer="Unassigned">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                                <span>Assign Trainer</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="table-warning-subtle">
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ht-user-avatar" style="background:#fef3c7; color:#b45309;">RP</div>
+                                <div>
+                                    <div class="fw-bold text-dark">Robert Patel</div>
+                                    <span class="text-muted small">ID: #CLT-006</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>robert.p@example.com</td>
+                        <td>
+                            <span class="text-muted fst-italic">None (Unassigned)</span>
+                        </td>
+                        <td><span class="text-muted">—</span></td>
+                        <td>
+                            <span class="badge bg-warning text-dark">Pending Assignment</span>
+                        </td>
+                        <td class="text-end">
+                            <button type="button" class="ht-btn-action-sm ht-assign-trainer-btn"
+                                    data-client-id="6"
+                                    data-client-name="Robert Patel"
+                                    data-current-trainer="Unassigned">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                                <span>Assign Trainer</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Trainer Assignment Modal (Preview Interface) -->
+<div class="ht-modal-backdrop" id="htAssignModal" role="dialog" aria-modal="true" aria-labelledby="assignModalTitle">
+    <div class="ht-modal-card">
+        <div class="ht-modal-header">
+            <h2 class="ht-modal-title" id="assignModalTitle">Assign Trainer to Client</h2>
+            <button type="button" class="btn-close" id="assignModalClose" aria-label="Close dialog"></button>
+        </div>
+        <div class="ht-modal-body">
+            <div class="mb-3">
+                <label class="form-label text-muted small fw-bold text-uppercase">Client</label>
+                <div class="fw-bold text-dark fs-6" id="assignClientName">Sarah Jenkins</div>
+                <input type="hidden" id="assignClientId" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-muted small fw-bold text-uppercase">Current Assigned Trainer</label>
+                <div class="text-dark" id="assignCurrentTrainer">Marcus Vance</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="assignTrainerSelect" class="form-label fw-bold text-dark">Select New Trainer</label>
+                <select class="form-select" id="assignTrainerSelect">
+                    <option value="1">Marcus Vance — Strength & Conditioning (2 active clients)</option>
+                    <option value="2">Elena Rostova — Weight Loss & Cardio (1 active client)</option>
+                    <option value="3">Liam Bennett — Rehabilitation & Mobility (1 active client)</option>
+                </select>
+            </div>
+
+            <div class="p-3 bg-light rounded-3 border small text-muted">
+                <div class="fw-bold text-dark mb-1">Database Schema Integration Notice</div>
+                <div>Persisting direct trainer assignments requires adding a nullable <code>Client.trainerId</code> foreign key to the database schema. When confirmed by the backend developer, this modal will submit to <code>POST /Admin/AssignTrainer</code>.</div>
+            </div>
+        </div>
+        <div class="ht-modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="assignModalCancel">Cancel</button>
+            <button type="button" class="btn btn-primary" id="assignSubmitBtn" style="background-color: #095c4d; border-color: #095c4d;">
+                Confirm Assignment (Preview)
+            </button>
+        </div>
+    </div>
+</div>

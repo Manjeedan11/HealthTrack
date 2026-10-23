@@ -1,0 +1,282 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Dashboard";
+
+    int userCount = ViewBag.UserCount ?? 0;
+    int clientCount = ViewBag.ClientCount ?? 0;
+    int trainerCount = ViewBag.TrainerCount ?? 0;
+    int appointmentCount = ViewBag.AppointmentCount ?? 0;
+}
+
+<div class="ht-dashboard-container">
+    <!-- Welcome Header -->
+    <div class="ht-welcome-section mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h1 class="ht-welcome-title">System Overview</h1>
+                <p class="ht-welcome-subtitle">Platform health, entity statistics, and administrative governance.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-light text-dark border px-3 py-2 fs-7">
+                    <span class="ht-status-dot-active me-1"></span> Live Database Bound
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 KPI Stat Cards (Directly Bound to AdminController.index() ViewBag Data) -->
+    <div class="ht-admin-kpi-grid">
+        <!-- Total Users -->
+        <div class="ht-card ht-kpi-card">
+            <div class="ht-kpi-top">
+                <span class="ht-kpi-label">TOTAL REGISTERED USERS</span>
+                <span class="ht-kpi-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="ht-kpi-val-row">
+                <span class="ht-kpi-val">@userCount</span>
+            </div>
+            <div class="ht-kpi-sub">
+                <span class="ht-trend-text">All Identity accounts</span>
+            </div>
+        </div>
+
+        <!-- Total Clients -->
+        <div class="ht-card ht-kpi-card">
+            <div class="ht-kpi-top">
+                <span class="ht-kpi-label">ACTIVE CLIENT PROFILES</span>
+                <span class="ht-kpi-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21a8.38 8.38 0 0 1 13 0"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="ht-kpi-val-row">
+                <span class="ht-kpi-val">@clientCount</span>
+            </div>
+            <div class="ht-kpi-sub">
+                <span class="text-muted small">Personal fitness accounts</span>
+            </div>
+        </div>
+
+        <!-- Total Trainers -->
+        <div class="ht-card ht-kpi-card">
+            <div class="ht-kpi-top">
+                <span class="ht-kpi-label">COACHING STAFF</span>
+                <span class="ht-kpi-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 20a6 6 0 0 0-12 0"></path>
+                        <circle cx="12" cy="10" r="4"></circle>
+                        <circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                </span>
+            </div>
+            <div class="ht-kpi-val-row">
+                <span class="ht-kpi-val">@trainerCount</span>
+            </div>
+            <div class="ht-kpi-sub">
+                <span class="text-muted small">Registered fitness coaches</span>
+            </div>
+        </div>
+
+        <!-- Total Appointments -->
+        <div class="ht-card ht-kpi-card">
+            <div class="ht-kpi-top">
+                <span class="ht-kpi-label">TOTAL CONSULTATIONS</span>
+                <span class="ht-kpi-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                        <line x1="16" x2="16" y1="2" y2="6"></line>
+                        <line x1="8" x2="8" y1="2" y2="6"></line>
+                        <line x1="3" x2="21" y1="10" y2="10"></line>
+                    </svg>
+                </span>
+            </div>
+            <div class="ht-kpi-val-row">
+                <span class="ht-kpi-val">@appointmentCount</span>
+            </div>
+            <div class="ht-kpi-sub">
+                <span class="text-muted small">Booked consultations</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Navigation & Management Shortcuts -->
+    <div class="mb-4">
+        <h2 class="h5 fw-bold text-dark mb-3">Administrative Management Modules</h2>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <a asp-controller="Admin" asp-action="users" class="ht-admin-action-card">
+                    <div class="ht-admin-action-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="ht-admin-action-title">
+                            User Management
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </div>
+                        <p class="ht-admin-action-desc">Inspect all Identity accounts, search by email or ID, and review assigned roles.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="~/admin-trainer-assignments-preview.html" class="ht-admin-action-card">
+                    <div class="ht-admin-action-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="ht-admin-action-title">
+                            Trainer Assignments
+                            <span class="ht-nav-badge-preview">Preview</span>
+                        </div>
+                        <p class="ht-admin-action-desc">Client-to-trainer allocation interface and database schema migration handover.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="~/admin-reports-preview.html" class="ht-admin-action-card">
+                    <div class="ht-admin-action-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="ht-admin-action-title">
+                            Reports & Activity
+                            <span class="ht-nav-badge-preview">Preview</span>
+                        </div>
+                        <p class="ht-admin-action-desc">Aggregated system usage, client measurement trends, trainer engagement, and audit logs.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2-Column Section: System Architecture Status & Recent Platform Activity -->
+    <div class="row g-4">
+        <!-- Left: Compact System Configuration & Architecture Overview -->
+        <div class="col-lg-7">
+            <div class="ht-card h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                    <h2 class="h6 fw-bold text-dark mb-0">System Architecture & Runtime Overview</h2>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">Online</span>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="text-muted d-block small fw-bold text-uppercase">Presentation Tier</span>
+                            <span class="fw-semibold text-dark">ASP.NET Core MVC (Razor)</span>
+                            <span class="d-block text-muted small mt-1">Inter Font &bull; Responsive Layout</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="text-muted d-block small fw-bold text-uppercase">Security & Roles</span>
+                            <span class="fw-semibold text-dark">ASP.NET Core Identity</span>
+                            <span class="d-block text-muted small mt-1">Roles: Client, Trainer, Admin</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="text-muted d-block small fw-bold text-uppercase">Persistence Tier</span>
+                            <span class="fw-semibold text-dark">Entity Framework Core</span>
+                            <span class="d-block text-muted small mt-1">HealthTrackDbContext</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="text-muted d-block small fw-bold text-uppercase">Active Database Count</span>
+                            <span class="fw-semibold text-dark">@userCount User Accounts</span>
+                            <span class="d-block text-muted small mt-1">@clientCount Clients &bull; @trainerCount Trainers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-3 bg-light border">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="small fw-bold text-dark">User Account Composition</span>
+                        <span class="small text-muted">@userCount total accounts</span>
+                    </div>
+                    @{
+                        int totalU = userCount > 0 ? userCount : 1;
+                        int clientPct = (int)Math.Round((double)clientCount / totalU * 100);
+                        int trainerPct = (int)Math.Round((double)trainerCount / totalU * 100);
+                        int adminPct = Math.Max(0, 100 - clientPct - trainerPct);
+                    }
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: @clientPct%; background-color: #0284c7;" title="Clients: @clientCount (@clientPct%)"></div>
+                        <div class="progress-bar" role="progressbar" style="width: @trainerPct%; background-color: #d97706;" title="Trainers: @trainerCount (@trainerPct%)"></div>
+                        <div class="progress-bar" role="progressbar" style="width: @adminPct%; background-color: #0d6e5a;" title="Admins (@adminPct%)"></div>
+                    </div>
+                    <div class="d-flex justify-content-between small text-muted mt-2">
+                        <span><span class="d-inline-block rounded-circle me-1" style="width:8px;height:8px;background-color:#0284c7;"></span>Clients (@clientCount)</span>
+                        <span><span class="d-inline-block rounded-circle me-1" style="width:8px;height:8px;background-color:#d97706;"></span>Trainers (@trainerCount)</span>
+                        <span><span class="d-inline-block rounded-circle me-1" style="width:8px;height:8px;background-color:#0d6e5a;"></span>Admins</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Recent Platform & Administrative Activity -->
+        <div class="col-lg-5">
+            <div class="ht-card h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                    <h2 class="h6 fw-bold text-dark mb-0">Platform Activity & Notifications</h2>
+                    <span class="badge bg-light text-muted border">System Stream</span>
+                </div>
+
+                <div class="ht-activity-timeline">
+                    <div class="ht-timeline-item">
+                        <div class="ht-timeline-dot"></div>
+                        <span class="ht-timeline-time">Today &bull; Current Session</span>
+                        <div class="ht-timeline-title">Administrator Portal Session Active</div>
+                        <p class="ht-timeline-desc">Logged in with role <code>Admin</code>. Identity tokens validated.</p>
+                    </div>
+
+                    <div class="ht-timeline-item">
+                        <div class="ht-timeline-dot"></div>
+                        <span class="ht-timeline-time">Identity Authorization</span>
+                        <div class="ht-timeline-title">Role-Based Access Verified</div>
+                        <p class="ht-timeline-desc">Class-level <code>[Authorize(Roles = "Admin")]</code> enforced on AdminController.</p>
+                    </div>
+
+                    <div class="ht-timeline-item">
+                        <div class="ht-timeline-dot"></div>
+                        <span class="ht-timeline-time">Entity Records Loaded</span>
+                        <div class="ht-timeline-title">Database Entities Synchronized</div>
+                        <p class="ht-timeline-desc">@userCount users, @clientCount clients, @trainerCount trainers, @appointmentCount appointments active.</p>
+                    </div>
+
+                    <div class="ht-timeline-item">
+                        <div class="ht-timeline-dot"></div>
+                        <span class="ht-timeline-time">Platform Security</span>
+                        <div class="ht-timeline-title">CSRF & Session Protection Online</div>
+                        <p class="ht-timeline-desc">Anti-forgery tokens attached to all sign-out and modification workflows.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
