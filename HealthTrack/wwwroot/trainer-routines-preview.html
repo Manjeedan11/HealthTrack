@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Routines - HealthTrack Trainer Portal Preview</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+
+    <style>
+        /* Scoped styles for Trainer Manage Routines preview */
+        .ht-routine-filter-bar {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 20px;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        }
+
+        .ht-routine-search-input {
+            position: relative;
+        }
+
+        .ht-routine-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #ffffff;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            overflow: hidden;
+        }
+
+        .ht-routine-card:hover {
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+        }
+
+        .ht-routine-category-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-cat-hypertrophy {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .badge-cat-power {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-cat-hiit {
+            background-color: #fff7ed;
+            color: #9a3412;
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-cat-mobility {
+            background-color: #f5f3ff;
+            color: #5b21b6;
+            border: 1px solid #ddd6fe;
+        }
+
+        .badge-cat-foundations {
+            background-color: #f8fafc;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .ht-client-avatar-mini {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #0d6e5a;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ht-routine-details-table {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #eef2f6;
+            margin-top: 14px;
+        }
+
+        .ht-routine-details-table th {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 8px 14px;
+        }
+
+        .ht-routine-details-table td {
+            font-size: 0.85rem;
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1e293b;
+            vertical-align: middle;
+        }
+
+        .ht-routine-details-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ht-btn-action-preview {
+            font-size: 0.82rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .ht-stat-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            color: #475569;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 4px 10px;
+        }
+
+        .ht-stat-pill svg {
+            color: #0d6e5a;
+        }
+
+        .ht-modal-notice {
+            background-color: #f8fafc;
+            border-left: 4px solid #0d6e5a;
+            padding: 12px 14px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.82rem;
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation (255px wide desktop) -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Trainer Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="trainer-clients-preview.html?screen=dashboard" id="sidebarBrandLink">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub ht-brand-sub-trainer">TRAINER PORTAL</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching exact Trainer hierarchy -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard -->
+                <a href="trainer-clients-preview.html?screen=dashboard" class="ht-nav-item" id="navItemDashboard" title="Trainer Dashboard">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Clients -->
+                <a href="trainer-clients-preview.html?screen=clients" class="ht-nav-item" id="navItemClients" title="Clients Directory">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span>Clients</span>
+                </a>
+
+                <!-- 3. Workout Plans -->
+                <a href="workout-preview.html" class="ht-nav-item" id="navItemWorkoutPlans" title="Workout Plans Preview">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6.5 6.5 11 11"></path>
+                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                            <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a href="diet-preview.html" class="ht-nav-item" id="navItemDietPlans" title="Diet Plans Preview">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Manage Routines (ACTIVE) -->
+                <a href="trainer-routines-preview.html" class="ht-nav-item active" id="navItemManageRoutines" aria-current="page" title="Manage Routines">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </span>
+                    <span>Manage Routines</span>
+                </a>
+
+                <!-- 6. Appointments -->
+                <a href="appointments-preview.html?role=trainer" class="ht-nav-item" id="navItemAppointments" title="Appointments">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 7. Progress -->
+                <a href="trainer-clients-preview.html?screen=dashboard#headingProgressSummary" class="ht-nav-item" id="navItemProgress" title="Progress Summary">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                    </span>
+                    <span>Progress</span>
+                </a>
+
+                <!-- 8. Feedback -->
+                <a href="feedback-notifications-preview.html?role=trainer#feedback" class="ht-nav-item" id="navItemFeedback" title="Feedback">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    <span>Feedback</span>
+                </a>
+
+                <!-- 9. Notifications -->
+                <a href="feedback-notifications-preview.html?role=trainer#notifications" class="ht-nav-item" id="navItemNotifications" title="Notifications">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </span>
+                    <span>Notifications</span>
+                </a>
+
+                <!-- 10. Reports -->
+                <a href="javascript:void(0);" class="ht-nav-item" onclick="alert('Preview Notice: Routine analytics and compliance reports are available in the upcoming Administrator & Trainer Reporting sprint.');" title="Reports">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </span>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Profile & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="javascript:void(0);" class="ht-nav-item" onclick="alert('Trainer Profile: Marcus Vance · Certified Strength & Conditioning Specialist (CSCS)');" aria-label="Trainer profile">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span>Profile</span>
+                </a>
+
+                <a href="javascript:void(0);" class="ht-nav-item ht-nav-signout w-100" onclick="alert('Preview Mode: Trainer logout simulated.');">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar (White bar with notifications & user profile) -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6e5a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="d-none d-sm-inline">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span class="fw-semibold text-dark" style="font-size: 0.95rem;">Trainer Portal Preview · Manage Routines</span>
+                    </div>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell with indicator -->
+                    <a href="feedback-notifications-preview.html?role=trainer#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications" title="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- User Profile Area (MV avatar) -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar" id="trainerAvatar">MV</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name" id="trainerFullName">Marcus Vance</span>
+                            <span class="ht-profile-role">Trainer</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- ======================================================== -->
+                    <!-- PREVIEW NOTICE BANNER WITH SCREEN TEST SHORTCUTS         -->
+                    <!-- ======================================================== -->
+                    <div class="ht-demo-notice alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div class="small">
+                                <strong>Trainer Manage Routines Preview:</strong> Fictional demonstration routines and clients only.
+                                Filter routines, inspect exercise regimens, and review layout. In-memory demo changes do not alter database records.
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnToggleEmptyCatalog" style="font-size: 0.78rem;">
+                                Test Empty State
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnResetDemoCatalog" style="font-size: 0.78rem;">
+                                Reset Demo Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Breadcrumbs & Back Link -->
+                    <div class="mb-3">
+                        <a href="trainer-clients-preview.html?screen=dashboard" class="ht-card-link-action p-0">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            <span>Back to Trainer Dashboard</span>
+                        </a>
+                    </div>
+
+                    <!-- Page Header & Action Row -->
+                    <div class="ht-trainer-header-row mb-4">
+                        <div>
+                            <h1 class="ht-welcome-title">Manage Routines</h1>
+                            <p class="ht-welcome-subtitle">
+                                Review, search and assign standardized and customized training routines across clients.
+                            </p>
+                        </div>
+
+                        <div class="ht-trainer-actions-group">
+                            <a href="workout-preview.html" class="ht-action-card-btn" id="btnCreateNewRoutine" title="Create or Assign Workout Routine">
+                                <span class="ht-action-card-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </span>
+                                <span class="ht-action-card-text">Create / Assign<br />Workout</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Compact Demonstration Summary KPI Cards -->
+                    <div class="ht-kpi-grid mb-4" id="kpiSummarySection">
+                        <!-- Card 1: Total Routines -->
+                        <div class="ht-card ht-kpi-card">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">TOTAL ROUTINES</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val" id="kpiTotalRoutines">6</span>
+                                <span class="ht-kpi-unit">Routines</span>
+                            </div>
+                            <div class="ht-kpi-sub">
+                                <span class="text-muted small">Demonstration Catalog</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Active Clients with Plans -->
+                        <div class="ht-card ht-kpi-card">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">ASSIGNED CLIENTS</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val" id="kpiAssignedClients">4</span>
+                                <span class="ht-kpi-unit">Clients</span>
+                            </div>
+                            <div class="ht-kpi-sub">
+                                <span class="text-success small fw-semibold">Active assignments</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Avg Duration -->
+                        <div class="ht-card ht-kpi-card">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">AVG DURATION</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val" id="kpiAvgDuration">40</span>
+                                <span class="ht-kpi-unit">min</span>
+                            </div>
+                            <div class="ht-kpi-sub">
+                                <span class="text-muted small">Standardized per session</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Total Exercises -->
+                        <div class="ht-card ht-kpi-card">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">TOTAL EXERCISES</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m6.5 6.5 11 11"></path>
+                                        <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val" id="kpiTotalExercises">25</span>
+                                <span class="ht-kpi-unit">Exercises</span>
+                            </div>
+                            <div class="ht-kpi-sub">
+                                <span class="text-muted small">In active routines</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Client Filter Controls -->
+                    <div class="ht-routine-filter-bar mb-4">
+                        <div class="row g-3 align-items-center">
+                            <!-- Search box -->
+                            <div class="col-12 col-md-5">
+                                <label for="routineSearchInput" class="ht-label mb-1">Search Routines</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </span>
+                                    <input type="text"
+                                           class="form-control border-start-0 ps-0"
+                                           id="routineSearchInput"
+                                           placeholder="Search by routine name, description, or exercise..."
+                                           aria-label="Search routines" />
+                                </div>
+                            </div>
+
+                            <!-- Client Dropdown Filter -->
+                            <div class="col-12 col-sm-6 col-md-3">
+                                <label for="clientSelectFilter" class="ht-label mb-1">Filter by Client</label>
+                                <select class="form-select" id="clientSelectFilter" aria-label="Filter by assigned client">
+                                    <option value="all" selected>All Clients</option>
+                                    <option value="Dhammika Perera">Dhammika Perera (3)</option>
+                                    <option value="Sarah Jenkins">Sarah Jenkins (1)</option>
+                                    <option value="Michael Chang">Michael Chang (1)</option>
+                                    <option value="Emily Watson">Emily Watson (1)</option>
+                                </select>
+                            </div>
+
+                            <!-- Category / Focus Dropdown -->
+                            <div class="col-12 col-sm-6 col-md-3">
+                                <label for="categorySelectFilter" class="ht-label mb-1">Training Focus</label>
+                                <select class="form-select" id="categorySelectFilter" aria-label="Filter by training category">
+                                    <option value="all" selected>All Categories</option>
+                                    <option value="Hypertrophy">Strength &amp; Hypertrophy</option>
+                                    <option value="Power">Power &amp; Core</option>
+                                    <option value="HIIT">Cardio &amp; HIIT</option>
+                                    <option value="Mobility">Mobility &amp; Prehab</option>
+                                    <option value="Foundations">Foundations</option>
+                                </select>
+                            </div>
+
+                            <!-- Reset / Count Row -->
+                            <div class="col-12 col-md-1 text-md-end mt-md-4 pt-md-1">
+                                <button type="button" class="btn btn-outline-secondary btn-sm w-100" id="btnResetFilters" title="Reset all search filters">
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Active filter indicator -->
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-3 pt-2 border-top">
+                            <span class="small text-muted" id="filterStatusText">
+                                Showing <strong>6</strong> of <strong>6</strong> routines
+                            </span>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-sm text-primary p-0 text-decoration-none" id="btnExpandAllRegimens" style="font-size: 0.82rem;">
+                                    Expand All Regimens
+                                </button>
+                                <span class="text-muted">·</span>
+                                <button type="button" class="btn btn-sm text-muted p-0 text-decoration-none" id="btnCollapseAllRegimens" style="font-size: 0.82rem;">
+                                    Collapse All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Routines List Container -->
+                    <div class="d-flex flex-column gap-3" id="routinesListContainer">
+                        <!-- Routine items will be rendered by JavaScript -->
+                    </div>
+
+                    <!-- Search No Results State -->
+                    <div class="ht-card text-center py-5 d-none" id="noResultsState" aria-live="polite">
+                        <div class="mb-3 text-muted">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <line x1="8" y1="11" x2="14" y2="11"></line>
+                            </svg>
+                        </div>
+                        <h2 class="ht-card-title mb-2">No Matching Routines Found</h2>
+                        <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 440px;">
+                            We couldn't find any workout routines matching your current search term or filter criteria.
+                        </p>
+                        <button type="button" class="btn btn-primary px-4 py-2" id="btnResetSearch">
+                            Reset Search Filters
+                        </button>
+                    </div>
+
+                    <!-- Empty Catalog State (Simulated) -->
+                    <div class="ht-card text-center py-5 d-none" id="emptyCatalogState" aria-live="polite">
+                        <div class="mb-3 text-muted">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <h2 class="ht-card-title mb-2">No Workout Routines in Catalog</h2>
+                        <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
+                            You have not registered any workout routines for your assigned clients yet. Create a routine with customized exercise targets, sets, repetitions, and duration.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="workout-preview.html" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Create First Routine
+                            </a>
+                            <button type="button" class="btn btn-outline-secondary px-4 py-2" id="btnRestoreFromEmpty">
+                                Restore Demonstration Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Demonstration Action Modal -->
+    <div class="modal fade" id="previewActionModal" tabindex="-1" aria-labelledby="previewModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="previewModalTitle">Preview Action Notice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="previewModalBodyText" class="mb-3"></p>
+                    <div class="ht-modal-notice">
+                        <strong>Technical Architecture Note:</strong>
+                        The current ASP.NET Core MVC `WorkoutController` provides `create` actions but does not yet expose dedicated `edit` or `delete` controller endpoints. During Phase 2 backend integration, these buttons will bind to the corresponding repository methods.
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // Mobile sidebar drawer handling
+            const portalSidebar = document.getElementById('portalSidebar');
+            const openSidebarBtn = document.getElementById('openSidebarBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+            function openSidebar() {
+                if (portalSidebar) portalSidebar.classList.add('show');
+                if (sidebarBackdrop) sidebarBackdrop.classList.add('show');
+            }
+
+            function closeSidebar() {
+                if (portalSidebar) portalSidebar.classList.remove('show');
+                if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+            }
+
+            if (openSidebarBtn) openSidebarBtn.addEventListener('click', openSidebar);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
+
+            // =========================================================================
+            // DEMONSTRATION ROUTINE DATA
+            // =========================================================================
+            const initialDemoRoutines = [
+                {
+                    id: 1,
+                    name: "Upper Body Strength & Hypertrophy",
+                    client: "Dhammika Perera",
+                    clientInitials: "DP",
+                    category: "Hypertrophy",
+                    categoryBadgeClass: "badge-cat-hypertrophy",
+                    categoryLabel: "Strength & Hypertrophy",
+                    dateCreated: "Oct 15, 2026",
+                    duration: 45,
+                    description: "Targeted upper body push-pull regimen focusing on chest hypertrophy, scapular retraction, and shoulder stability with progressive overload.",
+                    exercises: [
+                        { name: "Barbell Bench Press", sets: 3, reps: 10, duration: 2, notes: "Controlled 3-second eccentric tempo" },
+                        { name: "Incline Dumbbell Press", sets: 3, reps: 12, duration: 2, notes: "Full stretch at bottom position" },
+                        { name: "Bent-Over Barbell Row", sets: 4, reps: 10, duration: 2, notes: "Neutral spine, squeeze rhomboids" },
+                        { name: "Seated Cable Row", sets: 3, reps: 12, duration: 1, notes: "Wide grip attachment" }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Lower Body Power & Core Stability",
+                    client: "Dhammika Perera",
+                    clientInitials: "DP",
+                    category: "Power",
+                    categoryBadgeClass: "badge-cat-power",
+                    categoryLabel: "Power & Core",
+                    dateCreated: "Oct 16, 2026",
+                    duration: 50,
+                    description: "Compound posterior chain and quadriceps strength regimen integrated with anti-extension core stability drills.",
+                    exercises: [
+                        { name: "Barbell Back Squat", sets: 4, reps: 8, duration: 3, notes: "Parallel depth, maintain brace" },
+                        { name: "Romanian Deadlift", sets: 3, reps: 10, duration: 2, notes: "Hip hinge emphasis, slight knee bend" },
+                        { name: "Walking Dumbbell Lunges", sets: 3, reps: 12, duration: 2, notes: "12 reps per leg (24 total)" },
+                        { name: "Hanging Leg Raises", sets: 4, reps: 15, duration: 1, notes: "Avoid swinging, toes toward bar" }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "High-Intensity Interval Conditioning (HIIT)",
+                    client: "Sarah Jenkins",
+                    clientInitials: "SJ",
+                    category: "HIIT",
+                    categoryBadgeClass: "badge-cat-hiit",
+                    categoryLabel: "Cardio & HIIT",
+                    dateCreated: "Oct 18, 2026",
+                    duration: 30,
+                    description: "High-metabolic output anaerobic circuit designed to increase VO2 max, accelerate calorie expenditure, and improve work capacity.",
+                    exercises: [
+                        { name: "Kettlebell Swings", sets: 4, reps: 20, duration: 1, notes: "Explosive hip extension" },
+                        { name: "Plyometric Box Jumps", sets: 4, reps: 12, duration: 1, notes: "Soft landing on 24-inch box" },
+                        { name: "Battle Ropes Alternating Waves", sets: 4, reps: 30, duration: 1, notes: "30 seconds max velocity" },
+                        { name: "Concept2 Rower Sprint", sets: 4, reps: 1, duration: 2, notes: "500m sub-1:45 split" }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Functional Mobility & Joint Restoration",
+                    client: "Michael Chang",
+                    clientInitials: "MC",
+                    category: "Mobility",
+                    categoryBadgeClass: "badge-cat-mobility",
+                    categoryLabel: "Mobility & Prehab",
+                    dateCreated: "Oct 20, 2026",
+                    duration: 25,
+                    description: "Active recovery and dynamic joint restoration routine designed to correct postural anterior tilt and increase thoracic rotation.",
+                    exercises: [
+                        { name: "Thoracic Spine Foam Rolling & Rotations", sets: 3, reps: 10, duration: 2, notes: "Slow breathing through rotation" },
+                        { name: "90/90 Hip Openers", sets: 3, reps: 8, duration: 2, notes: "Hold end range 3 seconds" },
+                        { name: "Resistance Band Pull-Aparts", sets: 4, reps: 15, duration: 1, notes: "Rear delt activation focus" },
+                        { name: "World's Greatest Stretch", sets: 3, reps: 6, duration: 2, notes: "6 reps per side with hamstring sweep" }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Push-Pull-Legs: Pull Focus",
+                    client: "Dhammika Perera",
+                    clientInitials: "DP",
+                    category: "Hypertrophy",
+                    categoryBadgeClass: "badge-cat-hypertrophy",
+                    categoryLabel: "Strength & Hypertrophy",
+                    dateCreated: "Oct 21, 2026",
+                    duration: 55,
+                    description: "Complete back and bicep volume workout designed for upper-body width and progressive mechanical tension.",
+                    exercises: [
+                        { name: "Conventional Deadlift", sets: 4, reps: 6, duration: 3, notes: "Reset every rep from dead stop" },
+                        { name: "Wide-Grip Lat Pulldown", sets: 3, reps: 12, duration: 2, notes: "Pull to collarbone, 1-sec squeeze" },
+                        { name: "Neutral Grip Pull-Ups", sets: 3, reps: 8, duration: 2, notes: "Full dead hang at bottom" },
+                        { name: "Face Pulls with Rope", sets: 4, reps: 15, duration: 1, notes: "External rotation at finish" },
+                        { name: "Incline Dumbbell Bicep Curls", sets: 3, reps: 12, duration: 1, notes: "Supinate wrists at top" }
+                    ]
+                },
+                {
+                    id: 6,
+                    name: "Beginner Cardiovascular & Core Foundations",
+                    client: "Emily Watson",
+                    clientInitials: "EW",
+                    category: "Foundations",
+                    categoryBadgeClass: "badge-cat-foundations",
+                    categoryLabel: "Foundations",
+                    dateCreated: "Oct 22, 2026",
+                    duration: 35,
+                    description: "Low-impact baseline conditioning regimen designed for initial aerobic base building and lumbar spine stabilization.",
+                    exercises: [
+                        { name: "Treadmill Incline Power Walk", sets: 1, reps: 1, duration: 15, notes: "Incline 6.0%, speed 5.0 km/h" },
+                        { name: "Bodyweight Box Squats", sets: 3, reps: 12, duration: 2, notes: "Focus on knee alignment over toes" },
+                        { name: "Bird Dogs", sets: 3, reps: 10, duration: 1, notes: "Hold reach 2 seconds per side" },
+                        { name: "Deadbugs", sets: 3, reps: 12, duration: 1, notes: "Keep lower back flat against floor" }
+                    ]
+                }
+            ];
+
+            // Local mutable store for demonstration interactions
+            let demoRoutines = JSON.parse(JSON.stringify(initialDemoRoutines));
+
+            // DOM Elements
+            const routinesListContainer = document.getElementById('routinesListContainer');
+            const searchInput = document.getElementById('routineSearchInput');
+            const clientFilter = document.getElementById('clientSelectFilter');
+            const categoryFilter = document.getElementById('categorySelectFilter');
+            const btnResetFilters = document.getElementById('btnResetFilters');
+            const btnResetSearch = document.getElementById('btnResetSearch');
+            const filterStatusText = document.getElementById('filterStatusText');
+            const noResultsState = document.getElementById('noResultsState');
+            const emptyCatalogState = document.getElementById('emptyCatalogState');
+            const btnToggleEmptyCatalog = document.getElementById('btnToggleEmptyCatalog');
+            const btnResetDemoCatalog = document.getElementById('btnResetDemoCatalog');
+            const btnRestoreFromEmpty = document.getElementById('btnRestoreFromEmpty');
+            const btnExpandAll = document.getElementById('btnExpandAllRegimens');
+            const btnCollapseAll = document.getElementById('btnCollapseAllRegimens');
+
+            // KPI elements
+            const kpiTotalRoutines = document.getElementById('kpiTotalRoutines');
+            const kpiAssignedClients = document.getElementById('kpiAssignedClients');
+            const kpiAvgDuration = document.getElementById('kpiAvgDuration');
+            const kpiTotalExercises = document.getElementById('kpiTotalExercises');
+
+            // Modal
+            let actionModalInstance = null;
+            const previewModalEl = document.getElementById('previewActionModal');
+            if (previewModalEl && typeof bootstrap !== 'undefined') {
+                actionModalInstance = new bootstrap.Modal(previewModalEl);
+            }
+
+            function showPreviewModal(title, message) {
+                const titleEl = document.getElementById('previewModalTitle');
+                const bodyEl = document.getElementById('previewModalBodyText');
+                if (titleEl) titleEl.textContent = title;
+                if (bodyEl) bodyEl.textContent = message;
+                if (actionModalInstance) {
+                    actionModalInstance.show();
+                } else {
+                    alert(`${title}\n\n${message}`);
+                }
+            }
+
+            function updateKpis() {
+                if (!kpiTotalRoutines) return;
+                const total = demoRoutines.length;
+                kpiTotalRoutines.textContent = total;
+
+                if (total === 0) {
+                    if (kpiAssignedClients) kpiAssignedClients.textContent = '0';
+                    if (kpiAvgDuration) kpiAvgDuration.textContent = '0';
+                    if (kpiTotalExercises) kpiTotalExercises.textContent = '0';
+                    return;
+                }
+
+                const uniqueClients = new Set(demoRoutines.map(r => r.client));
+                if (kpiAssignedClients) kpiAssignedClients.textContent = uniqueClients.size;
+
+                const avgDur = Math.round(demoRoutines.reduce((acc, r) => acc + (r.duration || 0), 0) / total);
+                if (kpiAvgDuration) kpiAvgDuration.textContent = avgDur;
+
+                const totalEx = demoRoutines.reduce((acc, r) => acc + (r.exercises ? r.exercises.length : 0), 0);
+                if (kpiTotalExercises) kpiTotalExercises.textContent = totalEx;
+            }
+
+            function renderRoutines() {
+                if (!routinesListContainer) return;
+
+                if (demoRoutines.length === 0) {
+                    routinesListContainer.innerHTML = '';
+                    if (noResultsState) noResultsState.classList.add('d-none');
+                    if (emptyCatalogState) emptyCatalogState.classList.remove('d-none');
+                    if (filterStatusText) filterStatusText.innerHTML = 'Showing <strong>0</strong> routines';
+                    updateKpis();
+                    return;
+                }
+
+                if (emptyCatalogState) emptyCatalogState.classList.add('d-none');
+
+                const searchTerm = (searchInput ? searchInput.value : '').trim().toLowerCase();
+                const selectedClient = clientFilter ? clientFilter.value : 'all';
+                const selectedCategory = categoryFilter ? categoryFilter.value : 'all';
+
+                const filtered = demoRoutines.filter(r => {
+                    const matchClient = selectedClient === 'all' || r.client === selectedClient;
+                    const matchCategory = selectedCategory === 'all' || r.category === selectedCategory;
+
+                    let matchSearch = true;
+                    if (searchTerm) {
+                        const inName = r.name.toLowerCase().includes(searchTerm);
+                        const inDesc = r.description.toLowerCase().includes(searchTerm);
+                        const inClient = r.client.toLowerCase().includes(searchTerm);
+                        const inExercises = r.exercises && r.exercises.some(ex => ex.name.toLowerCase().includes(searchTerm));
+                        matchSearch = inName || inDesc || inClient || inExercises;
+                    }
+
+                    return matchClient && matchCategory && matchSearch;
+                });
+
+                if (filtered.length === 0) {
+                    routinesListContainer.innerHTML = '';
+                    if (noResultsState) noResultsState.classList.remove('d-none');
+                    if (filterStatusText) {
+                        filterStatusText.innerHTML = `No routines match the current filter (0 of ${demoRoutines.length})`;
+                    }
+                    return;
+                }
+
+                if (noResultsState) noResultsState.classList.add('d-none');
+                if (filterStatusText) {
+                    filterStatusText.innerHTML = `Showing <strong>${filtered.length}</strong> of <strong>${demoRoutines.length}</strong> routines`;
+                }
+
+                let html = '';
+                filtered.forEach(routine => {
+                    const exCount = routine.exercises ? routine.exercises.length : 0;
+                    const totalSets = routine.exercises ? routine.exercises.reduce((sum, e) => sum + (e.sets || 0), 0) : 0;
+
+                    html += `
+                        <article class="ht-routine-card p-4" id="routine-item-${routine.id}" data-routine-id="${routine.id}">
+                            <!-- Top row: Category, Client, Metrics & Action buttons -->
+                            <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-3">
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                                        <span class="ht-routine-category-badge ${routine.categoryBadgeClass}">${routine.categoryLabel}</span>
+                                        <span class="ht-stat-pill">
+                                            <span class="ht-client-avatar-mini" aria-hidden="true">${routine.clientInitials}</span>
+                                            <span>${routine.client}</span>
+                                        </span>
+                                        <span class="ht-stat-pill">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                                            </svg>
+                                            Created ${routine.dateCreated}
+                                        </span>
+                                    </div>
+                                    <h2 class="ht-card-title mb-1" style="font-size: 1.15rem;">${routine.name}</h2>
+                                    <p class="ht-card-subtitle mb-0" style="font-size: 0.88rem; max-width: 780px;">
+                                        ${routine.description}
+                                    </p>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-primary ht-btn-action-preview btnToggleRegimen"
+                                            data-target="regimen-${routine.id}"
+                                            aria-expanded="false"
+                                            aria-controls="regimen-${routine.id}">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                                        </svg>
+                                        <span class="btnToggleText">View Regimen (${exCount})</span>
+                                    </button>
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary ht-btn-action-preview btnEditRoutine"
+                                            data-id="${routine.id}"
+                                            data-name="${routine.name}"
+                                            title="Edit routine specifications">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                        <span>Edit</span>
+                                    </button>
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger ht-btn-action-preview btnDeleteRoutine"
+                                            data-id="${routine.id}"
+                                            data-name="${routine.name}"
+                                            title="Delete routine from catalog">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Summary Pills Row -->
+                            <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                                <span class="ht-stat-pill">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m6.5 6.5 11 11"></path>
+                                        <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                    </svg>
+                                    <strong>${exCount}</strong> Exercises
+                                </span>
+                                <span class="ht-stat-pill">
+                                    <strong>${totalSets}</strong> Total Sets
+                                </span>
+                                <span class="ht-stat-pill">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    ~${routine.duration} mins session
+                                </span>
+                            </div>
+
+                            <!-- Expandable Regimen Exercise Table -->
+                            <div class="ht-routine-regimen collapse mt-3" id="regimen-${routine.id}">
+                                <div class="table-responsive ht-routine-details-table">
+                                    <table class="table mb-0 align-middle" aria-label="Exercises for ${routine.name}">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="width: 35%;">EXERCISE NAME</th>
+                                                <th scope="col" style="width: 15%;">SETS</th>
+                                                <th scope="col" style="width: 15%;">REPS</th>
+                                                <th scope="col" style="width: 15%;">REST / TIME</th>
+                                                <th scope="col" style="width: 20%;">COACHING NOTES</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${routine.exercises.map(ex => `
+                                                <tr>
+                                                    <td>
+                                                        <div class="fw-semibold text-dark">${ex.name}</div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-light text-dark border">${ex.sets} sets</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-light text-dark border">${ex.reps} reps</span>
+                                                    </td>
+                                                    <td class="text-muted">
+                                                        ${ex.duration > 0 ? `${ex.duration} min rest` : 'Standard rest'}
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-muted">${ex.notes || 'Strict form'}</small>
+                                                    </td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                });
+
+                routinesListContainer.innerHTML = html;
+                updateKpis();
+            }
+
+            // Event Listeners for Filters
+            if (searchInput) searchInput.addEventListener('input', renderRoutines);
+            if (clientFilter) clientFilter.addEventListener('change', renderRoutines);
+            if (categoryFilter) categoryFilter.addEventListener('change', renderRoutines);
+
+            if (btnResetFilters) {
+                btnResetFilters.addEventListener('click', function () {
+                    if (searchInput) searchInput.value = '';
+                    if (clientFilter) clientFilter.value = 'all';
+                    if (categoryFilter) categoryFilter.value = 'all';
+                    renderRoutines();
+                });
+            }
+
+            if (btnResetSearch) {
+                btnResetSearch.addEventListener('click', function () {
+                    if (searchInput) searchInput.value = '';
+                    if (clientFilter) clientFilter.value = 'all';
+                    if (categoryFilter) categoryFilter.value = 'all';
+                    renderRoutines();
+                });
+            }
+
+            // Expand / Collapse Delegated Handler
+            if (routinesListContainer) {
+                routinesListContainer.addEventListener('click', function (e) {
+                    // Toggle regimen
+                    const toggleBtn = e.target.closest('.btnToggleRegimen');
+                    if (toggleBtn) {
+                        const targetId = toggleBtn.getAttribute('data-target');
+                        const targetEl = document.getElementById(targetId);
+                        if (targetEl) {
+                            const isShown = targetEl.classList.contains('show');
+                            const textSpan = toggleBtn.querySelector('.btnToggleText');
+                            if (isShown) {
+                                targetEl.classList.remove('show');
+                                toggleBtn.setAttribute('aria-expanded', 'false');
+                                if (textSpan) textSpan.textContent = textSpan.textContent.replace('Hide', 'View');
+                            } else {
+                                targetEl.classList.add('show');
+                                toggleBtn.setAttribute('aria-expanded', 'true');
+                                if (textSpan) textSpan.textContent = textSpan.textContent.replace('View', 'Hide');
+                            }
+                        }
+                        return;
+                    }
+
+                    // Edit button
+                    const editBtn = e.target.closest('.btnEditRoutine');
+                    if (editBtn) {
+                        const name = editBtn.getAttribute('data-name');
+                        showPreviewModal(
+                            'Edit Routine (Preview Demonstration)',
+                            `You selected "${name}" for editing. In production, this navigates to the routine builder at /Workout/Edit/{id} with loaded exercises. In this static preview, edits are simulated.`
+                        );
+                        return;
+                    }
+
+                    // Delete button
+                    const deleteBtn = e.target.closest('.btnDeleteRoutine');
+                    if (deleteBtn) {
+                        const id = parseInt(deleteBtn.getAttribute('data-id'), 10);
+                        const name = deleteBtn.getAttribute('data-name');
+                        if (confirm(`Preview Mode: Remove "${name}" from this in-memory catalog?\n\n(No database records will be modified).`)) {
+                            demoRoutines = demoRoutines.filter(r => r.id !== id);
+                            renderRoutines();
+                        }
+                        return;
+                    }
+                });
+            }
+
+            // Expand / Collapse All
+            if (btnExpandAll) {
+                btnExpandAll.addEventListener('click', function () {
+                    document.querySelectorAll('.ht-routine-regimen').forEach(el => el.classList.add('show'));
+                    document.querySelectorAll('.btnToggleRegimen').forEach(btn => {
+                        btn.setAttribute('aria-expanded', 'true');
+                        const textSpan = btn.querySelector('.btnToggleText');
+                        if (textSpan) textSpan.textContent = textSpan.textContent.replace('View', 'Hide');
+                    });
+                });
+            }
+
+            if (btnCollapseAll) {
+                btnCollapseAll.addEventListener('click', function () {
+                    document.querySelectorAll('.ht-routine-regimen').forEach(el => el.classList.remove('show'));
+                    document.querySelectorAll('.btnToggleRegimen').forEach(btn => {
+                        btn.setAttribute('aria-expanded', 'false');
+                        const textSpan = btn.querySelector('.btnToggleText');
+                        if (textSpan) textSpan.textContent = textSpan.textContent.replace('Hide', 'View');
+                    });
+                });
+            }
+
+            // Test Empty State toggle
+            if (btnToggleEmptyCatalog) {
+                btnToggleEmptyCatalog.addEventListener('click', function () {
+                    demoRoutines = [];
+                    renderRoutines();
+                });
+            }
+
+            // Reset demo data
+            function resetCatalog() {
+                demoRoutines = JSON.parse(JSON.stringify(initialDemoRoutines));
+                if (searchInput) searchInput.value = '';
+                if (clientFilter) clientFilter.value = 'all';
+                if (categoryFilter) categoryFilter.value = 'all';
+                renderRoutines();
+            }
+
+            if (btnResetDemoCatalog) btnResetDemoCatalog.addEventListener('click', resetCatalog);
+            if (btnRestoreFromEmpty) btnRestoreFromEmpty.addEventListener('click', resetCatalog);
+
+            // Initial render
+            renderRoutines();
+        })();
+    </script>
+</body>
+</html>

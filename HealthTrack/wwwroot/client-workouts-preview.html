@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Workouts - HealthTrack Client Portal Preview</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+
+    <style>
+        /* Scoped styles for Client My Workouts screen */
+        .ht-session-hero-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            overflow: hidden;
+        }
+
+        .ht-hero-header-band {
+            background: linear-gradient(135deg, #095c4d 0%, #0d6e5a 100%);
+            color: #ffffff;
+            padding: 24px 28px;
+        }
+
+        .ht-progress-container-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 22px;
+        }
+
+        .ht-workout-timer-badge {
+            font-family: monospace;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0d6e5a;
+            background-color: #e6f4f1;
+            border: 1px solid #bce1d9;
+            border-radius: 8px;
+            padding: 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ht-exercise-check-row {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .ht-exercise-check-row:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+        }
+
+        .ht-exercise-check-row.completed {
+            background-color: #f0fdf4;
+            border-color: #86efac;
+        }
+
+        .ht-exercise-check-row.completed .ht-exercise-title {
+            text-decoration: line-through;
+            color: #64748b;
+        }
+
+        .ht-custom-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #0d6e5a;
+            flex-shrink: 0;
+        }
+
+        .ht-exercise-stat-chip {
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background-color: #f1f5f9;
+            color: #334155;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ht-history-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #ffffff;
+            padding: 20px;
+        }
+
+        .ht-history-table th {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 14px;
+        }
+
+        .ht-history-table td {
+            font-size: 0.88rem;
+            padding: 12px 14px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .ht-streak-badge {
+            background-color: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ht-modal-notice {
+            background-color: #f8fafc;
+            border-left: 4px solid #0d6e5a;
+            padding: 12px 14px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.82rem;
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- Sidebar Navigation (255px wide desktop) -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Client Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="client-dashboard-preview.html" id="sidebarBrandLink">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub">Client Portal</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching exact Client hierarchy -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard -->
+                <a href="client-dashboard-preview.html" class="ht-nav-item" id="navItemDashboard" title="Client Dashboard">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Workout Plans -->
+                <a href="client-plans-preview.html#workout-plans" class="ht-nav-item" id="navItemWorkoutPlans" title="Assigned Workout Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h6v6"></path>
+                            <path d="M9 21H3v-6"></path>
+                            <path d="M21 3l-7 7"></path>
+                            <path d="M3 21l7-7"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 3. My Workouts (ACTIVE) -->
+                <a href="client-workouts-preview.html" class="ht-nav-item active" id="navItemMyWorkouts" aria-current="page" title="My Workouts">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                    </span>
+                    <span>My Workouts</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a href="client-plans-preview.html#diet-plans" class="ht-nav-item" id="navItemDietPlans" title="Diet Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Health Measurements -->
+                <a href="client-health-preview.html#measurements" class="ht-nav-item" id="navItemMeasurements" title="Health Measurements">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <path d="M6 12h.01M18 12h.01"></path>
+                        </svg>
+                    </span>
+                    <span>Health Measurements</span>
+                </a>
+
+                <!-- 6. Progress & Analytics -->
+                <a href="client-health-preview.html#progress" class="ht-nav-item" id="navItemProgress" title="Progress & Analytics">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"></path>
+                            <path d="m19 9-5 5-4-4-3 3"></path>
+                        </svg>
+                    </span>
+                    <span>Progress &amp; Analytics</span>
+                </a>
+
+                <!-- 7. Appointments -->
+                <a href="appointments-preview.html?role=client" class="ht-nav-item" id="navItemAppointments" title="Appointments">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 8. Trainer Feedback -->
+                <a href="feedback-notifications-preview.html?role=client#feedback" class="ht-nav-item" id="navItemFeedback" title="Trainer Feedback">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    <span>Trainer Feedback</span>
+                </a>
+
+                <!-- 9. Notifications -->
+                <a href="feedback-notifications-preview.html?role=client#notifications" class="ht-nav-item" id="navItemNotifications" title="Notifications">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </span>
+                    <span>Notifications</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Settings & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="javascript:void(0);" class="ht-nav-item" onclick="alert('Client Settings: Profile information, health goals, and notification preferences.');" aria-label="Portal settings">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                    <span>Settings</span>
+                </a>
+
+                <a href="javascript:void(0);" class="ht-nav-item ht-nav-signout w-100" onclick="alert('Preview Mode: Client logout simulated.');">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar (White bar with notifications & user profile) -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6e5a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="d-none d-sm-inline">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        </svg>
+                        <span class="fw-semibold text-dark" style="font-size: 0.95rem;">Client Portal Preview · My Workouts</span>
+                    </div>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell -->
+                    <a href="feedback-notifications-preview.html?role=client#notifications" class="ht-topbar-btn" aria-label="Notifications" title="Notifications">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </a>
+
+                    <!-- User Profile Area (DP avatar) -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar" id="clientAvatar">DP</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name" id="clientFullName">Dhammika Perera</span>
+                            <span class="ht-profile-role">Client</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- ======================================================== -->
+                    <!-- PREVIEW NOTICE BANNER WITH SCREEN TEST SHORTCUTS         -->
+                    <!-- ======================================================== -->
+                    <div class="ht-demo-notice alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div class="small">
+                                <strong>Client Workout Tracking Preview:</strong> Fictional demonstration routines and workout telemetry.
+                                Test the live exercise checklist, session timer, and progress calculations. Progress is updated in browser memory and not persisted to database.
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnToggleEmptyWorkouts" style="font-size: 0.78rem;">
+                                Test No-Assigned-Workouts State
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnResetWorkoutDemo" style="font-size: 0.78rem;">
+                                Reset Checklist
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Breadcrumbs & Navigation Links -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                        <a href="client-dashboard-preview.html" class="ht-card-link-action p-0">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            <span>Back to Client Dashboard</span>
+                        </a>
+
+                        <a href="client-plans-preview.html#workout-plans" class="ht-card-link-action p-0">
+                            <span>View All Workout Plans &rarr;</span>
+                        </a>
+                    </div>
+
+                    <!-- Page Header Row -->
+                    <div class="ht-welcome-section mb-4">
+                        <h1 class="ht-welcome-title">My Workouts</h1>
+                        <p class="ht-welcome-subtitle">
+                            Track today's training regimen, follow your exercise checklist, and record workout completion.
+                        </p>
+                    </div>
+
+                    <!-- ======================================================== -->
+                    <!-- MAIN ACTIVE WORKOUT VIEW CONTAINER                       -->
+                    <!-- ======================================================== -->
+                    <div id="activeWorkoutViewContainer">
+                        <!-- Summary KPI Cards -->
+                        <div class="ht-kpi-grid mb-4">
+                            <!-- Card 1: Active Routine -->
+                            <div class="ht-card ht-kpi-card">
+                                <div class="ht-kpi-top">
+                                    <span class="ht-kpi-label">ACTIVE ROUTINE</span>
+                                    <span class="ht-kpi-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="m6.5 6.5 11 11"></path>
+                                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="ht-kpi-val-row">
+                                    <span class="ht-kpi-val" style="font-size: 1.25rem;">Upper Body</span>
+                                </div>
+                                <div class="ht-kpi-sub">
+                                    <span class="text-muted small">Assigned by <strong>Marcus Vance</strong></span>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Weekly Adherence -->
+                            <div class="ht-card ht-kpi-card">
+                                <div class="ht-kpi-top">
+                                    <span class="ht-kpi-label">WEEKLY ADHERENCE</span>
+                                    <span class="ht-kpi-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="ht-kpi-val-row">
+                                    <span class="ht-kpi-val" id="weeklyCompletedSessions">3</span>
+                                    <span class="ht-kpi-unit">/ 4 sessions</span>
+                                </div>
+                                <div class="ht-kpi-sub">
+                                    <span class="text-success small fw-semibold">75% on track this week</span>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Workout Streak -->
+                            <div class="ht-card ht-kpi-card">
+                                <div class="ht-kpi-top">
+                                    <span class="ht-kpi-label">WORKOUT STREAK</span>
+                                    <span class="ht-streak-badge" aria-hidden="true">
+                                        🔥 Consistent
+                                    </span>
+                                </div>
+                                <div class="ht-kpi-val-row">
+                                    <span class="ht-kpi-val">4</span>
+                                    <span class="ht-kpi-unit">Days</span>
+                                </div>
+                                <div class="ht-kpi-sub">
+                                    <span class="text-muted small">Personal best: 7 days</span>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Est. Session Time -->
+                            <div class="ht-card ht-kpi-card">
+                                <div class="ht-kpi-top">
+                                    <span class="ht-kpi-label">EST. SESSION TIME</span>
+                                    <span class="ht-kpi-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="ht-kpi-val-row">
+                                    <span class="ht-kpi-val">45</span>
+                                    <span class="ht-kpi-unit">min</span>
+                                </div>
+                                <div class="ht-kpi-sub">
+                                    <span class="text-muted small">~320 estimated calories</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Featured Current / Today's Workout Hero Card -->
+                        <div class="ht-session-hero-card mb-4" id="todaysWorkoutSection">
+                            <!-- Hero Header Band -->
+                            <div class="ht-hero-header-band">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <span class="badge bg-white text-dark fw-bold px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">
+                                                TODAY'S SCHEDULED ROUTINE
+                                            </span>
+                                            <span class="badge bg-light bg-opacity-25 text-white" style="font-size: 0.72rem;">
+                                                Assigned by Marcus Vance
+                                            </span>
+                                        </div>
+                                        <h2 class="h3 fw-bold mb-1 text-white">Upper Body Strength &amp; Hypertrophy</h2>
+                                        <p class="mb-0 text-white-50" style="max-width: 680px; font-size: 0.9rem;">
+                                            Focus on strict form, 3-second eccentric tempo, and full scapular retraction. Complete all 4 scheduled exercises below.
+                                        </p>
+                                    </div>
+
+                                    <!-- Session Timer & Quick Controls -->
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="text-end d-none d-sm-block">
+                                            <div class="small text-white-50 mb-1">SESSION TIMER</div>
+                                            <div class="ht-workout-timer-badge" id="workoutTimerDisplay" aria-live="polite">
+                                                ⏱ 00:00
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Session Progress & Controls Bar -->
+                            <div class="p-4 border-bottom bg-light">
+                                <div class="row align-items-center g-3">
+                                    <div class="col-12 col-md-7">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <span class="fw-semibold text-dark small" id="sessionProgressLabel">
+                                                Session Progress: <span id="progressPercentText">0%</span>
+                                            </span>
+                                            <span class="small text-muted" id="exerciseCounterText">
+                                                0 of 4 exercises completed
+                                            </span>
+                                        </div>
+                                        <div class="progress" style="height: 10px; border-radius: 9999px;">
+                                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                                                 role="progressbar"
+                                                 style="width: 0%;"
+                                                 id="workoutProgressBar"
+                                                 aria-valuenow="0"
+                                                 aria-valuemin="0"
+                                                 aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-5 text-md-end d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
+                                        <button type="button" class="btn btn-outline-primary btn-sm px-3" id="btnStartWorkout">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                            </svg>
+                                            <span id="btnStartWorkoutText">Start Session</span>
+                                        </button>
+
+                                        <button type="button" class="btn btn-success btn-sm px-3" id="btnCompleteWorkout">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                            Log Workout Session
+                                        </button>
+
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" id="btnResetChecklist" title="Reset all checkboxes">
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Exercise Interactive Checklist -->
+                            <div class="p-4">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <h3 class="ht-card-heading mb-0" style="font-size: 1rem;">Exercise Regimen Checklist</h3>
+                                    <span class="text-muted small">Check off sets as you complete them</span>
+                                </div>
+
+                                <div id="exerciseChecklistContainer">
+                                    <!-- Exercise 1 -->
+                                    <div class="ht-exercise-check-row" id="exRow1">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <input type="checkbox"
+                                                   class="form-check-input ht-custom-checkbox ex-checkbox"
+                                                   id="chkEx1"
+                                                   data-index="1"
+                                                   aria-label="Mark Barbell Bench Press complete" />
+                                            <div>
+                                                <h4 class="ht-exercise-title mb-1 fw-bold text-dark" style="font-size: 0.95rem;">
+                                                    1. Barbell Bench Press
+                                                </h4>
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="ht-exercise-stat-chip">3 Sets</span>
+                                                    <span class="ht-exercise-stat-chip">10 Reps</span>
+                                                    <span class="ht-exercise-stat-chip text-muted">2 min rest</span>
+                                                    <span class="badge bg-light text-secondary border">Pectoralis Major &amp; Triceps</span>
+                                                </div>
+                                                <div class="small text-muted mt-1">
+                                                    <em>Coaching Cue:</em> Retract shoulder blades, plant feet firmly, 3-sec controlled descent.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-secondary ex-status-badge" id="badgeEx1">Pending</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Exercise 2 -->
+                                    <div class="ht-exercise-check-row" id="exRow2">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <input type="checkbox"
+                                                   class="form-check-input ht-custom-checkbox ex-checkbox"
+                                                   id="chkEx2"
+                                                   data-index="2"
+                                                   aria-label="Mark Incline Dumbbell Press complete" />
+                                            <div>
+                                                <h4 class="ht-exercise-title mb-1 fw-bold text-dark" style="font-size: 0.95rem;">
+                                                    2. Incline Dumbbell Press
+                                                </h4>
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="ht-exercise-stat-chip">3 Sets</span>
+                                                    <span class="ht-exercise-stat-chip">12 Reps</span>
+                                                    <span class="ht-exercise-stat-chip text-muted">90 sec rest</span>
+                                                    <span class="badge bg-light text-secondary border">Clavicular Head &amp; Anterior Delts</span>
+                                                </div>
+                                                <div class="small text-muted mt-1">
+                                                    <em>Coaching Cue:</em> Bench at 30-degree angle. Press up in slight arc without banging dumbbells.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-secondary ex-status-badge" id="badgeEx2">Pending</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Exercise 3 -->
+                                    <div class="ht-exercise-check-row" id="exRow3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <input type="checkbox"
+                                                   class="form-check-input ht-custom-checkbox ex-checkbox"
+                                                   id="chkEx3"
+                                                   data-index="3"
+                                                   aria-label="Mark Bent-Over Barbell Row complete" />
+                                            <div>
+                                                <h4 class="ht-exercise-title mb-1 fw-bold text-dark" style="font-size: 0.95rem;">
+                                                    3. Bent-Over Barbell Row
+                                                </h4>
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="ht-exercise-stat-chip">4 Sets</span>
+                                                    <span class="ht-exercise-stat-chip">10 Reps</span>
+                                                    <span class="ht-exercise-stat-chip text-muted">90 sec rest</span>
+                                                    <span class="badge bg-light text-secondary border">Latissimus Dorsi &amp; Rhomboids</span>
+                                                </div>
+                                                <div class="small text-muted mt-1">
+                                                    <em>Coaching Cue:</em> 45-degree hip hinge, pull bar into lower ribcage, squeeze at apex.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-secondary ex-status-badge" id="badgeEx3">Pending</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Exercise 4 -->
+                                    <div class="ht-exercise-check-row" id="exRow4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <input type="checkbox"
+                                                   class="form-check-input ht-custom-checkbox ex-checkbox"
+                                                   id="chkEx4"
+                                                   data-index="4"
+                                                   aria-label="Mark Seated Cable Row complete" />
+                                            <div>
+                                                <h4 class="ht-exercise-title mb-1 fw-bold text-dark" style="font-size: 0.95rem;">
+                                                    4. Seated Cable Row
+                                                </h4>
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="ht-exercise-stat-chip">3 Sets</span>
+                                                    <span class="ht-exercise-stat-chip">12 Reps</span>
+                                                    <span class="ht-exercise-stat-chip text-muted">60 sec rest</span>
+                                                    <span class="badge bg-light text-secondary border">Mid-Back &amp; Biceps</span>
+                                                </div>
+                                                <div class="small text-muted mt-1">
+                                                    <em>Coaching Cue:</em> Keep upright posture, avoid excessive torso rocking, full stretch forward.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-secondary ex-status-badge" id="badgeEx4">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Completed Workout Sessions (Demonstration History) -->
+                        <div class="ht-history-card">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <div>
+                                    <h3 class="ht-card-heading mb-0">Recent Completed Sessions</h3>
+                                    <p class="text-muted small mb-0">Fictional demonstration history of workouts completed in this cycle.</p>
+                                </div>
+                                <span class="badge bg-light text-dark border">
+                                    Last completed: Oct 21, 2026
+                                </span>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table ht-history-table align-middle mb-0" aria-label="Recent completed workout sessions">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 32%;">ROUTINE NAME</th>
+                                            <th scope="col" style="width: 22%;">DATE &amp; TIME</th>
+                                            <th scope="col" style="width: 16%;">DURATION</th>
+                                            <th scope="col" style="width: 15%;">CALORIES BURNED</th>
+                                            <th scope="col" style="width: 15%; text-align: right;">STATUS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-semibold text-dark">Lower Body Power &amp; Core</div>
+                                                <small class="text-muted">4 of 4 exercises completed</small>
+                                            </td>
+                                            <td>Oct 21, 2026 · 07:15 AM</td>
+                                            <td>50 mins</td>
+                                            <td>
+                                                <span class="fw-semibold text-dark">380 kcal</span>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                    ✓ Completed
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-semibold text-dark">Upper Body Hypertrophy</div>
+                                                <small class="text-muted">4 of 4 exercises completed</small>
+                                            </td>
+                                            <td>Oct 19, 2026 · 07:30 AM</td>
+                                            <td>45 mins</td>
+                                            <td>
+                                                <span class="fw-semibold text-dark">340 kcal</span>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                    ✓ Completed
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-semibold text-dark">HIIT &amp; Mobility Circuit</div>
+                                                <small class="text-muted">4 of 4 intervals completed</small>
+                                            </td>
+                                            <td>Oct 17, 2026 · 06:45 PM</td>
+                                            <td>35 mins</td>
+                                            <td>
+                                                <span class="fw-semibold text-dark">290 kcal</span>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                    ✓ Completed
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-semibold text-dark">Full Body Conditioning</div>
+                                                <small class="text-muted">5 of 5 exercises completed</small>
+                                            </td>
+                                            <td>Oct 15, 2026 · 08:00 AM</td>
+                                            <td>55 mins</td>
+                                            <td>
+                                                <span class="fw-semibold text-dark">410 kcal</span>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                    ✓ Completed
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ======================================================== -->
+                    <!-- SIMULATED EMPTY STATE: NO ASSIGNED WORKOUTS             -->
+                    <!-- ======================================================== -->
+                    <div class="ht-card text-center py-5 d-none" id="emptyWorkoutsState" aria-live="polite">
+                        <div class="mb-3 text-muted">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                                <line x1="6" y1="1" x2="6" y2="4"></line>
+                                <line x1="10" y1="1" x2="10" y2="4"></line>
+                                <line x1="14" y1="1" x2="14" y2="4"></line>
+                            </svg>
+                        </div>
+                        <h2 class="ht-card-title mb-2">No Workout Plans Assigned Yet</h2>
+                        <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
+                            Your trainer Marcus Vance has not scheduled your active workout routine yet. Schedule a fitness consultation or check your health measurements to get started.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="appointments-preview.html?role=client" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Book Trainer Consultation
+                            </a>
+                            <button type="button" class="btn btn-outline-secondary px-4 py-2" id="btnRestoreWorkoutsFromEmpty">
+                                Restore Demonstration Routine
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Workout Session Logged Confirmation Modal -->
+    <div class="modal fade" id="sessionCompletedModal" tabindex="-1" aria-labelledby="sessionModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-success p-2 rounded-circle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <h5 class="modal-title fw-bold" id="sessionModalTitle">Workout Session Completed!</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2 text-dark">
+                        Congratulations, <strong>Dhammika</strong>! You completed today's <strong>Upper Body Strength &amp; Hypertrophy</strong> session.
+                    </p>
+                    <div class="p-3 bg-light rounded-3 mb-3">
+                        <div class="row text-center g-2">
+                            <div class="col-4">
+                                <div class="text-muted small">COMPLETED</div>
+                                <div class="fw-bold fs-6 text-dark" id="modalCompletedExercises">4 / 4</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-muted small">DURATION</div>
+                                <div class="fw-bold fs-6 text-dark" id="modalDuration">45 mins</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-muted small">EST. CALORIES</div>
+                                <div class="fw-bold fs-6 text-success">320 kcal</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ht-modal-notice">
+                        <strong>Backend Technical Handoff:</strong>
+                        This session completion action updates in-memory prototype status. In the upcoming backend integration phase, submitting this will post telemetry payload to the `WorkoutLog` service to record completed exercises, actual sets/reps, duration, and calories burned into the persistence layer.
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // Mobile sidebar drawer handling
+            const portalSidebar = document.getElementById('portalSidebar');
+            const openSidebarBtn = document.getElementById('openSidebarBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+            function openSidebar() {
+                if (portalSidebar) portalSidebar.classList.add('show');
+                if (sidebarBackdrop) sidebarBackdrop.classList.add('show');
+            }
+
+            function closeSidebar() {
+                if (portalSidebar) portalSidebar.classList.remove('show');
+                if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+            }
+
+            if (openSidebarBtn) openSidebarBtn.addEventListener('click', openSidebar);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
+
+            // =========================================================================
+            // IN-MEMORY WORKOUT CHECKLIST & PROGRESS STATE
+            // =========================================================================
+            const checkboxes = document.querySelectorAll('.ex-checkbox');
+            const progressBar = document.getElementById('workoutProgressBar');
+            const progressPercentText = document.getElementById('progressPercentText');
+            const exerciseCounterText = document.getElementById('exerciseCounterText');
+            const btnCompleteWorkout = document.getElementById('btnCompleteWorkout');
+            const btnResetChecklist = document.getElementById('btnResetChecklist');
+            const btnStartWorkout = document.getElementById('btnStartWorkout');
+            const btnStartWorkoutText = document.getElementById('btnStartWorkoutText');
+            const workoutTimerDisplay = document.getElementById('workoutTimerDisplay');
+
+            // Empty state toggles
+            const activeWorkoutView = document.getElementById('activeWorkoutViewContainer');
+            const emptyWorkoutsState = document.getElementById('emptyWorkoutsState');
+            const btnToggleEmptyWorkouts = document.getElementById('btnToggleEmptyWorkouts');
+            const btnRestoreWorkoutsFromEmpty = document.getElementById('btnRestoreWorkoutsFromEmpty');
+            const btnResetWorkoutDemo = document.getElementById('btnResetWorkoutDemo');
+
+            // Modal
+            let sessionModalInstance = null;
+            const sessionModalEl = document.getElementById('sessionCompletedModal');
+            if (sessionModalEl && typeof bootstrap !== 'undefined') {
+                sessionModalInstance = new bootstrap.Modal(sessionModalEl);
+            }
+
+            // Stopwatch Timer State
+            let timerInterval = null;
+            let elapsedSeconds = 0;
+            let isTimerRunning = false;
+
+            function formatTimer(totalSeconds) {
+                const mins = Math.floor(totalSeconds / 60);
+                const secs = totalSeconds % 60;
+                return `⏱ ${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            function startTimer() {
+                if (isTimerRunning) {
+                    // Pause
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                    if (btnStartWorkoutText) btnStartWorkoutText.textContent = 'Resume Session';
+                } else {
+                    // Start / Resume
+                    isTimerRunning = true;
+                    if (btnStartWorkoutText) btnStartWorkoutText.textContent = 'Pause Session';
+                    timerInterval = setInterval(() => {
+                        elapsedSeconds++;
+                        if (workoutTimerDisplay) {
+                            workoutTimerDisplay.textContent = formatTimer(elapsedSeconds);
+                        }
+                    }, 1000);
+                }
+            }
+
+            function resetTimer() {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                elapsedSeconds = 0;
+                if (workoutTimerDisplay) workoutTimerDisplay.textContent = '⏱ 00:00';
+                if (btnStartWorkoutText) btnStartWorkoutText.textContent = 'Start Session';
+            }
+
+            if (btnStartWorkout) {
+                btnStartWorkout.addEventListener('click', startTimer);
+            }
+
+            // Update Progress Bar & Checklist State
+            function updateProgress() {
+                const total = checkboxes.length;
+                let completed = 0;
+
+                checkboxes.forEach(chk => {
+                    const idx = chk.getAttribute('data-index');
+                    const row = document.getElementById(`exRow${idx}`);
+                    const badge = document.getElementById(`badgeEx${idx}`);
+
+                    if (chk.checked) {
+                        completed++;
+                        if (row) row.classList.add('completed');
+                        if (badge) {
+                            badge.textContent = 'Done ✓';
+                            badge.className = 'badge bg-success ex-status-badge';
+                        }
+                    } else {
+                        if (row) row.classList.remove('completed');
+                        if (badge) {
+                            badge.textContent = 'Pending';
+                            badge.className = 'badge bg-secondary ex-status-badge';
+                        }
+                    }
+                });
+
+                const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                if (progressBar) {
+                    progressBar.style.width = `${percent}%`;
+                    progressBar.setAttribute('aria-valuenow', percent);
+                }
+                if (progressPercentText) {
+                    progressPercentText.textContent = `${percent}%`;
+                }
+                if (exerciseCounterText) {
+                    exerciseCounterText.textContent = `${completed} of ${total} exercises completed`;
+                }
+
+                if (completed > 0 && !isTimerRunning && elapsedSeconds === 0) {
+                    startTimer();
+                }
+            }
+
+            checkboxes.forEach(chk => {
+                chk.addEventListener('change', updateProgress);
+            });
+
+            // Reset checklist
+            function resetSessionChecklist() {
+                checkboxes.forEach(chk => {
+                    chk.checked = false;
+                });
+                resetTimer();
+                updateProgress();
+            }
+
+            if (btnResetChecklist) btnResetChecklist.addEventListener('click', resetSessionChecklist);
+            if (btnResetWorkoutDemo) btnResetWorkoutDemo.addEventListener('click', resetSessionChecklist);
+
+            // Complete session button
+            if (btnCompleteWorkout) {
+                btnCompleteWorkout.addEventListener('click', function () {
+                    // Mark all checked if not yet completed for convenience of test review
+                    checkboxes.forEach(chk => {
+                        chk.checked = true;
+                    });
+                    updateProgress();
+
+                    // Update modal stats
+                    const modalCompleted = document.getElementById('modalCompletedExercises');
+                    const modalDur = document.getElementById('modalDuration');
+                    if (modalCompleted) modalCompleted.textContent = '4 / 4';
+                    if (modalDur) {
+                        const mins = Math.max(1, Math.round(elapsedSeconds / 60));
+                        modalDur.textContent = elapsedSeconds > 0 ? `${mins} min(s)` : '45 mins';
+                    }
+
+                    if (sessionModalInstance) {
+                        sessionModalInstance.show();
+                    } else {
+                        alert("Session Completed! Great job Dhammika!\n\n(Preview Note: Workout telemetry recorded in browser session. No database records were modified.)");
+                    }
+                });
+            }
+
+            // Toggle empty state
+            if (btnToggleEmptyWorkouts) {
+                btnToggleEmptyWorkouts.addEventListener('click', function () {
+                    if (activeWorkoutView) activeWorkoutView.classList.add('d-none');
+                    if (emptyWorkoutsState) emptyWorkoutsState.classList.remove('d-none');
+                });
+            }
+
+            function restoreFromEmpty() {
+                if (activeWorkoutView) activeWorkoutView.classList.remove('d-none');
+                if (emptyWorkoutsState) emptyWorkoutsState.classList.add('d-none');
+                resetSessionChecklist();
+            }
+
+            if (btnRestoreWorkoutsFromEmpty) {
+                btnRestoreWorkoutsFromEmpty.addEventListener('click', restoreFromEmpty);
+            }
+
+            // Initial progress evaluation
+            updateProgress();
+        })();
+    </script>
+</body>
+</html>
