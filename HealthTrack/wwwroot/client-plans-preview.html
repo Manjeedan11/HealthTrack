@@ -23,7 +23,7 @@
         <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Client Portal Navigation">
             <!-- Sidebar Header / Brand -->
             <div class="ht-sidebar-header">
-                <a class="ht-sidebar-brand" href="/Client/Preview" id="sidebarBrandLink">
+                <a class="ht-sidebar-brand" href="client-dashboard-preview.html" id="sidebarBrandLink">
                     <span class="ht-sidebar-badge" aria-hidden="true">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
@@ -41,7 +41,7 @@
             <!-- Primary Navigation Links matching Client Dashboard screenshot -->
             <nav class="ht-sidebar-menu">
                 <!-- 1. Dashboard -->
-                <a href="/Client/Preview" class="ht-nav-item" id="navItemDashboard" title="Dashboard">
+                <a href="client-dashboard-preview.html" class="ht-nav-item" id="navItemDashboard" title="Dashboard">
                     <span class="ht-nav-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="7" x="3" y="3" rx="1"></rect>
@@ -255,7 +255,7 @@
                     <section id="sectionWorkoutPlans" aria-labelledby="client-workout-heading">
                         <!-- Breadcrumb / Back Link -->
                         <div class="mb-3">
-                            <a href="/Client/Preview" class="ht-card-link-action p-0" id="linkBackToDashboardWorkouts">
+                            <a href="client-dashboard-preview.html" class="ht-card-link-action p-0" id="linkBackToDashboardWorkouts">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -299,7 +299,7 @@
                     <section id="sectionDietPlans" class="d-none" aria-labelledby="client-diet-heading">
                         <!-- Breadcrumb / Back Link -->
                         <div class="mb-3">
-                            <a href="/Client/Preview" class="ht-card-link-action p-0" id="linkBackToDashboardDiets">
+                            <a href="client-dashboard-preview.html" class="ht-card-link-action p-0" id="linkBackToDashboardDiets">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -778,22 +778,7 @@
                 });
             }
 
-            // Back links
-            const backLinks = [
-                document.getElementById('linkBackToDashboardWorkouts'),
-                document.getElementById('linkBackToDashboardDiets'),
-                document.getElementById('navItemDashboard'),
-                document.getElementById('sidebarBrandLink')
-            ];
-            backLinks.forEach(link => {
-                if (link) {
-                    link.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        // For preview, scroll to top and ensure workouts tab
-                        setScreen('workouts');
-                    });
-                }
-            });
+
 
             // Initial render based on URL fragment
             const initialHash = window.location.hash.toLowerCase();

@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Trainer Clients Preview - HealthTrack Trainer Portal</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- ======================================================== -->
+        <!-- SIDEBAR NAVIGATION (255px wide desktop)                  -->
+        <!-- ======================================================== -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Trainer Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="trainer-clients-preview.html?screen=dashboard" id="sidebarBrandLink">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub ht-brand-sub-trainer">TRAINER PORTAL</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching Trainer Portal -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard -->
+                <a href="trainer-clients-preview.html?screen=dashboard" class="ht-nav-item" id="navItemDashboard" title="Trainer Dashboard">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Clients (Active on both Clients Directory and Client Overview) -->
+                <a href="trainer-clients-preview.html?screen=clients" class="ht-nav-item active" id="navItemClients" title="Clients" aria-current="page">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
+                    <span>Clients</span>
+                </a>
+
+                <!-- 3. Workout Plans -->
+                <a href="workout-preview.html" class="ht-nav-item" title="Workout Plans Preview">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6.5 6.5 11 11"></path>
+                            <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                            <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a href="diet-preview.html" class="ht-nav-item" title="Diet Plans Preview">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Manage Routines -->
+                <a href="workout-preview.html" class="ht-nav-item" title="Manage Routines">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </span>
+                    <span>Manage Routines</span>
+                </a>
+
+                <!-- 6. Appointments -->
+                <a href="appointments-preview.html?role=trainer" class="ht-nav-item" title="Appointments Preview">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 7. Progress -->
+                <a href="trainer-clients-preview.html?screen=dashboard#headingProgressSummary" class="ht-nav-item" title="Progress Summary">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                    </span>
+                    <span>Progress</span>
+                </a>
+
+                <!-- 8. Feedback -->
+                <a href="feedback-notifications-preview.html?role=trainer#feedback" class="ht-nav-item" title="Feedback">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    <span>Feedback</span>
+                </a>
+
+                <!-- 9. Notifications -->
+                <a href="feedback-notifications-preview.html?role=trainer#notifications" class="ht-nav-item" title="Notifications">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </span>
+                    <span>Notifications</span>
+                </a>
+
+                <!-- 10. Reports -->
+                <a href="javascript:void(0);" class="ht-nav-item" onclick="event.preventDefault();" title="Reports (Admin-only feature)">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </span>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Profile & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="javascript:void(0);" class="ht-nav-item" onclick="event.preventDefault();" aria-label="Trainer profile">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span>Profile</span>
+                </a>
+
+                <a href="javascript:void(0);" class="ht-nav-item ht-nav-signout w-100" onclick="alert('Preview Mode: Sign out simulated.');">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar (White bar with notifications & user profile on right) -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6e5a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="d-none d-sm-inline">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                        <span class="fw-semibold text-dark" style="font-size: 0.95rem;">Trainer Portal Preview</span>
+                    </div>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell with indicator -->
+                    <a href="feedback-notifications-preview.html?role=trainer#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications" title="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- User Profile Area (MV avatar matching attached design) -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar" id="trainerAvatar">MV</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name" id="trainerFullName">Marcus Vance</span>
+                            <span class="ht-profile-role">Trainer</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- ======================================================== -->
+                    <!-- PREVIEW NOTICE BANNER WITH SCREEN TEST SHORTCUTS         -->
+                    <!-- ======================================================== -->
+                    <div class="ht-demo-notice alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div class="small">
+                                <strong>PREVIEW MODE — DEMONSTRATION DATA ONLY. NOT LIVE DATABASE DATA.</strong>
+                                <span class="d-none d-md-inline ms-1 text-muted">Visual preview of the Clients Directory, Client Overview, and Client Not-Found states.</span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Scenario Switcher Toolbar for Visual Testing -->
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="small text-muted fw-semibold d-none d-sm-inline">Quick Preview:</span>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Preview Screen Switcher">
+                                <a href="trainer-clients-preview.html?screen=clients" class="btn btn-outline-primary" id="btnQuickClients" title="View Clients Directory">Clients</a>
+                                <a href="trainer-clients-preview.html?screen=client&clientId=1" class="btn btn-outline-primary" id="btnQuickClient1" title="View Client 1 Overview (Dhammika Perera)">Client #1</a>
+                                <a href="trainer-clients-preview.html?screen=client&clientId=5" class="btn btn-outline-primary" id="btnQuickClient5" title="View Client 5 Overview (No Weight Logged)">No Weight</a>
+                                <a href="trainer-clients-preview.html?screen=client&clientId=99999" class="btn btn-outline-primary" id="btnQuickClientNotFound" title="Test Client Not Found State">Not Found</a>
+                                <a href="trainer-clients-preview.html?screen=dashboard" class="btn btn-outline-secondary" id="btnQuickDashboard" title="View Trainer Dashboard">Dashboard</a>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnToggleEmptyRoster" title="Toggle empty client table test">
+                                <span id="btnToggleEmptyText">Test 0 Clients</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Render Target for Screen Content -->
+                    <div id="screenContainer"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- JAVASCRIPT LOGIC & DEMONSTRATION DATA                    -->
+    <!-- ======================================================== -->
+    <script>
+        (function () {
+            "use strict";
+
+            // Fictional demonstration client dataset (preview-only, no database writes)
+            const defaultDemoClients = [
+                {
+                    clientId: 1,
+                    name: "Dhammika Perera",
+                    initials: "DP",
+                    displayId: "C-001",
+                    latestWeight: 78.5,
+                    weightUnit: "kg"
+                },
+                {
+                    clientId: 2,
+                    name: "Kasun Fernando",
+                    initials: "KF",
+                    displayId: "C-002",
+                    latestWeight: 84.0,
+                    weightUnit: "kg"
+                },
+                {
+                    clientId: 3,
+                    name: "Nimal Wijesinghe",
+                    initials: "NW",
+                    displayId: "C-003",
+                    latestWeight: 71.2,
+                    weightUnit: "kg"
+                },
+                {
+                    clientId: 4,
+                    name: "Anoma Senanayake",
+                    initials: "AS",
+                    displayId: "C-004",
+                    latestWeight: 63.8,
+                    weightUnit: "kg"
+                },
+                {
+                    clientId: 5,
+                    name: "Ruwan Wickramasinghe",
+                    initials: "RW",
+                    displayId: "C-005",
+                    latestWeight: null,
+                    weightUnit: "kg"
+                }
+            ];
+
+            // Appointments demonstration data for Dashboard view
+            const demoAppointments = [
+                {
+                    clientName: "Dhammika Perera",
+                    timeFormatted: "Today, 10:00 AM",
+                    status: "Confirmed",
+                    serviceType: "Personal Fitness Assessment"
+                },
+                {
+                    clientName: "Kasun Fernando",
+                    timeFormatted: "Tomorrow, 2:30 PM",
+                    status: "Pending",
+                    serviceType: "Dietary & Nutrition Review"
+                },
+                {
+                    clientName: "Nimal Wijesinghe",
+                    timeFormatted: "Oct 25, 11:15 AM",
+                    status: "Confirmed",
+                    serviceType: "Strength Routine Check-in"
+                }
+            ];
+
+            // Progress summaries for Dashboard view
+            const demoProgressSummaries = [
+                { clientFirstName: "Dhammika", weight: 78.5, weightUnit: "kg", statusNote: "Recently logged" },
+                { clientFirstName: "Kasun", weight: 84.0, weightUnit: "kg", statusNote: "Recently logged" },
+                { clientFirstName: "Nimal", weight: 71.2, weightUnit: "kg", statusNote: "Recently logged" }
+            ];
+
+            // Simulation state for toggling empty roster
+            let isRosterEmptySimulated = false;
+
+            // DOM Elements
+            const screenContainer = document.getElementById('screenContainer');
+            const pageTitle = document.getElementById('pageTitle');
+            const navItemDashboard = document.getElementById('navItemDashboard');
+            const navItemClients = document.getElementById('navItemClients');
+            const openSidebarBtn = document.getElementById('openSidebarBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const portalSidebar = document.getElementById('portalSidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            const btnToggleEmptyRoster = document.getElementById('btnToggleEmptyRoster');
+            const btnToggleEmptyText = document.getElementById('btnToggleEmptyText');
+
+            // Quick scenario button references for active state highlighting
+            const btnQuickClients = document.getElementById('btnQuickClients');
+            const btnQuickClient1 = document.getElementById('btnQuickClient1');
+            const btnQuickClient5 = document.getElementById('btnQuickClient5');
+            const btnQuickClientNotFound = document.getElementById('btnQuickClientNotFound');
+            const btnQuickDashboard = document.getElementById('btnQuickDashboard');
+
+            // Parse URL parameters
+            function parseRoute() {
+                const params = new URLSearchParams(window.location.search);
+                const screen = (params.get('screen') || 'clients').toLowerCase();
+                const rawClientId = params.get('clientId');
+                const clientId = rawClientId !== null ? parseInt(rawClientId, 10) : null;
+                return { screen, clientId, rawClientId };
+            }
+
+            // Update active states in the Sidebar
+            function updateSidebar(activeItem) {
+                if (activeItem === 'clients') {
+                    navItemClients.classList.add('active');
+                    navItemClients.setAttribute('aria-current', 'page');
+                    navItemDashboard.classList.remove('active');
+                    navItemDashboard.removeAttribute('aria-current');
+                } else if (activeItem === 'dashboard') {
+                    navItemDashboard.classList.add('active');
+                    navItemDashboard.setAttribute('aria-current', 'page');
+                    navItemClients.classList.remove('active');
+                    navItemClients.removeAttribute('aria-current');
+                } else {
+                    navItemClients.classList.remove('active');
+                    navItemClients.removeAttribute('aria-current');
+                    navItemDashboard.classList.remove('active');
+                    navItemDashboard.removeAttribute('aria-current');
+                }
+            }
+
+            // Update top quick-switcher buttons active visual indicator
+            function updateQuickSwitcher(screen, clientId) {
+                [btnQuickClients, btnQuickClient1, btnQuickClient5, btnQuickClientNotFound, btnQuickDashboard].forEach(btn => {
+                    if (btn) btn.classList.remove('active');
+                });
+
+                if (screen === 'clients' && btnQuickClients) {
+                    btnQuickClients.classList.add('active');
+                } else if (screen === 'client' && clientId === 1 && btnQuickClient1) {
+                    btnQuickClient1.classList.add('active');
+                } else if (screen === 'client' && clientId === 5 && btnQuickClient5) {
+                    btnQuickClient5.classList.add('active');
+                } else if (screen === 'client' && (clientId === 99999 || isNaN(clientId)) && btnQuickClientNotFound) {
+                    btnQuickClientNotFound.classList.add('active');
+                } else if (screen === 'dashboard' && btnQuickDashboard) {
+                    btnQuickDashboard.classList.add('active');
+                }
+            }
+
+            // ========================================================
+            // SCREEN RENDERER 1: Clients Directory (_ClientsListPartial)
+            // ========================================================
+            function renderClientsDirectory() {
+                pageTitle.textContent = "Clients Directory - HealthTrack Trainer Portal";
+                updateSidebar('clients');
+                updateQuickSwitcher('clients', null);
+
+                const clientsList = isRosterEmptySimulated ? [] : defaultDemoClients;
+
+                let tableRowsHtml = "";
+                if (clientsList.length > 0) {
+                    tableRowsHtml = clientsList.map(c => `
+                        <tr class="ht-client-row">
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="ht-client-avatar" aria-hidden="true">
+                                        ${c.initials}
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="ht-client-name">${c.name}</span>
+                                        <span class="ht-client-id">ID: ${c.displayId}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ht-client-progress-text">
+                                    ${c.latestWeight !== null ? `
+                                        <span class="ht-prog-label">Weight:</span>
+                                        <strong class="ht-prog-val">${c.latestWeight.toFixed(1)} ${c.weightUnit}</strong>
+                                    ` : `
+                                        <span class="text-muted fst-italic">No latest weight recorded</span>
+                                    `}
+                                </div>
+                            </td>
+                            <td class="text-end">
+                                <a href="trainer-clients-preview.html?screen=client&clientId=${c.clientId}" class="ht-view-details-link" data-preview-route>
+                                    <span>View Client</span>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    `).join("");
+                } else {
+                    tableRowsHtml = `
+                        <tr>
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <div class="ht-workout-empty-icon mx-auto mb-3" aria-hidden="true">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="fw-semibold">No clients currently found.</div>
+                                <div class="small mt-1">Client accounts will appear here once registered in the system.</div>
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                screenContainer.innerHTML = `
+                    <div class="ht-dashboard-container p-0">
+                        <!-- Breadcrumb & Back Navigation -->
+                        <div class="mb-3">
+                            <a href="trainer-clients-preview.html?screen=dashboard" class="ht-card-link-action p-0" data-preview-route id="linkBackToDashboardFromClients">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Trainer Dashboard</span>
+                            </a>
+                        </div>
+
+                        <!-- Page Header & Action Buttons Row -->
+                        <div class="ht-trainer-header-row mb-4">
+                            <div class="ht-welcome-section">
+                                <h1 class="ht-welcome-title">Clients Directory</h1>
+                                <p class="ht-welcome-subtitle">Review registered clients, check latest weight recordings, and access individual client profiles.</p>
+                            </div>
+
+                            <!-- Quick Actions Toolbar -->
+                            <div class="ht-trainer-actions-group" role="toolbar" aria-label="Trainer Quick Actions">
+                                <a href="workout-preview.html" class="ht-action-card-btn">
+                                    <span class="ht-action-card-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                    </span>
+                                    <span class="ht-action-card-text">Create / Assign<br />Workout</span>
+                                </a>
+
+                                <a href="diet-preview.html" class="ht-action-card-btn">
+                                    <span class="ht-action-card-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                    </span>
+                                    <span class="ht-action-card-text">Create / Assign<br />Diet</span>
+                                </a>
+
+                                <a href="feedback-notifications-preview.html?role=trainer#feedback" class="ht-action-card-btn">
+                                    <span class="ht-action-card-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="ht-action-card-text">Provide<br />Feedback</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Main Clients Card -->
+                        <section class="ht-card" aria-labelledby="headingClientsDirectory">
+                            <div class="ht-card-header-flex">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="ht-header-icon-badge" aria-hidden="true">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="ht-card-title mb-0" id="headingClientsDirectory">All Registered Clients</h2>
+                                        <p class="ht-card-subtitle mb-0">Select any client to view their individual overview, routines and feedback</p>
+                                    </div>
+                                </div>
+                                <span class="ht-badge-total">${clientsList.length} Total Clients</span>
+                            </div>
+
+                            <!-- Clients Table -->
+                            <div class="table-responsive">
+                                <table class="table ht-trainer-table align-middle mb-0" aria-label="Clients Directory Table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="ht-th-col">CLIENT</th>
+                                            <th scope="col" class="ht-th-col">LATEST WEIGHT</th>
+                                            <th scope="col" class="ht-th-col text-end">ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${tableRowsHtml}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                `;
+            }
+
+            // ========================================================
+            // SCREEN RENDERER 2: Client Overview (_ClientOverviewPartial)
+            // ========================================================
+            function renderClientOverview(client) {
+                pageTitle.textContent = `${client.name} - Client Overview - HealthTrack Trainer Portal`;
+                updateSidebar('clients');
+                updateQuickSwitcher('client', client.clientId);
+
+                const hasWeight = client.latestWeight !== null && client.latestWeight !== undefined;
+
+                screenContainer.innerHTML = `
+                    <div class="ht-dashboard-container p-0">
+                        <!-- Breadcrumb & Back Navigation -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <a href="trainer-clients-preview.html?screen=clients" class="ht-card-link-action p-0" data-preview-route id="linkBackToClients">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Clients</span>
+                            </a>
+                            <span class="text-muted" aria-hidden="true">•</span>
+                            <a href="trainer-clients-preview.html?screen=dashboard" class="ht-card-link-action p-0" data-preview-route id="linkBackToDashboardFromOverview">
+                                <span>Back to Trainer Dashboard</span>
+                            </a>
+                        </div>
+
+                        <!-- Client Profile Header Banner -->
+                        <section class="ht-card mb-4" aria-labelledby="clientHeaderTitle">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="ht-client-avatar-lg" aria-hidden="true">
+                                        ${client.initials}
+                                    </div>
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <h1 class="ht-welcome-title mb-0" id="clientHeaderTitle">${client.name}</h1>
+                                            <span class="ht-status-badge ht-status-confirmed">Active Client</span>
+                                        </div>
+                                        <p class="ht-card-subtitle mb-0 mt-1">Client Identifier: <strong class="text-dark">${client.displayId}</strong></p>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Action Shortcuts -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="feedback-notifications-preview.html?role=trainer&clientId=${client.clientId}#feedback" class="ht-action-card-btn py-2 px-3" title="Provide trainer feedback for ${client.name}">
+                                        <span class="ht-action-card-icon" style="width:26px; height:26px;" aria-hidden="true">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="ht-action-card-text" style="font-size:0.8rem;">Give Feedback</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Two-Column Overview Grid -->
+                        <div class="row g-4 mb-4">
+                            <!-- Left Column: Health Metrics & Recorded Progress -->
+                            <div class="col-12 col-lg-6">
+                                <section class="ht-card h-100 d-flex flex-column" aria-labelledby="headingLatestProgress">
+                                    <div class="ht-card-header-flex">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="9"></circle>
+                                                    <line x1="12" y1="3" x2="12" y2="21"></line>
+                                                    <line x1="8" y1="8" x2="16" y2="8"></line>
+                                                    <line x1="7" y1="16" x2="17" y2="16"></line>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0" id="headingLatestProgress">Latest Health Metric</h2>
+                                                <p class="ht-card-subtitle mb-0">Most recently recorded progress measurement</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex-grow-1">
+                                        ${hasWeight ? `
+                                            <div class="ht-progress-summary-card mb-3">
+                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                    <span class="ht-summary-client-name">Recorded Body Weight</span>
+                                                    <div class="ht-summary-scale-icon" aria-hidden="true">
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                                            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                                            <path d="M7 21h10"></path>
+                                                            <path d="M12 3v18"></path>
+                                                            <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div class="ht-summary-weight">
+                                                    ${client.latestWeight.toFixed(1)} <span class="ht-summary-unit">${client.weightUnit}</span>
+                                                </div>
+                                                <div class="ht-summary-note">Latest recorded weight measurement on file</div>
+                                            </div>
+                                        ` : `
+                                            <div class="p-4 rounded-3 border border-dashed bg-light text-center mb-3">
+                                                <div class="ht-workout-empty-icon mx-auto mb-2" style="width:48px; height:48px;" aria-hidden="true">
+                                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                                                    </svg>
+                                                </div>
+                                                <div class="fw-semibold text-dark">No latest weight recorded</div>
+                                                <div class="small text-muted mt-1">This client has not logged any body weight measurements yet.</div>
+                                            </div>
+                                        `}
+
+                                        <div class="ht-workout-notice mt-auto">
+                                            <div class="small text-muted">
+                                                <strong>Data Governance Note:</strong> Additional biometric details (such as height, BMI trends, and individual consultations) are recorded and maintained through the client's self-tracking portal and administrative records.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <!-- Right Column: Client Management Actions & Routines -->
+                            <div class="col-12 col-lg-6">
+                                <section class="ht-card h-100 d-flex flex-column" aria-labelledby="headingClientManagement">
+                                    <div class="ht-card-header-flex">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0" id="headingClientManagement">Client Management</h2>
+                                                <p class="ht-card-subtitle mb-0">Manage routines, diet plans and feedback for ${client.name}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Navigation to features -->
+                                    <div class="d-flex flex-column gap-3 flex-grow-1">
+                                        <!-- 1. View Workout Plans -->
+                                        <a href="workout-preview.html?clientId=${client.clientId}" class="ht-client-overview-action" title="View Workout Plans for ${client.name}">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <span class="ht-action-card-icon" aria-hidden="true">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="m6.5 6.5 11 11"></path>
+                                                        <path d="m21 21-1-1a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-1.58-1.58a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83L11.5 10.5"></path>
+                                                        <path d="m3 3 1 1a2 2 0 0 0 2.83 0l.88-.88a2 2 0 0 1 2.83 0l1.58 1.58a2 2 0 0 1 0 2.83l-.88.88a2 2 0 0 0 0 2.83l2.25 2.25"></path>
+                                                    </svg>
+                                                </span>
+                                                <div>
+                                                    <div class="fw-bold text-dark">View Workout Plans</div>
+                                                    <div class="small text-muted">Review exercises and routines assigned to this client</div>
+                                                </div>
+                                            </div>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted" aria-hidden="true">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
+
+                                        <!-- 2. View Diet Plans -->
+                                        <a href="diet-preview.html?clientId=${client.clientId}" class="ht-client-overview-action" title="View Diet Plans for ${client.name}">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <span class="ht-action-card-icon" aria-hidden="true">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M18 2v20"></path>
+                                                        <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                                        <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                                        <path d="M8 10v12"></path>
+                                                    </svg>
+                                                </span>
+                                                <div>
+                                                    <div class="fw-bold text-dark">View Diet Plans</div>
+                                                    <div class="small text-muted">Check nutrition schedules and meal allocations</div>
+                                                </div>
+                                            </div>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted" aria-hidden="true">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
+
+                                        <!-- 3. Provide Feedback -->
+                                        <a href="feedback-notifications-preview.html?role=trainer&clientId=${client.clientId}#feedback" class="ht-client-overview-action" title="Provide Trainer Feedback for ${client.name}">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <span class="ht-action-card-icon" aria-hidden="true">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                                    </svg>
+                                                </span>
+                                                <div>
+                                                    <div class="fw-bold text-dark">Provide Trainer Feedback</div>
+                                                    <div class="small text-muted">Submit motivational notes and routine adjustments</div>
+                                                </div>
+                                            </div>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted" aria-hidden="true">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <!-- Return Actions Footer -->
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <a href="trainer-clients-preview.html?screen=clients" class="ht-action-card-btn" data-preview-route id="btnReturnToClients">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Return to Clients Directory</span>
+                            </a>
+                            <a href="trainer-clients-preview.html?screen=dashboard" class="ht-action-card-btn" data-preview-route id="btnReturnToDashboard">
+                                <span>Back to Dashboard</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // ========================================================
+            // SCREEN RENDERER 3: Client Not Found State
+            // ========================================================
+            function renderClientNotFound(displayId) {
+                pageTitle.textContent = "Client Not Found - HealthTrack Trainer Portal";
+                updateSidebar('clients');
+                updateQuickSwitcher('client', isNaN(displayId) ? 99999 : displayId);
+
+                screenContainer.innerHTML = `
+                    <div class="ht-dashboard-container p-0">
+                        <!-- Breadcrumb Navigation -->
+                        <div class="mb-3">
+                            <a href="trainer-clients-preview.html?screen=clients" class="ht-card-link-action p-0" data-preview-route id="linkNotFoundBackToClients">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1" aria-hidden="true">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Back to Clients</span>
+                            </a>
+                        </div>
+
+                        <!-- Safe Client Not Found State Card (matching Razor Index.cshtml lines 40-58) -->
+                        <div class="ht-card text-center py-5">
+                            <div class="ht-workout-empty-icon mx-auto mb-3" aria-hidden="true">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <h2 class="ht-card-title mb-2">Client Not Found</h2>
+                            <p class="text-muted mb-4">The client record with ID #${displayId} was not found in the current client registry.</p>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                <a href="trainer-clients-preview.html?screen=clients" class="ht-action-card-btn" data-preview-route id="btnNotFoundReturnClients">
+                                    <span>Return to Clients Directory</span>
+                                </a>
+                                <a href="trainer-clients-preview.html?screen=dashboard" class="ht-action-card-btn" data-preview-route id="btnNotFoundReturnDashboard">
+                                    <span>Back to Trainer Dashboard</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // ========================================================
+            // SCREEN RENDERER 4: Trainer Dashboard (Index.cshtml)
+            // ========================================================
+            function renderDashboard() {
+                pageTitle.textContent = "Trainer Dashboard - HealthTrack Trainer Portal";
+                updateSidebar('dashboard');
+                updateQuickSwitcher('dashboard', null);
+
+                const clientsList = defaultDemoClients.slice(0, 4);
+
+                screenContainer.innerHTML = `
+                    <div class="ht-dashboard-container p-0">
+                        <!-- Top Header & Quick Actions Row -->
+                        <div class="ht-trainer-header-row mb-4">
+                            <!-- Welcome Heading on the Left -->
+                            <div class="ht-welcome-section">
+                                <h1 class="ht-welcome-title">
+                                    Welcome back,<br />Marcus
+                                </h1>
+                                <p class="ht-welcome-subtitle">Here's your client and appointment overview.</p>
+                            </div>
+
+                            <!-- Action Cards on the Right matching attached screenshot -->
+                            <div class="ht-trainer-actions-group" role="toolbar" aria-label="Trainer Quick Actions">
+                                <a href="workout-preview.html" class="ht-action-card-btn">
+                                    <span class="ht-action-card-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                    </span>
+                                    <span class="ht-action-card-text">Create / Assign<br />Workout</span>
+                                </a>
+
+                                <a href="diet-preview.html" class="ht-action-card-btn">
+                                    <span class="ht-action-card-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                    </span>
+                                    <span class="ht-action-card-text">Create / Assign<br />Diet</span>
+                                </a>
+
+                                <a href="feedback-notifications-preview.html?role=trainer#feedback" class="ht-action-card-btn">
+                                    <span class="ht-action-card-icon" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="ht-action-card-text">Provide<br />Feedback</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Main Dashboard Two-Column Grid -->
+                        <div class="row g-4">
+                            <!-- Left Column: Assigned Clients & Client Progress Summary -->
+                            <div class="col-12 col-lg-7 col-xl-7 d-flex flex-column gap-4">
+                                <!-- Card 1: Assigned Clients & Progress -->
+                                <section class="ht-card" id="clients-roster" aria-labelledby="headingAssignedClients">
+                                    <div class="ht-card-header-flex">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="9" cy="7" r="4"></circle>
+                                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0" id="headingAssignedClients">Assigned Clients &amp; Progress</h2>
+                                                <p class="ht-card-subtitle mb-0">Active roster and direct profile access</p>
+                                            </div>
+                                        </div>
+                                        <a href="trainer-clients-preview.html?screen=clients" class="ht-card-link-action" data-preview-route id="linkDashboardViewAllClients">
+                                            <span>View All Clients</span>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <!-- Clients Table / Roster -->
+                                    <div class="table-responsive">
+                                        <table class="table ht-trainer-table align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="ht-th-col">CLIENT</th>
+                                                    <th scope="col" class="ht-th-col">PROGRESS</th>
+                                                    <th scope="col" class="ht-th-col text-end">ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${clientsList.map(c => `
+                                                    <tr class="ht-client-row">
+                                                        <td>
+                                                            <div class="d-flex align-items-center gap-3">
+                                                                <div class="ht-client-avatar">
+                                                                    ${c.initials}
+                                                                </div>
+                                                                <div class="d-flex flex-column">
+                                                                    <span class="ht-client-name">${c.name}</span>
+                                                                    <span class="ht-client-id">ID: ${c.displayId}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="ht-client-progress-text">
+                                                                <span class="ht-prog-label">Weight:</span>
+                                                                <strong class="ht-prog-val">${c.latestWeight !== null ? `${c.latestWeight.toFixed(1)} ${c.weightUnit}` : "—"}</strong>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <a href="trainer-clients-preview.html?screen=client&clientId=${c.clientId}" class="ht-view-details-link" data-preview-route>
+                                                                <span>View Client</span>
+                                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                                                </svg>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                `).join("")}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </section>
+
+                                <!-- Card 2: Client Progress Summary -->
+                                <section class="ht-card" aria-labelledby="headingProgressSummary">
+                                    <div class="ht-card-header-flex">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="9"></circle>
+                                                    <line x1="12" y1="3" x2="12" y2="21"></line>
+                                                    <line x1="8" y1="8" x2="16" y2="8"></line>
+                                                    <line x1="7" y1="16" x2="17" y2="16"></line>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0" id="headingProgressSummary">Client Progress Summary</h2>
+                                                <p class="ht-card-subtitle mb-0">Recent weight log updates from assigned clients</p>
+                                            </div>
+                                        </div>
+                                        <a href="trainer-clients-preview.html?screen=clients" class="ht-card-link-action" data-preview-route id="linkDashboardProgressToClients">
+                                            <span>View All Clients</span>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <!-- 3 Mini Cards in a Row -->
+                                    <div class="ht-progress-summary-grid">
+                                        ${demoProgressSummaries.map(s => `
+                                            <div class="ht-progress-summary-card">
+                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                    <span class="ht-summary-client-name">${s.clientFirstName}</span>
+                                                    <div class="ht-summary-scale-icon" aria-hidden="true">
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                                            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                                                            <path d="M7 21h10"></path>
+                                                            <path d="M12 3v18"></path>
+                                                            <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div class="ht-summary-weight">
+                                                    ${s.weight.toFixed(1)} <span class="ht-summary-unit">${s.weightUnit}</span>
+                                                </div>
+                                                <div class="ht-summary-note">${s.statusNote}</div>
+                                            </div>
+                                        `).join("")}
+                                    </div>
+                                </section>
+                            </div>
+
+                            <!-- Right Column: Appointments -->
+                            <div class="col-12 col-lg-5 col-xl-5">
+                                <section class="ht-card h-100 d-flex flex-column" aria-labelledby="headingAppointments">
+                                    <div class="ht-card-header-flex">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ht-header-icon-badge" aria-hidden="true">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="ht-card-title mb-0" id="headingAppointments">Appointments</h2>
+                                                <p class="ht-card-subtitle mb-0">Upcoming &amp; Pending</p>
+                                            </div>
+                                        </div>
+                                        <span class="ht-badge-total">${demoAppointments.length} Total</span>
+                                    </div>
+
+                                    <!-- Appointment Items List -->
+                                    <div class="ht-appointments-list flex-grow-1">
+                                        ${demoAppointments.map(appt => `
+                                            <div class="ht-appointment-box mb-3">
+                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                    <div class="ht-appointment-time d-flex align-items-center gap-2">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <circle cx="12" cy="12" r="10"></circle>
+                                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                                        </svg>
+                                                        <span>${appt.timeFormatted}</span>
+                                                    </div>
+                                                    <span class="ht-status-badge ${appt.status.toLowerCase() === 'confirmed' ? 'ht-status-confirmed' : 'ht-status-pending'}">
+                                                        ${appt.status}
+                                                    </span>
+                                                </div>
+                                                <h3 class="ht-appointment-client-name mb-1">${appt.clientName}</h3>
+                                                <div class="ht-appointment-type">${appt.serviceType}</div>
+                                            </div>
+                                        `).join("")}
+                                    </div>
+
+                                    <!-- View Appointments Button at Bottom -->
+                                    <div class="mt-3">
+                                        <a href="appointments-preview.html?role=trainer" class="ht-btn-view-appointments" title="View all appointments">
+                                            <span>View Appointments</span>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // ========================================================
+            // MAIN ROUTER / SCREEN DISPATCHER
+            // ========================================================
+            function renderCurrentScreen() {
+                const { screen, clientId, rawClientId } = parseRoute();
+
+                if (screen === 'dashboard') {
+                    renderDashboard();
+                } else if (screen === 'client') {
+                    if (clientId === null || isNaN(clientId)) {
+                        renderClientNotFound(rawClientId || "0");
+                        return;
+                    }
+                    const matchedClient = defaultDemoClients.find(c => c.clientId === clientId);
+                    if (matchedClient) {
+                        renderClientOverview(matchedClient);
+                    } else {
+                        renderClientNotFound(rawClientId || String(clientId));
+                    }
+                } else {
+                    // Default to 'clients' directory
+                    renderClientsDirectory();
+                }
+
+                // Scroll to top upon transition
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }
+
+            // ========================================================
+            // INTERACTIVE EVENT LISTENERS
+            // ========================================================
+
+            // Mobile sidebar drawer toggles
+            function openDrawer() {
+                portalSidebar.classList.add('show');
+                sidebarBackdrop.classList.add('show');
+            }
+            function closeDrawer() {
+                portalSidebar.classList.remove('show');
+                sidebarBackdrop.classList.remove('show');
+            }
+            if (openSidebarBtn) openSidebarBtn.addEventListener('click', openDrawer);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeDrawer);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+            // Toggle empty roster demonstration button
+            if (btnToggleEmptyRoster) {
+                btnToggleEmptyRoster.addEventListener('click', function () {
+                    isRosterEmptySimulated = !isRosterEmptySimulated;
+                    btnToggleEmptyText.textContent = isRosterEmptySimulated ? "Reset Roster" : "Test 0 Clients";
+                    btnToggleEmptyRoster.classList.toggle('btn-outline-danger', isRosterEmptySimulated);
+                    btnToggleEmptyRoster.classList.toggle('btn-outline-secondary', !isRosterEmptySimulated);
+                    const { screen } = parseRoute();
+                    if (screen === 'clients') {
+                        renderClientsDirectory();
+                    }
+                });
+            }
+
+            // Client-side smooth navigation handler for preview links
+            document.addEventListener('click', function (e) {
+                const anchor = e.target.closest('a[href*="trainer-clients-preview.html"]');
+                if (!anchor) return;
+
+                // Allow external modifications or default browser behaviors (ctrl/cmd click, target blank)
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || anchor.target === '_blank') {
+                    return;
+                }
+
+                const href = anchor.getAttribute('href');
+                if (!href) return;
+
+                // Close mobile drawer if opened
+                closeDrawer();
+
+                try {
+                    const parsedUrl = new URL(href, window.location.href);
+                    if (parsedUrl.pathname.endsWith('trainer-clients-preview.html')) {
+                        e.preventDefault();
+                        history.pushState(null, '', parsedUrl.search || '?screen=clients');
+                        renderCurrentScreen();
+                    }
+                } catch (err) {
+                    // Fall back to standard browser navigation
+                }
+            });
+
+            // Listen to browser Back and Forward navigation
+            window.addEventListener('popstate', renderCurrentScreen);
+
+            // Initial render on load
+            renderCurrentScreen();
+        })();
+    </script>
+</body>
+</html>

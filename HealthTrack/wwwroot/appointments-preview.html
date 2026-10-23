@@ -166,7 +166,7 @@
                     <section id="sectionClientAppointments">
                         <!-- Breadcrumb -->
                         <div class="mb-3">
-                            <a href="/Client/Preview" class="ht-card-link-action p-0">
+                            <a href="client-dashboard-preview.html" class="ht-card-link-action p-0">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -316,7 +316,7 @@
                     <section id="sectionTrainerAppointments" class="d-none">
                         <!-- Breadcrumb -->
                         <div class="mb-3">
-                            <a href="/Trainer/Preview" class="ht-card-link-action p-0">
+                            <a href="trainer-clients-preview.html?screen=dashboard" class="ht-card-link-action p-0">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -480,7 +480,7 @@
                     <section id="sectionBookingForm" class="d-none">
                         <!-- Breadcrumb -->
                         <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
-                            <a href="/Client/Preview" class="ht-card-link-action p-0">
+                            <a href="client-dashboard-preview.html" class="ht-card-link-action p-0">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -721,7 +721,7 @@
             function renderSidebar(role) {
                 const brandLink = document.getElementById('sidebarBrandLink');
                 if (brandLink) {
-                    brandLink.href = role === 'trainer' ? '/Trainer/Preview' : '/Client/Preview';
+                    brandLink.href = role === 'trainer' ? 'trainer-clients-preview.html?screen=dashboard' : 'client-dashboard-preview.html';
                 }
 
                 if (role === 'client') {
@@ -732,7 +732,7 @@
                     userRoleBadge.textContent = 'Client';
 
                     sidebarMenuNav.innerHTML = `
-                        <a href="/Client/Preview" class="ht-nav-item" title="Dashboard">
+                        <a href="client-dashboard-preview.html" class="ht-nav-item" title="Dashboard">
                             <span class="ht-nav-icon" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="7" height="7" x="3" y="3" rx="1"></rect>
@@ -814,7 +814,7 @@
                     userRoleBadge.textContent = 'Trainer';
 
                     sidebarMenuNav.innerHTML = `
-                        <a href="/Trainer/Preview" class="ht-nav-item" title="Dashboard">
+                        <a href="trainer-clients-preview.html?screen=dashboard" class="ht-nav-item" title="Dashboard">
                             <span class="ht-nav-icon" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="7" height="7" x="3" y="3" rx="1"></rect>
@@ -825,7 +825,7 @@
                             </span>
                             <span>Dashboard</span>
                         </a>
-                        <a href="/Trainer/Preview#clients-roster" class="ht-nav-item" title="Clients">
+                        <a href="trainer-clients-preview.html?screen=clients" class="ht-nav-item" title="Clients">
                             <span class="ht-nav-icon" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             </span>
@@ -863,7 +863,7 @@
                             </span>
                             <span>Appointments</span>
                         </a>
-                        <a href="#progress" class="ht-nav-item" onclick="event.preventDefault();" title="Progress">
+                        <a href="trainer-clients-preview.html?screen=dashboard#headingProgressSummary" class="ht-nav-item" title="Progress">
                             <span class="ht-nav-icon" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="m22 7-8.5 8.5-5-5L2 17"></path>

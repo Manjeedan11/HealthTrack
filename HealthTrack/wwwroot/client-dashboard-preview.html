@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client Dashboard Preview - HealthTrack Client Portal</title>
+
+    <!-- Typography: Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+<body class="ht-portal-body">
+    <!-- Accessible Skip Link -->
+    <a href="#portal-main-content" class="skip-link">Skip to main content</a>
+
+    <div class="ht-portal-shell">
+        <!-- ======================================================== -->
+        <!-- SIDEBAR NAVIGATION (255px wide desktop)                  -->
+        <!-- ======================================================== -->
+        <aside class="ht-portal-sidebar" id="portalSidebar" aria-label="Client Portal Navigation">
+            <!-- Sidebar Header / Brand -->
+            <div class="ht-sidebar-header">
+                <a class="ht-sidebar-brand" href="client-dashboard-preview.html" id="sidebarBrandLink">
+                    <span class="ht-sidebar-badge" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                    </span>
+                    <div class="ht-brand-titles">
+                        <span class="ht-brand-main">HealthTrack</span>
+                        <span class="ht-brand-sub">Client Portal</span>
+                    </div>
+                </a>
+                <button type="button" class="btn-close d-lg-none" id="closeSidebarBtn" aria-label="Close navigation"></button>
+            </div>
+
+            <!-- Primary Navigation Links matching Client Portal -->
+            <nav class="ht-sidebar-menu">
+                <!-- 1. Dashboard (Active) -->
+                <a href="client-dashboard-preview.html" class="ht-nav-item active" id="navItemDashboard" title="Dashboard" aria-current="page">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                        </svg>
+                    </span>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- 2. Workout Plans -->
+                <a href="client-plans-preview.html#workout-plans" class="ht-nav-item" title="Workout Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h6v6"></path>
+                            <path d="M9 21H3v-6"></path>
+                            <path d="M21 3l-7 7"></path>
+                            <path d="M3 21l7-7"></path>
+                        </svg>
+                    </span>
+                    <span>Workout Plans</span>
+                </a>
+
+                <!-- 3. My Workouts -->
+                <a href="client-plans-preview.html#my-workouts" class="ht-nav-item" title="My Workouts">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                    </span>
+                    <span>My Workouts</span>
+                </a>
+
+                <!-- 4. Diet Plans -->
+                <a href="client-plans-preview.html#diet-plans" class="ht-nav-item" title="Diet Plans">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v20"></path>
+                            <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                            <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                            <path d="M8 10v12"></path>
+                        </svg>
+                    </span>
+                    <span>Diet Plans</span>
+                </a>
+
+                <!-- 5. Health Measurements -->
+                <a href="client-health-preview.html#measurements" class="ht-nav-item" title="Health Measurements">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <path d="M6 12h.01M18 12h.01"></path>
+                        </svg>
+                    </span>
+                    <span>Health Measurements</span>
+                </a>
+
+                <!-- 6. Progress & Analytics -->
+                <a href="client-health-preview.html#progress" class="ht-nav-item" title="Progress & Analytics">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"></path>
+                            <path d="m19 9-5 5-4-4-3 3"></path>
+                        </svg>
+                    </span>
+                    <span>Progress &amp; Analytics</span>
+                </a>
+
+                <!-- 7. Appointments -->
+                <a href="appointments-preview.html?role=client" class="ht-nav-item" title="Appointments">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </span>
+                    <span>Appointments</span>
+                </a>
+
+                <!-- 8. Trainer Feedback -->
+                <a href="feedback-notifications-preview.html?role=client#feedback" class="ht-nav-item" title="Trainer Feedback">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    <span>Trainer Feedback</span>
+                </a>
+
+                <!-- 9. Notifications -->
+                <a href="feedback-notifications-preview.html?role=client#notifications" class="ht-nav-item" title="Notifications">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </span>
+                    <span>Notifications</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation: Settings & Sign Out -->
+            <div class="ht-sidebar-footer">
+                <a href="javascript:void(0);" class="ht-nav-item" onclick="event.preventDefault();" aria-label="Portal settings">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                    <span>Settings</span>
+                </a>
+
+                <a href="javascript:void(0);" class="ht-nav-item ht-nav-signout w-100" onclick="alert('Preview Mode: Sign out simulated.');">
+                    <span class="ht-nav-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </span>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar drawer -->
+        <div class="ht-sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+        <!-- Main Column -->
+        <div class="ht-portal-main">
+            <!-- Topbar (White bar matching Client Portal) -->
+            <header class="ht-portal-topbar">
+                <div class="ht-topbar-left">
+                    <button type="button" class="ht-mobile-toggle d-lg-none" id="openSidebarBtn" aria-label="Open navigation menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6e5a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="d-none d-sm-inline">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"></path>
+                        </svg>
+                        <span class="fw-semibold text-dark" style="font-size: 0.95rem;">Client Portal Preview</span>
+                    </div>
+                </div>
+
+                <div class="ht-topbar-right">
+                    <!-- Notification Bell with indicator -->
+                    <a href="feedback-notifications-preview.html?role=client#notifications" class="ht-topbar-btn position-relative" aria-label="Notifications" title="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span class="ht-notification-dot" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- User Profile Area -->
+                    <div class="ht-topbar-profile">
+                        <div class="ht-profile-avatar" id="clientAvatar">DP</div>
+                        <div class="ht-profile-details">
+                            <span class="ht-profile-name" id="clientFullName">Dhammika Perera</span>
+                            <span class="ht-profile-role">Client</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body Content -->
+            <main id="portal-main-content" role="main" class="ht-portal-content">
+                <div class="ht-dashboard-container">
+                    <!-- Preview Notice Banner with Navigation Links -->
+                    <div class="ht-demo-notice alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div class="small">
+                                <strong>PREVIEW MODE — DEMONSTRATION DATA ONLY. NOT LIVE DATABASE DATA.</strong>
+                                <span class="d-none d-md-inline ms-1 text-muted">Standalone Client Dashboard preview for visual testing of features and cross-page navigation.</span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Jump Bar to Related Previews -->
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="small text-muted fw-semibold d-none d-sm-inline">Switch View:</span>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Portal Navigation Switcher">
+                                <a href="client-plans-preview.html#workout-plans" class="btn btn-outline-primary" title="Workout & Diet Plans">Plans</a>
+                                <a href="client-health-preview.html#measurements" class="btn btn-outline-primary" title="Health Metrics">Health</a>
+                                <a href="appointments-preview.html?role=client" class="btn btn-outline-primary" title="Appointments">Bookings</a>
+                                <a href="feedback-notifications-preview.html?role=client#feedback" class="btn btn-outline-primary" title="Feedback & Notifications">Feedback</a>
+                                <a href="trainer-clients-preview.html?screen=dashboard" class="btn btn-outline-secondary" title="Switch to Trainer Portal Preview">Trainer Portal</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Welcome Section -->
+                    <div class="ht-welcome-section mb-4">
+                        <h1 class="ht-welcome-title">Welcome back, Dhammika</h1>
+                        <p class="ht-welcome-subtitle">Here's your health and fitness overview.</p>
+                    </div>
+
+                    <!-- Quick Action Buttons Row -->
+                    <div class="ht-quick-actions mb-4" role="toolbar" aria-label="Quick Actions">
+                        <a href="client-plans-preview.html#workout-plans" class="ht-action-btn" title="Log Workout">
+                            <span class="ht-action-icon" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M15 3h6v6"></path>
+                                    <path d="M9 21H3v-6"></path>
+                                    <path d="M21 3l-7 7"></path>
+                                    <path d="M3 21l7-7"></path>
+                                </svg>
+                            </span>
+                            <span>+ Log Workout</span>
+                        </a>
+
+                        <a href="client-plans-preview.html#diet-plans" class="ht-action-btn" title="Log Meal">
+                            <span class="ht-action-icon" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 2v20"></path>
+                                    <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
+                                    <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
+                                    <path d="M8 10v12"></path>
+                                </svg>
+                            </span>
+                            <span>+ Log Meal</span>
+                        </a>
+
+                        <a href="client-health-preview.html#measurements" class="ht-action-btn" title="Health Measurement">
+                            <span class="ht-action-icon" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                    <path d="M6 12h.01M18 12h.01"></path>
+                                </svg>
+                            </span>
+                            <span>+ Health Measurement</span>
+                        </a>
+
+                        <a href="appointments-preview.html?role=client" class="ht-action-btn" title="Book Appointment">
+                            <span class="ht-action-icon" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    <line x1="12" y1="12" x2="12" y2="14"></line>
+                                    <line x1="10" y1="14" x2="14" y2="14"></line>
+                                </svg>
+                            </span>
+                            <span>+ Book Appointment</span>
+                        </a>
+                    </div>
+
+                    <!-- Health Summary KPI Cards (3 in a row) -->
+                    <div class="ht-kpi-grid mb-4">
+                        <!-- Body Weight Card -->
+                        <div class="ht-card ht-kpi-card">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">BODY WEIGHT</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 22h14"></path>
+                                        <path d="M5 2h14"></path>
+                                        <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
+                                        <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">78.5</span>
+                                <span class="ht-kpi-unit">kg</span>
+                            </div>
+                            <div class="ht-kpi-sub">
+                                <span class="ht-trend-text text-success">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="7" y1="7" x2="17" y2="17"></line>
+                                        <polyline points="17 7 17 17 7 17"></polyline>
+                                    </svg>
+                                    -1.5 kg (30 days)
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- BMI Card -->
+                        <div class="ht-card ht-kpi-card">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">BMI</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="5" r="2"></circle>
+                                        <path d="m9 20 3-6 3 6"></path>
+                                        <path d="m6 8 6 2 6-2"></path>
+                                        <path d="M12 10v4"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">24.8</span>
+                                <span class="ht-kpi-unit">kg/m²</span>
+                            </div>
+                            <div class="ht-kpi-sub">
+                                <span class="ht-pill-normal">Normal</span>
+                            </div>
+                        </div>
+
+                        <!-- Calories Burned Card -->
+                        <div class="ht-card ht-kpi-card">
+                            <div class="ht-kpi-top">
+                                <span class="ht-kpi-label">CALORIES BURNED</span>
+                                <span class="ht-kpi-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="ht-kpi-val-row">
+                                <span class="ht-kpi-val">1,850</span>
+                                <span class="ht-kpi-unit">kcal</span>
+                            </div>
+                            <div class="ht-kpi-sub">
+                                <span class="ht-goal-text">Goal: 2,200</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main 2-Column Dashboard Cards Grid -->
+                    <div class="ht-main-grid">
+                        <!-- Card 1: Today's Workout -->
+                        <div class="ht-card">
+                            <div class="ht-card-header-row">
+                                <h2 class="ht-card-heading">Today's Workout</h2>
+                                <a href="client-plans-preview.html#workout-plans" class="ht-card-link">View Workout Plan &rarr;</a>
+                            </div>
+
+                            <h3 class="ht-card-feature-title">Upper Body Strength &amp; Hypertrophy</h3>
+                            <div class="ht-card-info-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2 text-muted">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span>07:30 AM · 45 mins</span>
+                            </div>
+                            <div class="ht-card-info-item text-muted">
+                                <span>Assigned by: <strong>Marcus Vance</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Upcoming Appointment -->
+                        <div class="ht-card">
+                            <div class="ht-card-header-row">
+                                <h2 class="ht-card-heading">Upcoming Appointment</h2>
+                                <a href="appointments-preview.html?role=client" class="ht-card-link">View Appointment &rarr;</a>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h3 class="ht-card-feature-title mb-0">Nutrition &amp; Weight Loss Consultation</h3>
+                                <span class="ht-pill-confirmed">Confirmed</span>
+                            </div>
+                            <div class="ht-card-info-item text-muted">
+                                <span>Provider: <strong>Marcus Vance</strong></span>
+                            </div>
+                            <div class="ht-card-info-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2 text-muted">
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <span>Tomorrow, 10:00 AM</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Today's Diet Plan -->
+                        <div class="ht-card">
+                            <div class="ht-card-header-row">
+                                <h2 class="ht-card-heading">Today's Diet Plan</h2>
+                                <a href="client-plans-preview.html#diet-plans" class="ht-card-link">View Diet Plan &rarr;</a>
+                            </div>
+
+                            <div class="ht-diet-plan-meta mb-3">
+                                <span class="text-muted">Current Plan: <strong>High Protein Lean Mass (Week 4)</strong></span>
+                            </div>
+
+                            <div class="ht-meals-list">
+                                <div class="ht-meal-row">
+                                    <span class="ht-meal-text"><strong>Breakfast:</strong> Oatmeal, Whey Protein &amp; Berries</span>
+                                    <span class="ht-pill-completed">Completed</span>
+                                </div>
+                                <div class="ht-meal-row">
+                                    <span class="ht-meal-text"><strong>Lunch:</strong> Grilled Chicken Breast with Quinoa</span>
+                                    <span class="ht-meal-time">1:00 PM</span>
+                                </div>
+                                <div class="ht-meal-row">
+                                    <span class="ht-meal-text"><strong>Dinner:</strong> Baked Salmon, Asparagus &amp; Sweet Potato</span>
+                                    <span class="ht-meal-time">7:30 PM</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Progress Tracking -->
+                        <div class="ht-card">
+                            <div class="ht-card-header-row">
+                                <h2 class="ht-card-heading">Progress Tracking</h2>
+                                <a href="client-health-preview.html#progress" class="ht-card-link">View Progress &rarr;</a>
+                            </div>
+
+                            <div class="ht-progress-header mb-3">
+                                <span class="ht-progress-diff">Down 1.5 kg over 30 days</span>
+                                <span class="ht-progress-range text-muted">Past 4 weeks</span>
+                            </div>
+
+                            <!-- Clean SVG Line Chart matching Client Index reference -->
+                            <div class="ht-chart-box">
+                                <svg viewBox="0 0 400 120" class="ht-progress-chart" preserveAspectRatio="none" aria-label="Weight progress trend chart">
+                                    <!-- Horizontal reference guideline -->
+                                    <line x1="20" y1="65" x2="380" y2="65" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" />
+
+                                    <!-- Trend Line -->
+                                    <polyline fill="none" stroke="#095c4d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                              points="40,40 140,55 240,75 360,95" />
+
+                                    <!-- Data Points -->
+                                    <circle cx="40" cy="40" r="4.5" fill="#ffffff" stroke="#095c4d" stroke-width="2.5" />
+                                    <circle cx="140" cy="55" r="4.5" fill="#ffffff" stroke="#095c4d" stroke-width="2.5" />
+                                    <circle cx="240" cy="75" r="4.5" fill="#ffffff" stroke="#095c4d" stroke-width="2.5" />
+                                    <circle cx="360" cy="95" r="4.5" fill="#095c4d" stroke="#095c4d" stroke-width="2.5" />
+                                </svg>
+
+                                <!-- Chart Bottom Labels -->
+                                <div class="ht-chart-labels">
+                                    <span class="ht-chart-label">Week 1 (80.0kg)</span>
+                                    <span class="ht-chart-label">Week 2 (79.4kg)</span>
+                                    <span class="ht-chart-label">Week 3 (78.9kg)</span>
+                                    <span class="ht-chart-label">Week 4 (78.5kg)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Reminders -->
+                        <div class="ht-card">
+                            <div class="ht-card-header-row">
+                                <h2 class="ht-card-heading">Reminders</h2>
+                                <a href="feedback-notifications-preview.html?role=client#notifications" class="ht-card-link">View All &rarr;</a>
+                            </div>
+
+                            <div class="ht-reminders-list">
+                                <div class="ht-reminder-row">
+                                    <span class="ht-reminder-title">Hydration checkpoint: Drink 500ml water</span>
+                                    <span class="ht-reminder-time text-muted">11:00 AM</span>
+                                </div>
+                                <div class="ht-reminder-row">
+                                    <span class="ht-reminder-title">Log lunch macros in Diet tracker</span>
+                                    <span class="ht-reminder-time text-muted">1:30 PM</span>
+                                </div>
+                                <div class="ht-reminder-row">
+                                    <span class="ht-reminder-title">Consultation with Trainer Marcus</span>
+                                    <span class="ht-reminder-time text-muted">Tomorrow 10:00 AM</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 6: Latest Trainer Feedback -->
+                        <div class="ht-card">
+                            <div class="ht-card-header-row">
+                                <h2 class="ht-card-heading">Latest Trainer Feedback</h2>
+                                <a href="feedback-notifications-preview.html?role=client#feedback" class="ht-card-link">View Feedback &rarr;</a>
+                            </div>
+
+                            <div class="ht-feedback-card">
+                                <p class="ht-feedback-quote mb-2">"Great work completing all 4 sets on the deadlifts this week Dhammika! Form looked very solid on the last session video."</p>
+                                <span class="ht-feedback-author text-muted">Marcus Vance (Trainer) &bull; 2 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        (function () {
+            "use strict";
+
+            // Mobile sidebar drawer toggles
+            const openSidebarBtn = document.getElementById('openSidebarBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const portalSidebar = document.getElementById('portalSidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+            function openDrawer() {
+                portalSidebar.classList.add('show');
+                sidebarBackdrop.classList.add('show');
+            }
+            function closeDrawer() {
+                portalSidebar.classList.remove('show');
+                sidebarBackdrop.classList.remove('show');
+            }
+            if (openSidebarBtn) openSidebarBtn.addEventListener('click', openDrawer);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeDrawer);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+        })();
+    </script>
+</body>
+</html>
