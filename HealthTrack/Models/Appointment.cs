@@ -8,4 +8,6 @@ public class Appointment
     public DateTime dateTime { get; set; }
     public string status { get; set; } = "Pending";
     public string notes { get; set; } = "";
+
+    public ICollection<Feedback>? feedbacks { get; set; }
 }

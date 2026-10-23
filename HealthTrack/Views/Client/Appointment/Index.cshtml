@@ -63,7 +63,6 @@
 
         <!-- KPI Summary Row (5 Cards) -->
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 g-3 mb-4">
-            <!-- Total -->
             <div class="col">
                 <div class="ht-card ht-kpi-card h-100">
                     <div class="ht-kpi-top">
@@ -85,7 +84,6 @@
                 </div>
             </div>
 
-            <!-- Pending -->
             <div class="col">
                 <div class="ht-card ht-kpi-card h-100">
                     <div class="ht-kpi-top">
@@ -106,7 +104,6 @@
                 </div>
             </div>
 
-            <!-- Confirmed -->
             <div class="col">
                 <div class="ht-card ht-kpi-card h-100">
                     <div class="ht-kpi-top">
@@ -126,7 +123,6 @@
                 </div>
             </div>
 
-            <!-- Completed -->
             <div class="col">
                 <div class="ht-card ht-kpi-card h-100">
                     <div class="ht-kpi-top">
@@ -145,7 +141,6 @@
                 </div>
             </div>
 
-            <!-- Cancelled -->
             <div class="col">
                 <div class="ht-card ht-kpi-card h-100">
                     <div class="ht-kpi-top">
@@ -476,6 +471,45 @@
                                         }
                                     </td>
                                 </tr>
+
+                                @* Inline feedback row below completed appointments *@
+                                @if (string.Equals(appt.status, "Completed", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    var latestFeedback = appt.feedbacks?.OrderByDescending(f => f.date).FirstOrDefault();
+
+                                    <tr>
+                                        <td colspan="4" style="background-color: #f8fafc; border-top: none; padding-top: 0; padding-bottom: 12px;">
+                                            @if (latestFeedback != null)
+                                            {
+                                                <div class="d-flex align-items-start gap-2 p-3 ms-2"
+                                                     style="background-color: #eff6ff; border-left: 3px solid #2563eb; border-radius: 6px;">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-1" aria-hidden="true">
+                                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                                    </svg>
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                                            <strong class="small" style="color: #1e40af;">Trainer Feedback</strong>
+                                                            <span class="text-muted small">
+                                                                · @(latestFeedback.trainer?.name ?? trainerDisplay) on @latestFeedback.date.ToString("MMM d, yyyy · h:mm tt")
+                                                            </span>
+                                                        </div>
+                                                        <p class="mb-0 small" style="color: #0f172a;">@latestFeedback.comment</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="d-flex align-items-center gap-2 px-3 py-2 ms-2 text-muted small">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                                    </svg>
+                                                    <em>Awaiting trainer feedback for this consultation.</em>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
                             }
                         </tbody>
                     </table>

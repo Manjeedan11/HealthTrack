@@ -38,6 +38,7 @@ public class AppointmentController : Controller
 
             viewModel.Appointments = context.appointments
                 .Include(a => a.client)
+                .Include(a => a.feedbacks).ThenInclude(f => f.trainer)
                 .Where(a => a.trainerId == trainer.trainerId)
                 .ToList();
         }
@@ -48,6 +49,7 @@ public class AppointmentController : Controller
 
             viewModel.Appointments = context.appointments
                 .Include(a => a.trainer)
+                .Include(a => a.feedbacks).ThenInclude(f => f.trainer) 
                 .Where(a => a.clientId == client.clientId)
                 .ToList();
         }
