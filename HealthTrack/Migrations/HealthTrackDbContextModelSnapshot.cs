@@ -241,6 +241,9 @@ namespace HealthTrack.Migrations
                     b.Property<int?>("exerciseId")
                         .HasColumnType("int");
 
+                    b.Property<float?>("height")
+                        .HasColumnType("real");
+
                     b.Property<int?>("mealId")
                         .HasColumnType("int");
 
@@ -739,7 +742,7 @@ namespace HealthTrack.Migrations
             modelBuilder.Entity("Feedback", b =>
                 {
                     b.HasOne("Appointment", "appointment")
-                        .WithMany()
+                        .WithMany("feedbacks")
                         .HasForeignKey("appointmentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -938,6 +941,11 @@ namespace HealthTrack.Migrations
                     b.Navigation("client");
 
                     b.Navigation("trainer");
+                });
+
+            modelBuilder.Entity("Appointment", b =>
+                {
+                    b.Navigation("feedbacks");
                 });
 
             modelBuilder.Entity("Client", b =>

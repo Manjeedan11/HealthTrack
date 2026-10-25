@@ -13,14 +13,19 @@ public class DietController : Controller
 {
     private readonly HealthTrackDbContext context;
     private readonly UserManager<User> userManager;
+    private readonly IHealthMetricSyncService healthMetricSync;
 
-    public DietController(HealthTrackDbContext context, UserManager<User> userManager)
+    public DietController(
+        HealthTrackDbContext context,
+        UserManager<User> userManager,
+        IHealthMetricSyncService healthMetricSync)
     {
         this.context = context;
         this.userManager = userManager;
+        this.healthMetricSync = healthMetricSync;
     }
 
-    
+    // GET: /Diet/Index — shared view for Client + Trainer
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -60,7 +65,7 @@ public class DietController : Controller
         return View("~/Views/Client/Diet/Index.cshtml", plans);
     }
 
-    
+    // GET: /Diet/Create — Trainer only
     [HttpGet]
     [Authorize(Roles = "Trainer")]
     public async Task<IActionResult> create()
@@ -79,7 +84,7 @@ public class DietController : Controller
         return View("~/Views/Trainer/Diet/Create.cshtml", viewModel);
     }
 
-    
+    // POST: /Diet/Create
     [HttpPost]
     [Authorize(Roles = "Trainer")]
     [ValidateAntiForgeryToken]
@@ -132,7 +137,7 @@ public class DietController : Controller
         }
     }
 
-    
+    // GET: /Diet/Log?mealId=X&planId=Y — Client only
     [HttpGet]
     [Authorize(Roles = "Client")]
     public async Task<IActionResult> log(int? mealId, int? planId)
@@ -162,7 +167,7 @@ public class DietController : Controller
         return View("~/Views/Client/Diet/Log.cshtml", log);
     }
 
-    
+    // POST: /Diet/Log — Client only
     [HttpPost]
     [Authorize(Roles = "Client")]
     [ValidateAntiForgeryToken]
@@ -187,6 +192,10 @@ public class DietController : Controller
             context.mealLogs.Add(log);
             await context.SaveChangesAsync();
 
+            // ← SYNC: Recalculate today's HealthMetric net calories
+            await healthMetricSync.syncTodaysCalories(client.clientId);
+
+            // Notify trainer
             if (client.trainerId.HasValue)
             {
                 var trainer = await context.trainers.FindAsync(client.trainerId);
@@ -206,7 +215,7 @@ public class DietController : Controller
                 }
             }
 
-            TempData["Success"] = $"Meal logged: {log.caloriesConsumed} cal.";
+            TempData["Success"] = $"Meal logged: {log.caloriesConsumed} cal. Health metric updated.";
             return RedirectToAction("index");
         }
         catch (Exception ex)

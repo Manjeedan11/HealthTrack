@@ -11,9 +11,14 @@ public class HealthMetric
     public int? mealId { get; set; }
     public Meal? meal { get; set; }
     public DateTime date { get; set; }
+
+    
     public float weight { get; set; }
+    public float? height { get; set; }       
     public float bmi { get; set; }
-    public int caloriesBurned { get; set; }
-    public int caloriesConsumed { get; set; }
+
+    
+    public int caloriesBurned { get; set; }  
+    public int caloriesConsumed { get; set; } 
 
 }

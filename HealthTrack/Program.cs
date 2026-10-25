@@ -40,6 +40,7 @@ builder.Services.AddScoped<IDietService, DietService>();
 builder.Services.AddScoped<IHealthMetricService, HealthMetricService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+builder.Services.AddScoped<IHealthMetricSyncService, HealthMetricSyncService>();
 
 // ⬇ NEW: Register the filter as a scoped service
 builder.Services.AddScoped<PopulateUserViewDataFilter>();

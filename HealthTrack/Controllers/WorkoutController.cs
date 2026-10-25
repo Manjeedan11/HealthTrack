@@ -13,14 +13,19 @@ public class WorkoutController : Controller
 {
     private readonly HealthTrackDbContext context;
     private readonly UserManager<User> userManager;
+    private readonly IHealthMetricSyncService healthMetricSync;
 
-    public WorkoutController(HealthTrackDbContext context, UserManager<User> userManager)
+    public WorkoutController(
+        HealthTrackDbContext context,
+        UserManager<User> userManager,
+        IHealthMetricSyncService healthMetricSync)
     {
         this.context = context;
         this.userManager = userManager;
+        this.healthMetricSync = healthMetricSync;
     }
 
-    
+    // GET: /Workout/Index — shared view for Client + Trainer
     public async Task<IActionResult> index()
     {
         var user = await userManager.GetUserAsync(User);
@@ -48,7 +53,7 @@ public class WorkoutController : Controller
                 .Where(p => p.clientId == client.clientId)
                 .ToList();
 
-            
+            // Recent workout logs for the client
             ViewBag.RecentLogs = context.workoutLogs
                 .Include(w => w.exercise)
                 .Where(w => w.clientId == client.clientId)
@@ -60,7 +65,7 @@ public class WorkoutController : Controller
         return View("~/Views/Client/Workout/Index.cshtml", plans);
     }
 
-    
+    // GET: /Workout/Create — Trainer only
     [HttpGet]
     [Authorize(Roles = "Trainer")]
     public async Task<IActionResult> create()
@@ -79,7 +84,7 @@ public class WorkoutController : Controller
         return View("~/Views/Trainer/Workout/Create.cshtml", viewModel);
     }
 
-    
+    // POST: /Workout/Create
     [HttpPost]
     [Authorize(Roles = "Trainer")]
     [ValidateAntiForgeryToken]
@@ -132,7 +137,7 @@ public class WorkoutController : Controller
         }
     }
 
-   
+    // GET: /Workout/Log?exerciseId=X&planId=Y — Client only
     [HttpGet]
     [Authorize(Roles = "Client")]
     public async Task<IActionResult> log(int? exerciseId, int? planId)
@@ -162,7 +167,7 @@ public class WorkoutController : Controller
         return View("~/Views/Client/Workout/Log.cshtml", log);
     }
 
-    
+    // POST: /Workout/Log — Client only
     [HttpPost]
     [Authorize(Roles = "Client")]
     [ValidateAntiForgeryToken]
@@ -187,6 +192,10 @@ public class WorkoutController : Controller
             context.workoutLogs.Add(log);
             await context.SaveChangesAsync();
 
+            // ← SYNC: Recalculate today's HealthMetric net calories
+            await healthMetricSync.syncTodaysCalories(client.clientId);
+
+            // Notify trainer
             if (client.trainerId.HasValue)
             {
                 var trainer = await context.trainers.FindAsync(client.trainerId);
@@ -206,7 +215,7 @@ public class WorkoutController : Controller
                 }
             }
 
-            TempData["Success"] = $"Workout logged: {log.durationMinutes} min, {log.caloriesBurned} cal.";
+            TempData["Success"] = $"Workout logged: {log.caloriesBurned} cal. Health metric updated.";
             return RedirectToAction("index");
         }
         catch (Exception ex)

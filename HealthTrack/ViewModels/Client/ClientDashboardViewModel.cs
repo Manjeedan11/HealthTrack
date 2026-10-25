@@ -20,6 +20,7 @@ namespace HealthTrack.ViewModels.Client
         public string? BmiCategory { get; set; }
         public int? CaloriesBurned { get; set; }
         public int? CaloriesGoal { get; set; }
+        public int? CaloriesConsumed { get; set; }
 
         
         public bool HasWorkout { get; set; }

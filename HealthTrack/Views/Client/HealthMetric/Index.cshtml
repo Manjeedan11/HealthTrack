@@ -1,46 +1,12 @@
 @model IEnumerable<HealthMetric>
 @{
     Layout = "_ClientLayout";
-    string viewMode = Context.Request.Query["view"].ToString().ToLowerInvariant();
-    bool isProgressView = viewMode == "progress";
-    ViewData["Title"] = isProgressView ? "Progress & Analytics" : "Health Measurements";
-
-    var metricsList = Model?.ToList() ?? new List<HealthMetric>();
-    // Repository returns records ordered by date descending (most recent first)
-    var latestMetric = metricsList.FirstOrDefault();
-    var previousMetric = metricsList.Count > 1 ? metricsList[1] : null;
-    float? weightDiff = (latestMetric != null && previousMetric != null)
-        ? (latestMetric.weight - previousMetric.weight)
-        : (float?)null;
-
-    string GetBmiCategory(float bmi)
-    {
-        if (bmi < 18.5f) return "Underweight";
-        if (bmi < 25.0f) return "Normal Range";
-        if (bmi < 30.0f) return "Overweight";
-        return "Obese";
-    }
-
-    string GetBmiBadgeClass(float bmi)
-    {
-        if (bmi < 18.5f) return "bg-warning text-dark";
-        if (bmi < 25.0f) return "ht-status-badge ht-status-confirmed";
-        if (bmi < 30.0f) return "bg-warning text-dark";
-        return "bg-danger text-white";
-    }
+    ViewData["Title"] = "Health Measurements";
+    var list = Model?.OrderByDescending(m => m.date).ToList() ?? new List<HealthMetric>();
+    var latest = list.FirstOrDefault();
 }
 
 <div class="ht-dashboard-container">
-    <!-- Breadcrumb & Back Link -->
-
-    @if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
-        @TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-
     <div class="mb-3">
         <a asp-controller="Client" asp-action="index" class="ht-card-link-action p-0">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
@@ -51,603 +17,108 @@
         </a>
     </div>
 
-    <!-- Mode Switcher Tabs (Seamless Client Experience) -->
-    <div class="d-flex align-items-center gap-2 mb-4">
-        <a asp-controller="HealthMetric" asp-action="index" asp-route-view="measurements"
-           class="btn btn-sm @(!isProgressView ? "btn-primary" : "btn-outline-primary")"
-           id="tabHealthMeasurements">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
-                <rect width="20" height="12" x="2" y="6" rx="2"></rect>
-                <circle cx="12" cy="12" r="2"></circle>
-                <path d="M6 12h.01M18 12h.01"></path>
+    <div class="ht-trainer-header-row mb-4">
+        <div>
+            <h1 class="ht-welcome-title">Health Measurements</h1>
+            <p class="ht-welcome-subtitle">Track your weight, BMI and daily calorie balance.</p>
+        </div>
+        <a asp-controller="HealthMetric" asp-action="log" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Health Measurements
-        </a>
-        <a asp-controller="HealthMetric" asp-action="index" asp-route-view="progress"
-           class="btn btn-sm @(isProgressView ? "btn-primary" : "btn-outline-primary")"
-           id="tabProgressAnalytics">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
-                <path d="M3 3v18h18"></path>
-                <path d="m19 9-5 5-4-4-3 3"></path>
-            </svg>
-            Progress &amp; Analytics
+            Log Measurement
         </a>
     </div>
 
-    @if (!isProgressView)
+    <!-- KPI Row -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">BODY WEIGHT</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val">@(latest?.weight.ToString("0.0") ?? "—")</span>
+                    <span class="ht-kpi-unit">kg</span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">BMI</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val">@(latest?.bmi.ToString("0.0") ?? "—")</span>
+                    <span class="ht-kpi-unit">kg/m²</span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">CALORIES BURNED</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val text-success">@(latest?.caloriesBurned.ToString("N0") ?? "0")</span>
+                    <span class="ht-kpi-unit">kcal</span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ht-card ht-kpi-card h-100">
+                <div class="ht-kpi-top"><span class="ht-kpi-label">NET INTAKE</span></div>
+                <div class="ht-kpi-val-row">
+                    <span class="ht-kpi-val @((latest?.caloriesConsumed ?? 0) < 0 ? "text-success" : "text-warning")">
+                        @(latest?.caloriesConsumed.ToString("N0") ?? "0")
+                    </span>
+                    <span class="ht-kpi-unit">kcal</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Table -->
+    @if (list.Any())
     {
-        <!-- ======================================================== -->
-        <!-- UI A: HEALTH MEASUREMENTS MODE                           -->
-        <!-- ======================================================== -->
-        <!-- Header & Action Row -->
-        <div class="ht-trainer-header-row mb-4">
-            <div>
-                <h1 class="ht-welcome-title">Health Measurements</h1>
-                <p class="ht-welcome-subtitle">Record, track and review your personal body weight, BMI and metabolic measurements over time.</p>
+        <div class="ht-card">
+            <div class="ht-card-header-flex mb-3">
+                <h2 class="ht-card-title mb-0">Measurement History</h2>
+                <span class="ht-badge-total">@list.Count Records</span>
             </div>
-            <div class="ht-trainer-actions-group">
-                <a asp-controller="HealthMetric" asp-action="log" asp-route-returnView="measurements" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto align-items-center gap-2" id="btnLogMeasurement">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>Log Measurement</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Latest Summary KPI Cards -->
-        <div class="row g-3 mb-4">
-            <!-- Body Weight Card -->
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="ht-card ht-kpi-card h-100">
-                    <div class="ht-kpi-top">
-                        <span class="ht-kpi-label">BODY WEIGHT</span>
-                        <span class="ht-kpi-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M5 22h14"></path>
-                                <path d="M5 2h14"></path>
-                                <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
-                                <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="ht-kpi-val-row">
-                        <span class="ht-kpi-val">@(latestMetric != null ? latestMetric.weight.ToString("0.0") : "—")</span>
-                        <span class="ht-kpi-unit">kg</span>
-                    </div>
-                    @if (weightDiff.HasValue)
-                    {
-                        <div class="mt-2">
-                            @if (weightDiff.Value < 0)
-                            {
-                                <span class="ht-health-kpi-badge-down">@weightDiff.Value.ToString("0.0") kg</span>
-                            }
-                            else if (weightDiff.Value > 0)
-                            {
-                                <span class="ht-health-kpi-badge-up">+@weightDiff.Value.ToString("0.0") kg</span>
-                            }
-                            else
-                            {
-                                <span class="ht-health-kpi-badge-neutral">No change</span>
-                            }
-                            <span class="text-muted small ms-1">vs previous</span>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <!-- BMI Card -->
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="ht-card ht-kpi-card h-100">
-                    <div class="ht-kpi-top">
-                        <span class="ht-kpi-label">BMI</span>
-                        <span class="ht-kpi-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="5" r="3"></circle>
-                                <line x1="12" y1="8" x2="12" y2="15"></line>
-                                <line x1="9" y1="11" x2="15" y2="11"></line>
-                                <line x1="10" y1="15" x2="8" y2="21"></line>
-                                <line x1="14" y1="15" x2="16" y2="21"></line>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="ht-kpi-val-row">
-                        <span class="ht-kpi-val">@(latestMetric != null && latestMetric.bmi > 0 ? latestMetric.bmi.ToString("0.0") : "—")</span>
-                        <span class="ht-kpi-unit">kg/m²</span>
-                    </div>
-                    @if (latestMetric != null && latestMetric.bmi > 0)
-                    {
-                        <div class="mt-2">
-                            <span class="@GetBmiBadgeClass(latestMetric.bmi) py-1 px-2" style="font-size: 0.72rem; border-radius: 6px;">
-                                @GetBmiCategory(latestMetric.bmi)
-                            </span>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <!-- Calories Burned Card -->
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="ht-card ht-kpi-card h-100">
-                    <div class="ht-kpi-top">
-                        <span class="ht-kpi-label">CALORIES BURNED</span>
-                        <span class="ht-kpi-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="ht-kpi-val-row">
-                        <span class="ht-kpi-val">@(latestMetric != null ? latestMetric.caloriesBurned.ToString("N0") : "—")</span>
-                        <span class="ht-kpi-unit">kcal</span>
-                    </div>
-                    <div class="mt-2 text-muted small">Latest recorded activity</div>
-                </div>
-            </div>
-
-            <!-- Calories Consumed Card -->
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="ht-card ht-kpi-card h-100">
-                    <div class="ht-kpi-top">
-                        <span class="ht-kpi-label">CALORIES CONSUMED</span>
-                        <span class="ht-kpi-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 2v20"></path>
-                                <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
-                                <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
-                                <path d="M8 10v12"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="ht-kpi-val-row">
-                        <span class="ht-kpi-val">@(latestMetric != null ? latestMetric.caloriesConsumed.ToString("N0") : "—")</span>
-                        <span class="ht-kpi-unit">kcal</span>
-                    </div>
-                    <div class="mt-2 text-muted small">Latest recorded intake</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Measurements History Table -->
-        @if (metricsList.Any())
-        {
-            <div class="ht-card">
-                <div class="ht-card-header-flex mb-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <h2 class="ht-card-title mb-0">Measurement History</h2>
-                        <span class="ht-status-badge ht-status-confirmed">@metricsList.Count Total Records</span>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table ht-trainer-table align-middle mb-0" aria-label="Recorded Health Measurements">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="ht-th-col" style="width: 28%;">RECORDED DATE</th>
-                                <th scope="col" class="ht-th-col" style="width: 18%;">WEIGHT</th>
-                                <th scope="col" class="ht-th-col" style="width: 18%;">BMI</th>
-                                <th scope="col" class="ht-th-col" style="width: 18%;">CALORIES BURNED</th>
-                                <th scope="col" class="ht-th-col text-end" style="width: 18%;">CALORIES CONSUMED</th>
+            <div class="table-responsive">
+                <table class="table ht-trainer-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ht-th-col" style="width: 20%;">DATE</th>
+                            <th class="ht-th-col" style="width: 15%;">HEIGHT</th>
+                            <th class="ht-th-col" style="width: 15%;">WEIGHT</th>
+                            <th class="ht-th-col" style="width: 15%;">BMI</th>
+                            <th class="ht-th-col" style="width: 17%;">BURNED</th>
+                            <th class="ht-th-col text-end" style="width: 18%;">NET INTAKE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in list)
+                        {
+                            <tr class="ht-client-row">
+                                <td><span class="fw-semibold">@m.date.ToString("MMM d, yyyy")</span></td>
+                                <td>@(m.height?.ToString("0") ?? "—") cm</td>
+                                <td><span class="fw-bold">@m.weight.ToString("0.0") kg</span></td>
+                                <td><span class="fw-semibold">@m.bmi.ToString("0.0")</span></td>
+                                <td><span class="ht-workout-duration-text">@m.caloriesBurned.ToString("N0") kcal</span></td>
+                                <td class="text-end">
+                                    <span class="fw-semibold @(m.caloriesConsumed < 0 ? "text-success" : "text-muted")">
+                                        @m.caloriesConsumed.ToString("N0") kcal
+                                    </span>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var m in metricsList)
-                            {
-                                <tr class="ht-client-row">
-                                    <td>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted">
-                                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-                                                <line x1="16" x2="16" y1="2" y2="6"></line>
-                                                <line x1="8" x2="8" y1="2" y2="6"></line>
-                                                <line x1="3" x2="21" y1="10" y2="10"></line>
-                                            </svg>
-                                            <span class="fw-semibold text-dark">@m.date.ToString("MMM d, yyyy · h:mm tt")</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold text-dark">@m.weight.ToString("0.0") kg</span>
-                                    </td>
-                                    <td>
-                                        @if (m.bmi > 0)
-                                        {
-                                            <div class="d-inline-flex align-items-center gap-1">
-                                                <span class="fw-bold">@m.bmi.ToString("0.0")</span>
-                                                <span class="badge bg-light text-secondary border px-1" style="font-size: 0.68rem;">@GetBmiCategory(m.bmi)</span>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">—</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <span class="ht-workout-duration-text">@m.caloriesBurned.ToString("N0") kcal</span>
-                                    </td>
-                                    <td class="text-end">
-                                        <span class="fw-semibold text-muted">@m.caloriesConsumed.ToString("N0") kcal</span>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
-        }
-        else
-        {
-            <!-- Empty State -->
-            <section class="ht-card text-center py-5 ht-health-empty-card" aria-label="No measurements recorded">
-                <div class="ht-health-empty-icon mb-3" aria-hidden="true">
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="20" height="12" x="2" y="6" rx="2"></rect>
-                        <circle cx="12" cy="12" r="2"></circle>
-                        <path d="M6 12h.01M18 12h.01"></path>
-                    </svg>
-                </div>
-                <h2 class="ht-card-title mb-2">No Measurements Recorded</h2>
-                <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
-                    You haven't recorded any health measurements yet. Track your body weight, BMI and metabolic metrics regularly to build insights and progress tracking.
-                </p>
-                <a asp-controller="HealthMetric" asp-action="log" asp-route-returnView="measurements" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto" id="btnLogFirstMeasurement">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Log First Measurement
-                </a>
-            </section>
-        }
+        </div>
     }
     else
     {
-        <!-- ======================================================== -->
-        <!-- UI B: PROGRESS & ANALYTICS MODE                          -->
-        <!-- ======================================================== -->
-        <!-- Header & Action Row -->
-        <div class="ht-trainer-header-row mb-4">
-            <div>
-                <h1 class="ht-welcome-title">Progress &amp; Analytics</h1>
-                <p class="ht-welcome-subtitle">Monitor trends, weight progression and metabolic analytics across your recorded health milestones.</p>
-            </div>
-            <div class="ht-trainer-actions-group">
-                <a asp-controller="HealthMetric" asp-action="log" asp-route-returnView="progress" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto align-items-center gap-2" id="btnLogMeasurementProgress">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>Log Measurement</span>
-                </a>
-            </div>
+        <div class="ht-card text-center py-5">
+            <p class="text-muted mb-3">No measurements recorded yet.</p>
+            <a asp-controller="HealthMetric" asp-action="log" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto">Log First Measurement</a>
         </div>
-
-        @if (metricsList.Count >= 2)
-        {
-            var chron = metricsList.OrderBy(m => m.date).ToList();
-            var oldest = chron.First();
-            var newest = chron.Last();
-            float overallDiff = newest.weight - oldest.weight;
-
-            <!-- Analytics Metric Highlights -->
-            <div class="row g-3 mb-4">
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="ht-card ht-kpi-card h-100">
-                        <div class="ht-kpi-top">
-                            <span class="ht-kpi-label">TOTAL WEIGHT CHANGE</span>
-                            <span class="ht-kpi-icon" aria-hidden="true">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 3v18h18"></path>
-                                    <path d="m19 9-5 5-4-4-3 3"></path>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="ht-kpi-val-row">
-                            <span class="ht-kpi-val">@(overallDiff < 0 ? overallDiff.ToString("0.0") : $"+{overallDiff:0.0}")</span>
-                            <span class="ht-kpi-unit">kg</span>
-                        </div>
-                        <div class="mt-2 text-muted small">
-                            From @oldest.weight.ToString("0.0") kg to @newest.weight.ToString("0.0") kg
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="ht-card ht-kpi-card h-100">
-                        <div class="ht-kpi-top">
-                            <span class="ht-kpi-label">CURRENT BMI</span>
-                            <span class="ht-kpi-icon" aria-hidden="true">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="5" r="3"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="15"></line>
-                                    <line x1="9" y1="11" x2="15" y2="11"></line>
-                                    <line x1="10" y1="15" x2="8" y2="21"></line>
-                                    <line x1="14" y1="15" x2="16" y2="21"></line>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="ht-kpi-val-row">
-                            <span class="ht-kpi-val">@newest.bmi.ToString("0.0")</span>
-                            <span class="ht-kpi-unit">kg/m²</span>
-                        </div>
-                        <div class="mt-2">
-                            <span class="@GetBmiBadgeClass(newest.bmi) py-1 px-2" style="font-size: 0.72rem; border-radius: 6px;">
-                                @GetBmiCategory(newest.bmi)
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="ht-card ht-kpi-card h-100">
-                        <div class="ht-kpi-top">
-                            <span class="ht-kpi-label">AVG CALORIES BURNED</span>
-                            <span class="ht-kpi-icon" aria-hidden="true">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="ht-kpi-val-row">
-                            <span class="ht-kpi-val">@((int)chron.Average(m => m.caloriesBurned))</span>
-                            <span class="ht-kpi-unit">kcal</span>
-                        </div>
-                        <div class="mt-2 text-muted small">Across @chron.Count milestones</div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="ht-card ht-kpi-card h-100">
-                        <div class="ht-kpi-top">
-                            <span class="ht-kpi-label">AVG CALORIES INTAKE</span>
-                            <span class="ht-kpi-icon" aria-hidden="true">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 2v20"></path>
-                                    <path d="M18 2a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4"></path>
-                                    <path d="M6 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path>
-                                    <path d="M8 10v12"></path>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="ht-kpi-val-row">
-                            <span class="ht-kpi-val">@((int)chron.Average(m => m.caloriesConsumed))</span>
-                            <span class="ht-kpi-unit">kcal</span>
-                        </div>
-                        <div class="mt-2 text-muted small">Daily average logged</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Native SVG Trend Charts (Responsive, Zero External Library Dependencies) -->
-            <div class="row g-4 mb-4">
-                <!-- Weight Trend Chart -->
-                <div class="col-12 col-lg-7">
-                    <div class="ht-card h-100">
-                        <div class="ht-card-header-flex mb-3">
-                            <div>
-                                <h2 class="ht-card-title mb-1">Body Weight Progression</h2>
-                                <p class="ht-card-subtitle mb-0">Historical body mass tracking across recorded entries</p>
-                            </div>
-                            <span class="ht-status-badge ht-status-confirmed">@chron.Count entries</span>
-                        </div>
-
-                        @{
-                            float minWeight = chron.Min(m => m.weight);
-                            float maxWeight = chron.Max(m => m.weight);
-                            float weightRange = Math.Max(1.0f, maxWeight - minWeight);
-                            // Pad range for visual breathing room
-                            float yMin = (float)Math.Floor(minWeight - 0.5f);
-                            float yMax = (float)Math.Ceiling(maxWeight + 0.5f);
-                            float totalYRange = Math.Max(1.0f, yMax - yMin);
-
-                            int svgWidth = 600;
-                            int svgHeight = 220;
-                            int padLeft = 45;
-                            int padRight = 30;
-                            int padTop = 20;
-                            int padBottom = 35;
-                            int plotWidth = svgWidth - padLeft - padRight;
-                            int plotHeight = svgHeight - padTop - padBottom;
-
-                            var points = new List<string>();
-                            for (int i = 0; i < chron.Count; i++)
-                            {
-                                float x = padLeft + (i * (float)plotWidth / (chron.Count - 1));
-                                float y = padTop + plotHeight - ((chron[i].weight - yMin) / totalYRange * plotHeight);
-                                points.Add($"{x:0.0},{y:0.0}");
-                            }
-                            string polylinePoints = string.Join(" ", points);
-                        }
-
-                        <div class="ht-health-chart-wrapper">
-                            <svg viewBox="0 0 @svgWidth @svgHeight" class="ht-health-chart-svg" preserveAspectRatio="none" aria-label="Body weight trend chart">
-                                <defs>
-                                    <linearGradient id="healthChartGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#0d6e5a" stop-opacity="0.3"></stop>
-                                        <stop offset="100%" stop-color="#0d6e5a" stop-opacity="0.0"></stop>
-                                    </linearGradient>
-                                </defs>
-
-                                <!-- Grid Guidelines -->
-                                <line x1="@padLeft" y1="@padTop" x2="@(svgWidth - padRight)" y2="@padTop" class="ht-health-chart-guideline"></line>
-                                <line x1="@padLeft" y1="@(padTop + plotHeight / 2)" x2="@(svgWidth - padRight)" y2="@(padTop + plotHeight / 2)" class="ht-health-chart-guideline"></line>
-                                <line x1="@padLeft" y1="@(padTop + plotHeight)" x2="@(svgWidth - padRight)" y2="@(padTop + plotHeight)" class="ht-health-chart-guideline"></line>
-
-                                <!-- Y Axis Labels -->
-                                <text x="@(padLeft - 8)" y="@(padTop + 4)" text-anchor="end" class="ht-health-chart-label">@yMax.ToString("0.0")</text>
-                                <text x="@(padLeft - 8)" y="@(padTop + plotHeight / 2 + 4)" text-anchor="end" class="ht-health-chart-label">@((yMin + totalYRange / 2).ToString("0.0"))</text>
-                                <text x="@(padLeft - 8)" y="@(padTop + plotHeight + 4)" text-anchor="end" class="ht-health-chart-label">@yMin.ToString("0.0")</text>
-
-                                <!-- Area Fill -->
-                                <polygon points="@padLeft,@(padTop + plotHeight) @polylinePoints @(svgWidth - padRight),@(padTop + plotHeight)" class="ht-health-chart-area"></polygon>
-
-                                <!-- Trend Line -->
-                                <polyline points="@polylinePoints" class="ht-health-chart-line"></polyline>
-
-                                <!-- Data Points and X Axis Labels -->
-                                @for (int i = 0; i < chron.Count; i++)
-                                {
-                                    float x = padLeft + (i * (float)plotWidth / (chron.Count - 1));
-                                    float y = padTop + plotHeight - ((chron[i].weight - yMin) / totalYRange * plotHeight);
-
-                                    <circle cx="@x.ToString("0.0")" cy="@y.ToString("0.0")" r="4.5" class="ht-health-chart-point">
-                                        <title>@chron[i].date.ToString("MMM d"): @chron[i].weight.ToString("0.0") kg</title>
-                                    </circle>
-                                    @Html.Raw($"<text x=\"{x:0.0}\" y=\"{padTop + plotHeight + 20}\" text-anchor=\"middle\" class=\"ht-health-chart-label\">{chron[i].date:MMM d}</text>")
-                                }
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BMI Trajectory & Guidelines -->
-                <div class="col-12 col-lg-5">
-                    <div class="ht-card h-100">
-                        <div class="ht-card-header-flex mb-3">
-                            <div>
-                                <h2 class="ht-card-title mb-1">BMI Trajectory</h2>
-                                <p class="ht-card-subtitle mb-0">Comparison against healthy thresholds</p>
-                            </div>
-                        </div>
-
-                        @{
-                            float minBmi = chron.Min(m => m.bmi);
-                            float maxBmi = chron.Max(m => m.bmi);
-                            float bmiYMin = (float)Math.Floor(Math.Min(18.0f, minBmi - 1.0f));
-                            float bmiYMax = (float)Math.Ceiling(Math.Max(26.0f, maxBmi + 1.0f));
-                            float bmiYRange = Math.Max(1.0f, bmiYMax - bmiYMin);
-
-                            var bmiPoints = new List<string>();
-                            for (int i = 0; i < chron.Count; i++)
-                            {
-                                float x = padLeft + (i * (float)plotWidth / (chron.Count - 1));
-                                float y = padTop + plotHeight - ((chron[i].bmi - bmiYMin) / bmiYRange * plotHeight);
-                                bmiPoints.Add($"{x:0.0},{y:0.0}");
-                            }
-                            string bmiPolyline = string.Join(" ", bmiPoints);
-                            float normalBmiLineY = padTop + plotHeight - ((25.0f - bmiYMin) / bmiYRange * plotHeight);
-                        }
-
-                        <div class="ht-health-chart-wrapper">
-                            <svg viewBox="0 0 @svgWidth @svgHeight" class="ht-health-chart-svg" preserveAspectRatio="none" aria-label="BMI trajectory chart">
-                                <!-- Normal threshold guideline at 25.0 -->
-                                <line x1="@padLeft" y1="@normalBmiLineY.ToString("0.0")" x2="@(svgWidth - padRight)" y2="@normalBmiLineY.ToString("0.0")" stroke="#22c55e" stroke-dasharray="4 4" stroke-width="1.5"></line>
-                                <text x="@(svgWidth - padRight)" y="@(normalBmiLineY - 4)" text-anchor="end" fill="#16a34a" style="font-size: 10px; font-weight: 600;">Normal Upper Limit (25.0)</text>
-
-                                <!-- Y Axis Labels -->
-                                <text x="@(padLeft - 8)" y="@(padTop + 4)" text-anchor="end" class="ht-health-chart-label">@bmiYMax.ToString("0.0")</text>
-                                <text x="@(padLeft - 8)" y="@(padTop + plotHeight + 4)" text-anchor="end" class="ht-health-chart-label">@bmiYMin.ToString("0.0")</text>
-
-                                <!-- Trend Line -->
-                                <polyline points="@bmiPolyline" stroke="#0284c7" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline>
-
-                                <!-- Data Points -->
-                                @for (int i = 0; i < chron.Count; i++)
-                                {
-                                    float x = padLeft + (i * (float)plotWidth / (chron.Count - 1));
-                                    float y = padTop + plotHeight - ((chron[i].bmi - bmiYMin) / bmiYRange * plotHeight);
-
-                                    <circle cx="@x.ToString("0.0")" cy="@y.ToString("0.0")" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="2">
-                                        <title>@chron[i].date.ToString("MMM d"): BMI @chron[i].bmi.ToString("0.0")</title>
-                                    </circle>
-                                    @Html.Raw($"<text x=\"{x:0.0}\" y=\"{padTop + plotHeight + 20}\" text-anchor=\"middle\" class=\"ht-health-chart-label\">{chron[i].date:MMM d}</text>")
-                                }
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Milestone Details Table -->
-            <div class="ht-card">
-                <div class="ht-card-header-flex mb-3">
-                    <h2 class="ht-card-title mb-0">Analytics Milestone Details</h2>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table ht-trainer-table align-middle mb-0" aria-label="Analytics Milestone Data">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="ht-th-col" style="width: 25%;">MILESTONE DATE</th>
-                                <th scope="col" class="ht-th-col" style="width: 20%;">RECORDED WEIGHT</th>
-                                <th scope="col" class="ht-th-col" style="width: 20%;">BMI</th>
-                                <th scope="col" class="ht-th-col" style="width: 20%;">CALORIES BURNED</th>
-                                <th scope="col" class="ht-th-col text-end" style="width: 15%;">CALORIES CONSUMED</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var m in chron.AsEnumerable().Reverse())
-                            {
-                                <tr class="ht-client-row">
-                                    <td>
-                                        <span class="fw-semibold text-dark">@m.date.ToString("MMM d, yyyy")</span>
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold text-dark">@m.weight.ToString("0.0") kg</span>
-                                    </td>
-                                    <td>
-                                        <span class="@GetBmiBadgeClass(m.bmi) py-1 px-2" style="font-size: 0.72rem; border-radius: 6px;">
-                                            @m.bmi.ToString("0.0") · @GetBmiCategory(m.bmi)
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="ht-workout-duration-text">@m.caloriesBurned.ToString("N0") kcal</span>
-                                    </td>
-                                    <td class="text-end">
-                                        <span class="fw-semibold text-muted">@m.caloriesConsumed.ToString("N0") kcal</span>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
-        else if (metricsList.Count == 1)
-        {
-            <!-- Limited History State (1 record only) -->
-            <div class="ht-card text-center py-5 ht-health-empty-card" aria-label="Insufficient history">
-                <div class="ht-health-empty-icon mb-3" aria-hidden="true">
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 3v18h18"></path>
-                        <path d="m19 9-5 5-4-4-3 3"></path>
-                    </svg>
-                </div>
-                <h2 class="ht-card-title mb-2">Not Enough History for Trend Analysis</h2>
-                <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
-                    You have recorded 1 measurement (@(latestMetric?.weight.ToString("0.0") ?? "0.0") kg on @(latestMetric?.date.ToString("MMM d, yyyy") ?? "N/A")). At least two separate records are required to plot trend lines and calculate progression deltas.
-                </p>
-                <a asp-controller="HealthMetric" asp-action="log" asp-route-returnView="progress" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Log Next Measurement
-                </a>
-            </div>
-        }
-        else
-        {
-            <!-- Completely Empty State -->
-            <div class="ht-card text-center py-5 ht-health-empty-card" aria-label="No data for analytics">
-                <div class="ht-health-empty-icon mb-3" aria-hidden="true">
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 3v18h18"></path>
-                        <path d="m19 9-5 5-4-4-3 3"></path>
-                    </svg>
-                </div>
-                <h2 class="ht-card-title mb-2">No Analytics Available Yet</h2>
-                <p class="ht-card-subtitle mx-auto mb-4" style="max-width: 480px;">
-                    Start recording your body weight and metabolic metrics to generate automated progress charts and health analytics.
-                </p>
-                <a asp-controller="HealthMetric" asp-action="log" asp-route-returnView="progress" class="ht-btn-submit d-inline-flex px-4 py-2 w-auto mx-auto">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Log First Measurement
-                </a>
-            </div>
-        }
     }
 </div>
