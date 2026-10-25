@@ -192,10 +192,10 @@ public class DietController : Controller
             context.mealLogs.Add(log);
             await context.SaveChangesAsync();
 
-            // ← SYNC: Recalculate today's HealthMetric net calories
+            
             await healthMetricSync.syncTodaysCalories(client.clientId);
 
-            // Notify trainer
+            
             if (client.trainerId.HasValue)
             {
                 var trainer = await context.trainers.FindAsync(client.trainerId);

@@ -166,7 +166,6 @@ public async Task<IActionResult> updateStatus(int id, string status)
 {
     Console.WriteLine($"=== updateStatus called: id={id}, status={status} ===");
 
-    
     var validStatuses = new[] { "Confirmed", "Cancelled", "Completed" };
     if (string.IsNullOrEmpty(status) || !validStatuses.Contains(status))
     {
@@ -174,12 +173,23 @@ public async Task<IActionResult> updateStatus(int id, string status)
         return RedirectToAction("index");
     }
 
+   
     var appointment = await context.appointments.FindAsync(id);
     if (appointment == null)
     {
         TempData["Error"] = "Appointment not found.";
         return RedirectToAction("index");
     }
+
+
+    var user = await userManager.GetUserAsync(User);
+    if (user == null) return Challenge();
+
+    var trainer = context.trainers.FirstOrDefault(t => t.userId == user.Id);
+    if (trainer == null) return NotFound();
+
+    if (appointment.trainerId != trainer.trainerId)
+        return Forbid();
 
     
     if (status == "Completed" && appointment.dateTime > DateTime.Now)
@@ -188,20 +198,18 @@ public async Task<IActionResult> updateStatus(int id, string status)
         return RedirectToAction("index");
     }
 
-    
     if (status == "Completed" && appointment.status != "Confirmed")
     {
         TempData["Error"] = "Only confirmed appointments can be marked as completed.";
         return RedirectToAction("index");
     }
 
+    
     try
     {
         appointment.status = status;
         await context.SaveChangesAsync();
-        Console.WriteLine($"=== Updated appointment {id} to {status} ===");
 
-       
         var client = await context.clients.FindAsync(appointment.clientId);
         if (client != null)
         {
@@ -220,7 +228,6 @@ public async Task<IActionResult> updateStatus(int id, string status)
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"=== Exception: {ex.Message} ===");
         TempData["Error"] = $"Update failed: {ex.InnerException?.Message ?? ex.Message}";
     }
 
